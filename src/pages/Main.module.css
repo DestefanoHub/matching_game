@@ -1,0 +1,10 @@
+.page{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: darkgray;
+}
+
+.title{
+    font-size: 16pt;
+}

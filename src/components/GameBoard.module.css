@@ -1,0 +1,6 @@
+.board{
+    background-color: whitesmoke;
+    display: grid;
+    grid-template-columns: repeat(3, 5em);
+    padding: 2em;
+}

@@ -1,8 +1,12 @@
+import { useState } from 'react';
+
 import Tile from './Tile';
 
 import styles from './GameBoard.module.css';
 
 const GameBoard = () => {
+    const [gameState, setGameState] = useState();
+    
     const tileGrid = [];
     
     for(let i = 0; i < 9; i++){

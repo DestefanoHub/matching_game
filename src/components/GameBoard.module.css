@@ -1,7 +1,7 @@
 .board{
     background-color: whitesmoke;
     display: grid;
-    grid-template-columns: repeat(3, 10em);
+    grid-template-columns: repeat(4, 10em);
     column-gap: 1em;
     row-gap: 1em;
     padding: 2em;

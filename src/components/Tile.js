@@ -1,28 +1,20 @@
-import { useState } from 'react';
+import { useGame, useGameDispatch } from '../store/GameContext';
 
 import styles from './Tile.module.css';
 
-const defaultState = {
-    value: 'Unknown',
-    clicked: false
-};
-
 const Tile = (props) => {
-    const [tileState, setTileState] = useState(defaultState);
+    const gameState = useGame();
+    const dispatch = useGameDispatch();
     
     const handleClick = (event) => {
-        if(tileState.clicked){
-            setTileState(defaultState);
-        }else{
-            setTileState({
-                value: props.tileNum,
-                clicked: true
-            });
-        }
+        dispatch({
+            type: 'reveal',
+            id: props.id
+        });
     };
     
-    return <button type='button' className={styles.tile} onClick={handleClick}>
-        {tileState.value}
+    return <button id={props.id} type='button' className={styles.tile} onClick={handleClick}>
+        {props.value}
     </button>
 };
 

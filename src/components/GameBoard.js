@@ -1,20 +1,19 @@
-import { useState } from 'react';
-
+import { useGame, GameProvider } from '../store/GameContext';
 import Tile from './Tile';
 
 import styles from './GameBoard.module.css';
 
 const GameBoard = () => {
-    const [gameState, setGameState] = useState();
-    
-    const tileGrid = [];
-    
-    for(let i = 0; i < 9; i++){
-        tileGrid.push(<Tile key={i} tileNum={i}/>);
-    }
+    const gameState = useGame();
+
+    const tileGrid = gameState.tiles.map((tile) => {
+        return <Tile key={tile.id} id={tile.id} value={tile.value}/>
+    });
     
     return <div className={styles.board}>
-        {tileGrid}
+        <GameProvider>
+            {tileGrid}
+        </GameProvider>
     </div>;
 };
 

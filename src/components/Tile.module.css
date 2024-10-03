@@ -1,4 +1,18 @@
 .tile{
     width: 12em;
     height: 12em;
+    background-color: lightgray;
+    border-radius: 10px;
+}
+
+.hover{
+    cursor: pointer;
+    background-color: darkgrey;
+    box-shadow: gray 5px 5px;
+}
+
+.active{
+    cursor: not-allowed;
+    background-color: darkgrey;
+    box-shadow: gray 5px 5px;
 }

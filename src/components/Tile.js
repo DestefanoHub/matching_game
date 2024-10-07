@@ -1,40 +1,15 @@
-import { useReducer } from 'react';
+import { useState } from 'react';
 
 import { useGame, useGameDispatch } from '../store/GameContext';
 
 import styles from './Tile.module.css';
 
-const initialState = {
-    active: false,
-    hovered: false
-};
-
-const tileReducer = (state, action) => {
-    switch(action.type){
-        case 'active': {
-            return {
-                ...state,
-                active: !state.active
-            }
-        }
-        case 'hover':{
-            if(!state.active && action.activeCount < 2){
-                return {
-                    ...state,
-                    hovered: !state.hovered
-                }
-            }
-
-            return state;
-        }
-        default: return state;
-    }
-};
-
 const Tile = (props) => {
-    const [state, tileDispatch] = useReducer(tileReducer, initialState);
+    const [isHovered, setIsHovered] = useState(false);
     const gameState = useGame();
     const gameDispatch = useGameDispatch();
+
+    let isActive = false;
     
     const handleClick = (event) => {
         gameDispatch({
@@ -44,17 +19,13 @@ const Tile = (props) => {
     };
 
     const handleMouseOver = (event) => {
-        tileDispatch({
-            type: 'hover',
-            activeCount: gameState.activeTiles.length
-        });
+        if(!isActive && gameState.activeTiles.length < 2){
+            setIsHovered(true);
+        }
     };
 
     const handleMouseOut = (event) => {
-        tileDispatch({
-            type: 'hover',
-            activeCount: gameState.activeTiles.length
-        });
+        setIsHovered(false);
     };
 
     const activeTile = gameState.activeTiles.find((tile) => {
@@ -62,17 +33,17 @@ const Tile = (props) => {
     });
 
     if(typeof activeTile !== 'undefined') {
-        tileDispatch({type: 'active'});
+        isActive = true;
     }
     
     return <button id={props.id} 
         type='button'
-        className={`${styles.tile} ${state.hovered && styles.hover} ${state.active && styles.active}`}
+        className={`${styles.tile} ${isHovered && styles.hover} ${isActive && styles.active}`}
         onClick={handleClick}
         onMouseOver={handleMouseOver}
         onMouseOut={handleMouseOut}
     >
-        {state.active && props.value}
+        {isActive && props.value}
     </button>
 };
 

@@ -10,7 +10,7 @@ for(let i = 0; i < 12; i++){
     
     tileGrid.push({
         id: i,
-        value: values[valueIndex],
+        value: values[valueIndex]
     });
 
     values.splice(valueIndex, 1);
@@ -20,7 +20,7 @@ const initialState = {
     tiles: tileGrid,
     activeTiles: [],
     points: 0,
-    totalPoints: values.length / 2,
+    totalPoints: (tileGrid.length / 2),
     gameOver: false,
     hasWon: false
 };
@@ -59,23 +59,27 @@ const gameReducer = (state, action) => {
             };
         }
         case 'score': {
-            const newScore = state.points++;
+            const newScore = state.points + 1;
 
-            if(newScore === state.totalPoints){
+            if(!state.gameOver){
+                if(newScore === state.totalPoints){
+                    return {
+                        ...state,
+                        points: newScore,
+                        activeTiles: [],
+                        hasWon: true,
+                        gameOver: true
+                    };
+                }
+                
                 return {
                     ...state,
                     points: newScore,
-                    activeTiles: [],
-                    hasWon: true,
-                    gameOver: true
+                    activeTiles: []
                 };
             }
-            
-            return {
-                ...state,
-                points: newScore,
-                activeTiles: []
-            };
+
+            return state;
         }
         default: return state;
     }

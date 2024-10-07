@@ -11,6 +11,10 @@ const GameBoard = () => {
         return <Tile key={tile.id} id={tile.id} value={tile.value}/>
     });
 
+    if(gameState.hasWon){
+        alert('You have won!');
+    }
+
     if(gameState.activeTiles.length === 2){
         if(gameState.activeTiles[0].value === gameState.activeTiles[1].value){
             dispatch({

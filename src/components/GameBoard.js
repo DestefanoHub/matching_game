@@ -11,14 +11,6 @@ const GameBoard = () => {
     const hasWon = useSelector(selectHasWon);
     const gameDispatch = useDispatch();
 
-    const tileGrid = tiles.map((tile) => {
-        return <Tile key={tile.id} id={tile.id} value={tile.value}/>
-    });
-
-    if(hasWon){
-        alert('You have won!');
-    }
-
     if(activeTiles.length === 2){
         if(activeTiles[0].value === activeTiles[1].value){
             gameDispatch(score());
@@ -26,8 +18,16 @@ const GameBoard = () => {
             gameDispatch(clear());
         }
     }
+
+    const tileGrid = tiles.map((tile) => {
+        return <Tile key={tile.id} id={tile.id} value={tile.value}/>
+    });
+
+    // if(hasWon){
+    //     alert('You have won!');
+    // }
     
-    return <div className={styles.board}>
+    return <div className={`${styles.board} ${activeTiles.length === 2 && styles.blocker}`}>
         {tileGrid}
     </div>;
 };

@@ -54,7 +54,7 @@ export const gameSlice = createSlice({
         score: (state) => {
             const newScore = state.points + 1;
 
-            if(!state.game.gameOver){
+            if(!state.gameOver){
                 if(newScore === state.totalPoints){
                     state.points = newScore;
                     state.activeTiles = [];

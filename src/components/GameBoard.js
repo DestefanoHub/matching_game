@@ -1,25 +1,29 @@
-import { useGame, useGameDispatch } from '../store/GameContext';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { score, clear, selectActiveTiles, selectTiles, selectHasWon } from '../store/gameSlice';
 import Tile from './Tile';
 
 import styles from './GameBoard.module.css';
 
 const GameBoard = () => {
-    const gameState = useGame();
-    const dispatch = useGameDispatch();
+    const tiles = useSelector(selectTiles);
+    const activeTiles = useSelector(selectActiveTiles);
+    const hasWon = useSelector(selectHasWon);
+    const gameDispatch = useDispatch();
 
-    const tileGrid = gameState.tiles.map((tile) => {
+    const tileGrid = tiles.map((tile) => {
         return <Tile key={tile.id} id={tile.id} value={tile.value}/>
     });
 
-    if(gameState.hasWon){
+    if(hasWon){
         alert('You have won!');
     }
 
-    if(gameState.activeTiles.length === 2){
-        if(gameState.activeTiles[0].value === gameState.activeTiles[1].value){
-            dispatch({
-                type: 'score'
-            });
+    if(activeTiles.length === 2){
+        if(activeTiles[0].value === activeTiles[1].value){
+            gameDispatch(score());
+        }else{
+            gameDispatch(clear());
         }
     }
     

@@ -1,25 +1,23 @@
 import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { useGame, useGameDispatch } from '../store/GameContext';
+import { reveal, selectActiveTiles } from '../store/gameSlice';
 
 import styles from './Tile.module.css';
 
 const Tile = (props) => {
     const [isHovered, setIsHovered] = useState(false);
-    const gameState = useGame();
-    const gameDispatch = useGameDispatch();
+    const activeTiles = useSelector(selectActiveTiles);
+    const gameDispatch = useDispatch();
 
     let isActive = false;
     
     const handleClick = (event) => {
-        gameDispatch({
-            type: 'reveal',
-            id: props.id
-        });
+        gameDispatch(reveal(props.id));
     };
 
     const handleMouseOver = (event) => {
-        if(!isActive && gameState.activeTiles.length < 2){
+        if(!isActive && activeTiles.length < 2){
             setIsHovered(true);
         }
     };
@@ -28,7 +26,7 @@ const Tile = (props) => {
         setIsHovered(false);
     };
 
-    const activeTile = gameState.activeTiles.find((tile) => {
+    const activeTile = activeTiles.find((tile) => {
         return tile.id === props.id;
     });
 
@@ -43,7 +41,7 @@ const Tile = (props) => {
         onMouseOver={handleMouseOver}
         onMouseOut={handleMouseOut}
     >
-        {isActive && props.value}
+        <span className={styles.text}>{isActive && props.value}</span>
     </button>
 };
 

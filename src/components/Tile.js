@@ -1,76 +1,41 @@
-import { useReducer } from 'react';
+import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { reveal, selectActiveTiles } from '../store/gameSlice';
 
 import styles from './Tile.module.css';
 
-const initialState = {
-    isActive: false,
-    isHovered: false
-};
-
-const tileReducer = (state, action) => {
-    switch(action.type){
-        case 'hover': {
-            if(!state.isActive){
-                return {
-                    ...state,
-                    isHovered: !state.isHovered
-                };
-            }
-
-            return state;
-        }
-        case 'active': {
-            return {
-                isHovered: false,
-                isActive: true
-            };
-        }
-        default: {
-            return state;
-        }
-    }
-};
-
 const Tile = (props) => {
-    const [tileState, dispatch] = useReducer(tileReducer, initialState);
+    const [isHovered, setIsHovered] = useState(false);
     const activeTiles = useSelector(selectActiveTiles);
     const gameDispatch = useDispatch();
-    
+
     const handleClick = (event) => {
-        dispatch({type: 'active'});
-        gameDispatch(reveal(props.id));
-        // if(!isActive && activeTiles.length < 2){
-        //     gameDispatch(reveal(props.id));
-        // }
+        if(activeTiles.length < 2){
+            gameDispatch(reveal(props.tile.id));
+        }
     };
 
     const handleMouseOver = (event) => {
-        dispatch({type: 'hover'});
+        if(!props.tile.isActive){
+            setIsHovered(true);
+        }
     };
 
     const handleMouseOut = (event) => {
-        dispatch({type: 'hover'});
+        if(!props.tile.isActive){
+            setIsHovered(false);
+        }
     };
-
-    // const activeTile = activeTiles.find((tile) => {
-    //     return tile.id === props.id;
-    // });
-
-    // if(typeof activeTile !== 'undefined') {
-    //     isActive = true;
-    // }
     
-    return <button id={props.id} 
+    return <button id={props.tile.id} 
         type='button'
-        className={`${styles.tile} ${tileState.isHovered && styles.hover} ${tileState.isActive && styles.active}`}
+        className={`${styles.tile} ${isHovered && styles.hover} ${props.tile.isActive && styles.active} ${props.tile.isScored && styles.scored}`}
         onClick={handleClick}
         onMouseOver={handleMouseOver}
         onMouseOut={handleMouseOut}
     >
-        <span className={styles.text}>{tileState.isActive && props.value}</span>
+        <span className={styles.text}>{props.tile.isActive && props.tile.value}</span>
     </button>
 };
 

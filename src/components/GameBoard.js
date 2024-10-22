@@ -20,7 +20,7 @@ const GameBoard = () => {
     }
 
     const tileGrid = tiles.map((tile) => {
-        return <Tile key={tile.id} id={tile.id} value={tile.value}/>
+        return <Tile key={tile.id} tile={tile}/>
     });
 
     // if(hasWon){

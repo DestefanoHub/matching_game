@@ -21,6 +21,11 @@
     animation: 0.5s 1 normal fadeIn;
 }
 
+.scored{
+    animation: 0.5s 1 normal fadeOut;
+    animation-fill-mode: forwards;
+}
+
 @keyframes fadeIn{
     from{
         opacity: 0;
@@ -38,5 +43,6 @@
 
     to{
         opacity: 0;
+        visibility: hidden;
     }
 }

@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSelector, createSlice } from '@reduxjs/toolkit'
 
 const tileGrid = [];
 const values = ['orange', 'orange', 'red', 'red', 'blue', 'blue', 'green', 'green', 'yellow', 'yellow', 'purple', 'purple'];
@@ -10,7 +10,9 @@ for(let i = 0; i < 12; i++){
     
     tileGrid.push({
         id: i,
-        value: values[valueIndex]
+        value: values[valueIndex],
+        isActive: false,
+        isScored: false
     });
 
     values.splice(valueIndex, 1);
@@ -18,11 +20,16 @@ for(let i = 0; i < 12; i++){
 
 const initialState = {
     tiles: tileGrid,
-    activeTiles: [],
     points: 0,
     totalPoints: (tileGrid.length / 2),
     gameOver: false,
     hasWon: false
+};
+
+const getActiveTiles = (tiles) => {
+    return tiles.filter((tile) => {
+        return tile.isActive;
+    });
 };
 
 export const gameSlice = createSlice({
@@ -34,13 +41,15 @@ export const gameSlice = createSlice({
                 return tile.id === action.payload;
             });
 
-            if(state.activeTiles.length < 2 && tileIndex !== -1){
-                const isTileActive = state.activeTiles.some((tile) => {
+            const activeTiles = getActiveTiles(state.tiles);
+
+            if(activeTiles.length < 2 && tileIndex !== -1){
+                const isTileActive = activeTiles.some((tile) => {
                     return tile.id === action.payload;
                 });
 
                 if(!isTileActive){
-                    state.activeTiles.push(state.tiles[tileIndex]);
+                    state.tiles[tileIndex].isActive = true;
                     return state;
                 }
             }
@@ -48,23 +57,29 @@ export const gameSlice = createSlice({
             return state;
         },
         clear: (state) => {
-            state.activeTiles = [];
+            const activeTiles = getActiveTiles(state.tiles);
+            activeTiles[0].isActive = false;
+            activeTiles[1].isActive = false;
             return state;
         },
         score: (state) => {
             const newScore = state.points + 1;
+            const activeTiles = getActiveTiles(state.tiles);
+
+            activeTiles[0].isActive = false;
+            activeTiles[0].isScored = true;
+            activeTiles[1].isActive = false;
+            activeTiles[1].isScored = true;
 
             if(!state.gameOver){
                 if(newScore === state.totalPoints){
                     state.points = newScore;
-                    state.activeTiles = [];
                     state.hasWon = true;
                     state.gameOver = true;
                     return state;
                 }
                 
                 state.points = newScore;
-                state.activeTiles = [];
                 return state;
             }
 
@@ -75,6 +90,6 @@ export const gameSlice = createSlice({
 
 export const { reveal, clear, score } = gameSlice.actions;
 export const selectTiles = (state) => state.game.tiles;
-export const selectActiveTiles = (state) => state.game.activeTiles;
+export const selectActiveTiles = createSelector([selectTiles], (tiles) => {return getActiveTiles(tiles)});
 export const selectHasWon = (state) => state.game.hasWon;
 export default gameSlice.reducer;

@@ -1,9 +1,9 @@
+import { Outlet } from 'react-router-dom';
+
 import './App.css';
 
-import Main from './pages/Main';
-
 const App = () => {
-  return <Main/>;
+  return <Outlet/>;
 }
 
 export default App;

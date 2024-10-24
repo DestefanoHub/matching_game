@@ -1,6 +1,6 @@
 import GameBoard from '../components/GameBoard';
 
-import styles from './Main.module.css';
+import styles from './Game.module.css';
 
 const Main = () => {
     return <section className={styles.page}>

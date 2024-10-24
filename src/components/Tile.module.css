@@ -17,7 +17,7 @@
     box-shadow: gray 5px 5px;
 }
 
-.active .text{
+.active .tileText{
     animation: 0.5s 1 normal fadeIn;
 }
 

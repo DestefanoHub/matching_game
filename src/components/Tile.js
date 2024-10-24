@@ -10,7 +10,7 @@ const Tile = (props) => {
     const activeTiles = useSelector(selectActiveTiles);
     const gameDispatch = useDispatch();
 
-    const handleClick = (event) => {
+    const handleClick = (event) => {        
         if(activeTiles.length < 2){
             gameDispatch(reveal(props.tile.id));
         }
@@ -35,7 +35,7 @@ const Tile = (props) => {
         onMouseOver={handleMouseOver}
         onMouseOut={handleMouseOut}
     >
-        <span className={styles.text}>{props.tile.isActive && props.tile.value}</span>
+        <span className={`${styles.tileText}`}>{props.tile.isActive && props.tile.value}</span>
     </button>
 };
 

@@ -11,23 +11,28 @@ const GameBoard = () => {
     const hasWon = useSelector(selectHasWon);
     const gameDispatch = useDispatch();
 
-    if(activeTiles.length === 2){
-        if(activeTiles[0].value === activeTiles[1].value){
-            gameDispatch(score());
-        }else{
-            gameDispatch(clear());
+    /*
+    * Wait until the tile animations have completed before updating the board, otherwise players
+    * will be unable to see the value of the second tile they click on.
+    */
+    const handleAnimationEnd = (event) => {
+        if(activeTiles.length === 2 && event.target.className.includes('tile')){
+            if(activeTiles[0].value === activeTiles[1].value){
+                gameDispatch(score());
+            }else{
+                gameDispatch(clear());
+            }
         }
-    }
+    };
 
     const tileGrid = tiles.map((tile) => {
         return <Tile key={tile.id} tile={tile}/>
     });
-
-    // if(hasWon){
-    //     alert('You have won!');
-    // }
     
-    return <div className={`${styles.board} ${activeTiles.length === 2 && styles.blocker}`}>
+    return <div id='gameboard'
+        className={`${styles.board} ${activeTiles.length === 2 && styles.blocker}`}
+        onAnimationEndCapture={handleAnimationEnd}
+    >
         {tileGrid}
     </div>;
 };

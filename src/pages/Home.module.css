@@ -1,0 +1,11 @@
+.page{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+}
+
+.content{
+    background-color: whitesmoke;
+    width: 50%;
+}

@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: darkgray;
+    height: 100%;
 }
 
 .title{

@@ -5,7 +5,7 @@
     border-radius: 10px;
 }
 
-.hover{
+.tile:hover{
     cursor: pointer;
     background-color: darkgrey;
     box-shadow: gray 5px 5px;

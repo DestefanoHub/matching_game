@@ -29,9 +29,15 @@ const initialState = {
 };
 
 const getActiveTiles = (tiles) => {
-    return tiles.filter((tile) => {
-        return tile.isActive;
+    const indices = [];
+
+    tiles.forEach((tile, index) => {        
+        if(tile.isActive){
+            indices.push(index);
+        }
     });
+
+    return indices;
 };
 
 export const gameSlice = createSlice({
@@ -46,8 +52,8 @@ export const gameSlice = createSlice({
             const activeTiles = getActiveTiles(state.tiles);
 
             if(activeTiles.length < 2 && tileIndex !== -1){
-                const isTileActive = activeTiles.some((tile) => {
-                    return tile.id === action.payload;
+                const isTileActive = activeTiles.some((tileIndex) => {
+                    return state.tiles[tileIndex].value === action.payload;
                 });
 
                 if(!isTileActive){
@@ -62,8 +68,8 @@ export const gameSlice = createSlice({
             const activeTiles = getActiveTiles(state.tiles);
 
             if(activeTiles.length === 2){
-                activeTiles[0].isActive = false;
-                activeTiles[1].isActive = false;
+                state.tiles[activeTiles[0]].isActive = false;
+                state.tiles[activeTiles[1]].isActive = false;
             }
 
             return state;
@@ -73,10 +79,10 @@ export const gameSlice = createSlice({
             const activeTiles = getActiveTiles(state.tiles);
 
             if(activeTiles.length === 2){
-                activeTiles[0].isActive = false;
-                activeTiles[0].isScored = true;
-                activeTiles[1].isActive = false;
-                activeTiles[1].isScored = true;
+                state.tiles[activeTiles[0]].isActive = false;
+                state.tiles[activeTiles[0]].isScored = true;
+                state.tiles[activeTiles[1]].isActive = false;
+                state.tiles[activeTiles[1]].isScored = true;
 
                 if(!state.gameOver){
                     if(newScore === state.totalPoints){

@@ -16,7 +16,7 @@ const GameBoard = () => {
     * second tile they click on.
     */
     if(activeTiles.length === 2){
-        if(activeTiles[0].value === activeTiles[1].value){
+        if(tiles[activeTiles[0]].value === tiles[activeTiles[1]].value){
             setTimeout(() => {gameDispatch(score())}, 500);
         }else{
             setTimeout(() => {gameDispatch(clear())}, 500);

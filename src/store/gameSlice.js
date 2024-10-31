@@ -1,4 +1,4 @@
-import { createSelector, createSlice } from '@reduxjs/toolkit'
+import { createSelector, createSlice } from '@reduxjs/toolkit';
 
 const tileGrid = [];
 const values = ['orange', 'orange', 'red', 'red', 'blue', 'blue', 'green', 'green', 'yellow', 'yellow', 'purple', 'purple'];
@@ -23,7 +23,9 @@ const initialState = {
     points: 0,
     totalPoints: (tileGrid.length / 2),
     gameOver: false,
-    hasWon: false
+    hasWon: false,
+    player: null,
+    difficulty: 1
 };
 
 const getActiveTiles = (tiles) => {
@@ -58,29 +60,35 @@ export const gameSlice = createSlice({
         },
         clear: (state) => {
             const activeTiles = getActiveTiles(state.tiles);
-            activeTiles[0].isActive = false;
-            activeTiles[1].isActive = false;
+
+            if(activeTiles.length === 2){
+                activeTiles[0].isActive = false;
+                activeTiles[1].isActive = false;
+            }
+
             return state;
         },
         score: (state) => {
             const newScore = state.points + 1;
             const activeTiles = getActiveTiles(state.tiles);
 
-            activeTiles[0].isActive = false;
-            activeTiles[0].isScored = true;
-            activeTiles[1].isActive = false;
-            activeTiles[1].isScored = true;
+            if(activeTiles.length === 2){
+                activeTiles[0].isActive = false;
+                activeTiles[0].isScored = true;
+                activeTiles[1].isActive = false;
+                activeTiles[1].isScored = true;
 
-            if(!state.gameOver){
-                if(newScore === state.totalPoints){
+                if(!state.gameOver){
+                    if(newScore === state.totalPoints){
+                        state.points = newScore;
+                        state.hasWon = true;
+                        state.gameOver = true;
+                        return state;
+                    }
+                    
                     state.points = newScore;
-                    state.hasWon = true;
-                    state.gameOver = true;
                     return state;
                 }
-                
-                state.points = newScore;
-                return state;
             }
 
             return state;

@@ -17,10 +17,6 @@
     box-shadow: gray 5px 5px;
 }
 
-.active .tileText{
-    animation: 0.5s 1 normal fadeIn;
-}
-
 .scored{
     animation: 0.5s 1 normal fadeOut;
     animation-fill-mode: forwards;

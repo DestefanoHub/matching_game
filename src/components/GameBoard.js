@@ -12,27 +12,22 @@ const GameBoard = () => {
     const gameDispatch = useDispatch();
 
     /*
-    * Wait until the tile animations have completed before updating the board, otherwise players
-    * will be unable to see the value of the second tile they click on.
+    * Wait a brief time before updating the board, otherwise players will be unable to see the value of the
+    * second tile they click on.
     */
-    const handleAnimationEnd = (event) => {
-        if(activeTiles.length === 2 && event.target.className.includes('tile')){
-            if(activeTiles[0].value === activeTiles[1].value){
-                gameDispatch(score());
-            }else{
-                gameDispatch(clear());
-            }
+    if(activeTiles.length === 2){
+        if(activeTiles[0].value === activeTiles[1].value){
+            setTimeout(() => {gameDispatch(score())}, 500);
+        }else{
+            setTimeout(() => {gameDispatch(clear())}, 500);
         }
-    };
+    }
 
     const tileGrid = tiles.map((tile) => {
         return <Tile key={tile.id} tile={tile}/>
     });
     
-    return <div id='gameboard'
-        className={`${styles.board} ${activeTiles.length === 2 && styles.blocker}`}
-        onAnimationEndCapture={handleAnimationEnd}
-    >
+    return <div id='gameboard' className={`${styles.board} ${activeTiles.length === 2 && styles.blocker}`}>
         {tileGrid}
     </div>;
 };

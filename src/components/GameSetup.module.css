@@ -1,0 +1,15 @@
+.form{
+    display: flex;
+    flex-direction: column;
+}
+
+.formRow{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 1em;
+    align-items: center;
+}
+
+.formRow label, .label{
+    padding-right: 1em;
+}

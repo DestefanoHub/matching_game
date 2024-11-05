@@ -1,0 +1,9 @@
+.modal{
+    border-radius: 10px;
+    background-color: lightgray;
+}
+
+.modal::backdrop{
+    opacity: 0.75;
+    background-color: green;
+};

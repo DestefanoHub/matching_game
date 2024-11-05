@@ -24,6 +24,7 @@ const initialState = {
     totalPoints: (tileGrid.length / 2),
     gameOver: false,
     hasWon: false,
+    init: false,
     player: null,
     difficulty: 1
 };
@@ -44,6 +45,12 @@ export const gameSlice = createSlice({
     name: 'game',
     initialState,
     reducers: {
+        setup: (state, action) => {
+            state.player = action.payload.player;
+            state.difficulty = action.payload.difficulty;
+            state.init = true;
+            return state;
+        },
         reveal: (state, action) => {
             const tileIndex = state.tiles.findIndex((tile) => {
                 return tile.id === action.payload;
@@ -102,7 +109,8 @@ export const gameSlice = createSlice({
     }
 });
 
-export const { reveal, clear, score } = gameSlice.actions;
+export const { setup, reveal, clear, score } = gameSlice.actions;
+export const selectInit = (state) => state.game.init;
 export const selectTiles = (state) => state.game.tiles;
 export const selectActiveTiles = createSelector([selectTiles], (tiles) => {return getActiveTiles(tiles)});
 export const selectHasWon = (state) => state.game.hasWon;

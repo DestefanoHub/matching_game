@@ -11,5 +11,9 @@
 }
 
 .formRow label, .label{
-    padding-right: 1em;
+    margin-right: 1em;
+}
+
+label, input{
+    cursor: pointer;
 }

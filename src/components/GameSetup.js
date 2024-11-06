@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import { useRef } from 'react';
+import { useState } from 'react';
 
 import { setup } from '../store/gameSlice';
 
@@ -9,22 +9,25 @@ import styles from './GameSetup.module.css';
 
 const GameSetup = (props) => {   
     const gameDispatch = useDispatch();
-    const playerRef = useRef(null);
-    const difficultyRef = useRef(null);
+    const [state, setState] = useState({player: '', difficulty: 1});
+
+    const handlePlayer = (event) => {
+        setState({
+            ...state,
+            player: event.target.value
+        });
+    };
+
+    const handleDifficulty = (event) => {
+        setState({
+            ...state,
+            difficulty: +event.target.value
+        });
+    };
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const player = playerRef.current.value;
-        const difficultyButtons = difficultyRef.current.querySelectorAll('input[type="radio"]');
-        let difficulty = 1;
-        
-        difficultyButtons.forEach((radio) => {
-            if(radio.checked){
-                difficulty = radio.value;
-            }
-        });
-
-        gameDispatch(setup({player, difficulty}));
+        gameDispatch(setup({player: state.player, difficulty: state.difficulty}));
         props.modalRef.current.close();
     };
 
@@ -34,9 +37,14 @@ const GameSetup = (props) => {
             <form className={styles.form} onSubmit={handleSubmit}>
                 <div className={styles.formRow}>
                     <label htmlFor='player'>Player name: </label>
-                    <input type='text' id='player' ref={playerRef}/>
+                    <input 
+                        type='text'
+                        id='player' 
+                        value={state.player}
+                        onChange={handlePlayer}
+                    />
                 </div>
-                <div className={styles.formRow} ref={difficultyRef}>
+                <div className={styles.formRow}>
                     <p className={styles.label}>Difficulty: </p>
                     <label>
                         <input 
@@ -44,6 +52,8 @@ const GameSetup = (props) => {
                             id='easy'
                             name='difficulty'
                             value='1'
+                            checked={state.difficulty === 1}
+                            onChange={handleDifficulty}
                         />Easy
                     </label>
                     <label>
@@ -52,6 +62,8 @@ const GameSetup = (props) => {
                             id='normal'
                             name='difficulty'
                             value='2'
+                            checked={state.difficulty === 2}
+                            onChange={handleDifficulty}
                         />Normal
                     </label>
                     <label>
@@ -60,6 +72,8 @@ const GameSetup = (props) => {
                             id='hard'
                             name='difficulty'
                             value='3'
+                            checked={state.difficulty === 3}
+                            onChange={handleDifficulty}
                         />Hard
                     </label>
                 </div>

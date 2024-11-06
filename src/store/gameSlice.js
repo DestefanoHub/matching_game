@@ -1,27 +1,36 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
 
-const tileGrid = [];
-const values = ['orange', 'orange', 'red', 'red', 'blue', 'blue', 'green', 'green', 'yellow', 'yellow', 'purple', 'purple'];
-    
-for(let i = 0; i < 12; i++){
-    const minCeiled = Math.ceil(0);
-    const maxFloored = Math.floor(values.length - 1);
-    const valueIndex = Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled);
-    
-    tileGrid.push({
-        id: i,
-        value: values[valueIndex],
-        isActive: false,
-        isScored: false
-    });
-
-    values.splice(valueIndex, 1);
-}
+const values = [
+    'orange',
+    'orange',
+    'red',
+    'red',
+    'blue',
+    'blue',
+    'green',
+    'green',
+    'yellow',
+    'yellow',
+    'purple',
+    'purple',
+    'brown',
+    'brown',
+    'black',
+    'black',
+    'white',
+    'white',
+    'cyan',
+    'cyan',
+    'magenta',
+    'magenta',
+    'gold',
+    'gold'
+];
 
 const initialState = {
-    tiles: tileGrid,
+    tiles: [],
     points: 0,
-    totalPoints: (tileGrid.length / 2),
+    totalPoints: 0,
     gameOver: false,
     hasWon: false,
     init: false,
@@ -46,9 +55,44 @@ export const gameSlice = createSlice({
     initialState,
     reducers: {
         setup: (state, action) => {
+            const tileGrid = [];
+            let gridSize = 12;
+
+            switch(action.payload.difficulty){
+                case 2:
+                    gridSize = 18;
+                    break;
+                case 3:
+                    gridSize = 24;
+                    break;
+                case 1:
+                default:
+                    gridSize = 12;
+                    break;
+            }
+
+            const difficultyValues = values.slice(0, gridSize);
+
+            for(let i = 0; i < gridSize; i++){
+                const minCeiled = Math.ceil(0);
+                const maxFloored = Math.floor(difficultyValues.length - 1);
+                const valueIndex = Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled);
+                
+                tileGrid.push({
+                    id: i,
+                    value: difficultyValues[valueIndex],
+                    isActive: false,
+                    isScored: false
+                });
+            
+                difficultyValues.splice(valueIndex, 1);
+            }
+
+            state.init = true;
             state.player = action.payload.player;
             state.difficulty = action.payload.difficulty;
-            state.init = true;
+            state.tiles = tileGrid;
+            state.totalPoints = (tileGrid.length / 2);
             return state;
         },
         reveal: (state, action) => {
@@ -111,6 +155,8 @@ export const gameSlice = createSlice({
 
 export const { setup, reveal, clear, score } = gameSlice.actions;
 export const selectInit = (state) => state.game.init;
+export const selectPlayer = (state) => state.game.player;
+export const selectDifficulty = (state) => state.game.difficulty;
 export const selectTiles = (state) => state.game.tiles;
 export const selectActiveTiles = createSelector([selectTiles], (tiles) => {return getActiveTiles(tiles)});
 export const selectHasWon = (state) => state.game.hasWon;

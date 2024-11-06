@@ -1,10 +1,29 @@
 .board{
     background-color: whitesmoke;
+}
+
+.easy{
     display: grid;
-    grid-template-columns: repeat(4, 10em);
     column-gap: 1em;
     row-gap: 1em;
     padding: 2em;
+    grid-template-columns: repeat(4, 10em);
+}
+
+.normal{
+    display: grid;
+    column-gap: 1em;
+    row-gap: 1em;
+    padding: 2em;
+    grid-template-columns: repeat(6, 10em);
+}
+
+.hard{
+    display: grid;
+    column-gap: 1em;
+    row-gap: 1em;
+    padding: 2em;
+    grid-template-columns: repeat(8, 10em);
 }
 
 .blocker{

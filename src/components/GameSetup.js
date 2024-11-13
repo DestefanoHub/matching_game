@@ -42,6 +42,7 @@ const GameSetup = (props) => {
                         id='player' 
                         value={state.player}
                         onChange={handlePlayer}
+                        required
                     />
                 </div>
                 <div className={styles.formRow}>
@@ -51,6 +52,7 @@ const GameSetup = (props) => {
                             type='radio'
                             id='easy'
                             name='difficulty'
+                            required
                             value='1'
                             checked={state.difficulty === 1}
                             onChange={handleDifficulty}

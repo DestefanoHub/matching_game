@@ -50,10 +50,22 @@ const getActiveTiles = (tiles) => {
     return indices;
 };
 
+const getDisplayDifficulty = (diff) => {
+    switch(diff){
+        case 2: return 'normal';
+        case 3: return 'hard';
+        case 1:
+        default: return 'easy';
+    }
+};
+
 export const gameSlice = createSlice({
     name: 'game',
     initialState,
     reducers: {
+        init: () => {
+            return initialState;
+        },
         setup: (state, action) => {
             const tileGrid = [];
             let gridSize = 12;
@@ -149,15 +161,23 @@ export const gameSlice = createSlice({
             }
 
             return state;
+        },
+        lose: (state) => {
+            state.gameOver = true;
+            state.hasWon = false;
+
+            return state;
         }
     }
 });
 
-export const { setup, reveal, clear, score } = gameSlice.actions;
+export const { init, setup, reveal, clear, score, lose } = gameSlice.actions;
 export const selectInit = (state) => state.game.init;
 export const selectPlayer = (state) => state.game.player;
 export const selectDifficulty = (state) => state.game.difficulty;
+export const selectDisplayDifficulty = createSelector([selectDifficulty], (diff) => {return getDisplayDifficulty(diff)});
 export const selectTiles = (state) => state.game.tiles;
 export const selectActiveTiles = createSelector([selectTiles], (tiles) => {return getActiveTiles(tiles)});
 export const selectHasWon = (state) => state.game.hasWon;
+export const selectGameOver = (state) => state.game.gameOver;
 export default gameSlice.reducer;

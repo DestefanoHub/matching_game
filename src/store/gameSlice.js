@@ -180,4 +180,6 @@ export const selectTiles = (state) => state.game.tiles;
 export const selectActiveTiles = createSelector([selectTiles], (tiles) => {return getActiveTiles(tiles)});
 export const selectHasWon = (state) => state.game.hasWon;
 export const selectGameOver = (state) => state.game.gameOver;
+export const selectPoints = (state) => state.game.points;
+export const selectTotalPoints = (state) => state.game.totalPoints;
 export default gameSlice.reducer;

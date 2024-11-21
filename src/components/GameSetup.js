@@ -8,8 +8,9 @@ import Modal from './Modal';
 import styles from './GameSetup.module.css';
 
 const GameSetup = (props) => {   
-    const gameDispatch = useDispatch();
     const [state, setState] = useState({player: '', difficulty: 1});
+    
+    const gameDispatch = useDispatch();
 
     const handlePlayer = (event) => {
         setState({

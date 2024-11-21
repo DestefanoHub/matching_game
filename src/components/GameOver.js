@@ -1,9 +1,13 @@
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+
+import { init } from '../store/gameSlice';
 
 import Modal from './Modal';
 
 const GameOver = (props) => {    
     const navigate = useNavigate();
+    const gameDispatch = useDispatch();
 
     const winMessage = 'Congrats, you won!';
     const loseMessage = 'Sorry, you lost';
@@ -11,10 +15,14 @@ const GameOver = (props) => {
     const loseNewGameText = 'Try Again';
 
     const handleClickNewGame = () => {
-        navigate('game', {replace: true});
+        gameDispatch(init());
+        props.modalRef.current.close();
+        navigate('/game', {replace: true});
     };
 
     const handleClickHome =  () => {
+        gameDispatch(init());
+        props.modalRef.current.close();
         navigate('/');
     };
 

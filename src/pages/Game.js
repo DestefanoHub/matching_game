@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,7 +13,7 @@ import { addGame } from '../store/appSlice';
 import styles from './Game.module.css';
 
 const Game = () => {
-    const [countdownState, setCountdownState] = useState(60);
+    const [countdown, setCountdown] = useState(60);
 
     const initialized = useSelector(selectInit);
     const hasWon = useSelector(selectHasWon);
@@ -30,10 +30,6 @@ const Game = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        setCountdownState(60);
-    }, []);
-
     if(gameOver){
         clearInterval(countdownInterval.current);
         gameOverModal.current.showModal();
@@ -43,12 +39,9 @@ const Game = () => {
             hasWon,
             score,
             totalScore,
-            time: countdownState
+            time: countdown,
+            date: new Date().toJSON()
         }));
-    }
-
-    if(countdownState === 0){
-        clearInterval(countdownInterval.current);
     }
 
     const handleClick = () => {
@@ -59,14 +52,14 @@ const Game = () => {
 
     const handleClose = () =>{
         dispatch(init());
-        setCountdownState(60);
+        setCountdown(60);
         gameOverModal.current.close();
         navigate('/game', {replace: true});
     };
 
     const startCountdown = () => {
         countdownInterval.current = setInterval(() => {
-            setCountdownState((prevCountdown) => {
+            setCountdown((prevCountdown) => {
                 if(prevCountdown === 0){
                     clearInterval(countdownInterval.current);
                     dispatch(lose());
@@ -83,7 +76,7 @@ const Game = () => {
         <GameOver modalRef={gameOverModal} onClose={handleClose} hasWon={hasWon}/>
         <p className={styles.title}>Matching Game</p>
         {!initialized && <button onClick={handleClick}>Start a new game!</button>}
-        {initialized && <GameInfo countdown={countdownState} setCountdown={setCountdownState}/>}
+        {initialized && <GameInfo countdown={countdown} setCountdown={setCountdown}/>}
         {initialized && <GameBoard startCountdown={startCountdown}/>}
     </section>;
 };

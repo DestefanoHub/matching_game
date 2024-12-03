@@ -105,7 +105,6 @@ export const gameSlice = createSlice({
             state.difficulty = action.payload.difficulty;
             state.tiles = tileGrid;
             state.totalPoints = (tileGrid.length / 2);
-            return state;
         },
         reveal: (state, action) => {
             const tileIndex = state.tiles.findIndex((tile) => {
@@ -121,57 +120,40 @@ export const gameSlice = createSlice({
 
                 if(!isTileActive){
                     state.tiles[tileIndex].isActive = true;
-                    return state;
                 }
             }
-
-            return state;
-        },
-        clear: (state) => {
-            const activeTiles = getActiveTiles(state.tiles);
-
-            if(activeTiles.length === 2){
-                state.tiles[activeTiles[0]].isActive = false;
-                state.tiles[activeTiles[1]].isActive = false;
-            }
-
-            return state;
         },
         score: (state) => {
             const newScore = state.points + 1;
             const activeTiles = getActiveTiles(state.tiles);
 
             if(activeTiles.length === 2){
-                state.tiles[activeTiles[0]].isActive = false;
-                state.tiles[activeTiles[0]].isScored = true;
-                state.tiles[activeTiles[1]].isActive = false;
-                state.tiles[activeTiles[1]].isScored = true;
+                if(state.tiles[activeTiles[0]].value === state.tiles[activeTiles[1]].value){
+                    state.tiles[activeTiles[0]].isScored = true;
+                    state.tiles[activeTiles[1]].isScored = true;
 
-                if(!state.gameOver){
-                    if(newScore === state.totalPoints){
+                    if(!state.gameOver){
                         state.points = newScore;
-                        state.hasWon = true;
-                        state.gameOver = true;
-                        return state;
-                    }
-                    
-                    state.points = newScore;
-                    return state;
-                }
-            }
 
-            return state;
+                        if(newScore === state.totalPoints){
+                            state.hasWon = true;
+                            state.gameOver = true;
+                        }
+                    }
+                }
+
+                state.tiles[activeTiles[0]].isActive = false;
+                state.tiles[activeTiles[1]].isActive = false;
+            }
         },
         lose: (state) => {
             state.gameOver = true;
             state.hasWon = false;
-
-            return state;
         }
     }
 });
 
-export const { init, setup, reveal, clear, score, lose } = gameSlice.actions;
+export const { init, setup, reveal, score, lose } = gameSlice.actions;
 export const selectInit = (state) => state.game.init;
 export const selectPlayer = (state) => state.game.player;
 export const selectDifficulty = (state) => state.game.difficulty;

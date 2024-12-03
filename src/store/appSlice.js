@@ -10,8 +10,6 @@ export const appSlice = createSlice({
     reducers: {
         addGame: (state, action) => {
             state.games.push(action.payload);
-            
-            return state;
         }
     }
 });

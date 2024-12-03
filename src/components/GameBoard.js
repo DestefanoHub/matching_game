@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { score, clear, selectInit, selectDisplayDifficulty, selectActiveTiles, selectTiles } from '../store/gameSlice';
+import { score, selectInit, selectDisplayDifficulty, selectActiveTiles, selectTiles } from '../store/gameSlice';
 import Tile from './Tile';
 
 import styles from './GameBoard.module.css';
@@ -21,11 +21,7 @@ const GameBoard = (props) => {
     * second tile they click on.
     */
     if(activeTiles.length === 2){
-        if(tiles[activeTiles[0]].value === tiles[activeTiles[1]].value){
-            setTimeout(() => {gameDispatch(score())}, 500);
-        }else{
-            setTimeout(() => {gameDispatch(clear())}, 500);
-        }
+        setTimeout(() => {gameDispatch(score())}, 500);
     }
 
     const handleClick = () => {

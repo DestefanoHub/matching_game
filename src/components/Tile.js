@@ -19,8 +19,7 @@ const Tile = (props) => {
         className={`${styles.tile} ${props.tile.isActive && styles.active} ${props.tile.isScored && styles.scored}`}
         onClick={handleClick}
     >
-        {/* <span>{props.tile.isActive && props.tile.value}</span> */}
-        <span>{props.tile.value}</span>
+        <span>{props.tile.isActive && props.tile.value}</span>
     </button>
 };
 

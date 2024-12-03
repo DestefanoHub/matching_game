@@ -42,6 +42,7 @@ const Game = () => {
             time: countdown,
             date: new Date().toJSON()
         }));
+        dispatch(init());
     }
 
     const handleClick = () => {
@@ -73,10 +74,10 @@ const Game = () => {
 
     return <section className={styles.page}>
         <GameSetup modalRef={gameSetupModal}/>
-        <GameOver modalRef={gameOverModal} onClose={handleClose} hasWon={hasWon}/>
+        <GameOver modalRef={gameOverModal} onClose={handleClose}/>
         <p className={styles.title}>Matching Game</p>
         {!initialized && <button onClick={handleClick}>Start a new game!</button>}
-        {initialized && <GameInfo countdown={countdown} setCountdown={setCountdown}/>}
+        {initialized && <GameInfo countdown={countdown}/>}
         {initialized && <GameBoard startCountdown={startCountdown}/>}
     </section>;
 };

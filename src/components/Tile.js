@@ -6,11 +6,11 @@ import styles from './Tile.module.css';
 
 const Tile = (props) => {
     const activeTiles = useSelector(selectActiveTiles);
-    const gameDispatch = useDispatch();
+    const dispatch = useDispatch();
 
     const handleClick = (event) => {        
         if(activeTiles.length < 2){
-            gameDispatch(reveal(props.tile.id));
+            dispatch(reveal(props.tile.id));
         }
     };
 

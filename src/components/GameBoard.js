@@ -14,7 +14,7 @@ const GameBoard = (props) => {
     const tiles = useSelector(selectTiles);
     const activeTiles = useSelector(selectActiveTiles);
 
-    const gameDispatch = useDispatch();
+    const dispatch = useDispatch();
     
     /*
     * Wait a brief time before updating the board, otherwise players will be unable to see the value of the
@@ -24,13 +24,13 @@ const GameBoard = (props) => {
         let tileShowTimeout = null;
 
         if(activeTiles.length === 2){
-            tileShowTimeout = setTimeout(() => {gameDispatch(score())}, 500);
+            tileShowTimeout = setTimeout(() => {dispatch(score())}, 500);
         }
 
         return () => {
             clearTimeout(tileShowTimeout);
         };
-    }, [activeTiles, gameDispatch]);
+    }, [activeTiles, dispatch]);
 
     const handleClick = () => {
         if(!playerHasStarted){

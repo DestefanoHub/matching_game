@@ -10,7 +10,7 @@ import styles from './GameSetup.module.css';
 const GameSetup = (props) => {   
     const [state, setState] = useState({player: '', difficulty: 1});
     
-    const gameDispatch = useDispatch();
+    const dispatch = useDispatch();
 
     const handlePlayer = (event) => {
         setState({
@@ -28,7 +28,7 @@ const GameSetup = (props) => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        gameDispatch(setup({player: state.player, difficulty: state.difficulty}));
+        dispatch(setup({player: state.player, difficulty: state.difficulty}));
         props.modalRef.current.close();
     };
 

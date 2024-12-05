@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { score, selectInit, selectDisplayDifficulty, selectActiveTiles, selectTiles } from '../store/gameSlice';
@@ -20,9 +20,17 @@ const GameBoard = (props) => {
     * Wait a brief time before updating the board, otherwise players will be unable to see the value of the
     * second tile they click on.
     */
-    if(activeTiles.length === 2){
-        setTimeout(() => {gameDispatch(score())}, 500);
-    }
+    useEffect(() => {
+        let tileShowTimeout = null;
+
+        if(activeTiles.length === 2){
+            tileShowTimeout = setTimeout(() => {gameDispatch(score())}, 500);
+        }
+
+        return () => {
+            clearTimeout(tileShowTimeout);
+        };
+    }, [activeTiles, gameDispatch]);
 
     const handleClick = () => {
         if(!playerHasStarted){

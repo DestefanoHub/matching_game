@@ -33,6 +33,7 @@ const initialState = {
     tiles: [],
     points: 0,
     totalPoints: 0,
+    time: 60,
     gameOver: false,
     hasWon: false,
     init: false,
@@ -125,6 +126,11 @@ export const gameSlice = createSlice({
                 }
             }
         },
+        decrement: (state) => {
+            if(state.time > 0){
+                state.time--;
+            }
+        },
         score: (state) => {
             const newScore = state.points + 1;
             const activeTiles = getActiveTiles(state.tiles);
@@ -167,21 +173,47 @@ export const scoreThunk = () => (dispatch, getState) => {
             hasWon: gameState.hasWon,
             score: gameState.score,
             totalScore: gameState.totalScore,
-            // time: countdown,
+            time: gameState.time,
             date: new Date().toJSON()
         }));
     }
 };
 
-export const { init, setup, reveal, score, lose } = gameSlice.actions;
+export const decrementThunk = () => (dispatch, getState) => {
+    dispatch(decrement());
+
+    const gameState = getState().game;
+
+    //Check if the game time has expired.
+    if(!gameState.time){
+        dispatch(lose());
+        /*
+        * It isn't necessary to get waste time calling 'getState' again here.
+        * The only two values being recorded that would not be updated in the current state are
+        * 'hasWon' and 'time', and we know what both of those should be at this point.
+        */
+        dispatch(addGame({
+            player: gameState.player,
+            difficulty: gameState.difficulty,
+            hasWon: false,
+            score: gameState.score,
+            totalScore: gameState.totalScore,
+            time: 0,
+            date: new Date().toJSON()
+        }));
+    }
+};
+
+export const { init, setup, reveal, decrement, score, lose } = gameSlice.actions;
 export const selectInit = (state) => state.game.init;
 export const selectPlayer = (state) => state.game.player;
-export const selectDifficulty = (state) => state.game.difficulty;
+const selectDifficulty = (state) => state.game.difficulty;
 export const selectDisplayDifficulty = createSelector([selectDifficulty], (diff) => {return getDisplayDifficulty(diff)});
 export const selectTiles = (state) => state.game.tiles;
 export const selectActiveTiles = createSelector([selectTiles], (tiles) => {return getActiveTiles(tiles)});
 export const selectHasWon = (state) => state.game.hasWon;
 export const selectGameOver = (state) => state.game.gameOver;
-export const selectPoints = (state) => state.game.points;
-export const selectTotalPoints = (state) => state.game.totalPoints;
+export const selectTime = (state) => state.game.time;
+// export const selectPoints = (state) => state.game.points;
+// export const selectTotalPoints = (state) => state.game.totalPoints;
 export default gameSlice.reducer;

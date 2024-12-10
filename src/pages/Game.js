@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,13 +7,11 @@ import GameBoard from '../components/GameBoard';
 import GameSetup from '../components/GameSetup';
 import GameOver from '../components/GameOver';
 
-import { init, lose, selectInit, selectGameOver } from '../store/gameSlice';
+import { init, decrementThunk, selectInit, selectGameOver } from '../store/gameSlice';
 
 import styles from './Game.module.css';
 
 const Game = () => {
-    const [countdown, setCountdown] = useState(60);
-
     const initialized = useSelector(selectInit);
     const gameOver = useSelector(selectGameOver);
 
@@ -37,21 +35,12 @@ const Game = () => {
 
     const handleClose = () =>{
         dispatch(init());
-        setCountdown(60);
         navigate('/game', {replace: true});
     };
 
     const startCountdown = () => {
         countdownInterval.current = setInterval(() => {
-            setCountdown((prevCountdown) => {
-                if(prevCountdown === 0){
-                    clearInterval(countdownInterval.current);
-                    dispatch(lose());
-                    return 0;
-                }
-
-                return prevCountdown - 1;
-            });
+            dispatch(decrementThunk());
         }, 1000);
     };
 
@@ -60,7 +49,8 @@ const Game = () => {
         <GameOver modalRef={gameOverModal} onClose={handleClose}/>
         <p className={styles.title}>Matching Game</p>
         {!initialized && <button onClick={handleClick}>Start a new game!</button>}
-        {initialized && <GameInfo countdown={countdown}/>}
+        {/* {initialized && <GameInfo countdown={countdown}/>} */}
+        {initialized && <GameInfo/>}
         {initialized && <GameBoard startCountdown={startCountdown}/>}
     </section>;
 };

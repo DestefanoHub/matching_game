@@ -39,9 +39,7 @@ const GameBoard = (props) => {
         }
     };
 
-    const tileGrid = tiles.map((tile) => {
-        return <Tile key={tile.id} tile={tile}/>
-    });
+    const tileGrid = tiles.map((tile) => <Tile key={tile.id} tile={tile}/>);
     
     return <div id='gameboard' 
         className={`${styles.board} ${styles[displayDifficulty]} ${activeTiles.length === 2 && styles.blocker}`}

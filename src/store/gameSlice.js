@@ -208,12 +208,10 @@ export const { init, setup, reveal, decrement, score, lose } = gameSlice.actions
 export const selectInit = (state) => state.game.init;
 export const selectPlayer = (state) => state.game.player;
 const selectDifficulty = (state) => state.game.difficulty;
-export const selectDisplayDifficulty = createSelector([selectDifficulty], (diff) => {return getDisplayDifficulty(diff)});
+export const selectDisplayDifficulty = createSelector([selectDifficulty], (diff) => getDisplayDifficulty(diff));
 export const selectTiles = (state) => state.game.tiles;
-export const selectActiveTiles = createSelector([selectTiles], (tiles) => {return getActiveTiles(tiles)});
+export const selectActiveTiles = createSelector([selectTiles], (tiles) => getActiveTiles(tiles));
 export const selectHasWon = (state) => state.game.hasWon;
 export const selectGameOver = (state) => state.game.gameOver;
 export const selectTime = (state) => state.game.time;
-// export const selectPoints = (state) => state.game.points;
-// export const selectTotalPoints = (state) => state.game.totalPoints;
 export default gameSlice.reducer;

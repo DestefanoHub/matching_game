@@ -1,5 +1,7 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
 
+import { addGame } from './appSlice';
+
 const values = [
     'orange',
     'orange',
@@ -152,6 +154,24 @@ export const gameSlice = createSlice({
         }
     }
 });
+
+export const scoreThunk = () => (dispatch, getState) => {
+    dispatch(score());
+    
+    const gameState = getState().game;
+
+    if(gameState.gameOver){
+        dispatch(addGame({
+            player: gameState.player,
+            difficulty: gameState.difficulty,
+            hasWon: gameState.hasWon,
+            score: gameState.score,
+            totalScore: gameState.totalScore,
+            // time: countdown,
+            date: new Date().toJSON()
+        }));
+    }
+};
 
 export const { init, setup, reveal, score, lose } = gameSlice.actions;
 export const selectInit = (state) => state.game.init;

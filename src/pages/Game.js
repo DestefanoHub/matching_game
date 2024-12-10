@@ -7,8 +7,7 @@ import GameBoard from '../components/GameBoard';
 import GameSetup from '../components/GameSetup';
 import GameOver from '../components/GameOver';
 
-import { init, lose, selectInit, selectHasWon, selectGameOver, selectPlayer, selectDisplayDifficulty, selectPoints, selectTotalPoints } from '../store/gameSlice';
-import { addGame } from '../store/appSlice';
+import { init, lose, selectInit, selectGameOver } from '../store/gameSlice';
 
 import styles from './Game.module.css';
 
@@ -16,12 +15,7 @@ const Game = () => {
     const [countdown, setCountdown] = useState(60);
 
     const initialized = useSelector(selectInit);
-    const hasWon = useSelector(selectHasWon);
     const gameOver = useSelector(selectGameOver);
-    const player = useSelector(selectPlayer);
-    const difficulty = useSelector(selectDisplayDifficulty);
-    const score = useSelector(selectPoints);
-    const totalScore = useSelector(selectTotalPoints);
 
     const gameSetupModal = useRef(null);
     const gameOverModal = useRef(null);
@@ -33,16 +27,6 @@ const Game = () => {
     if(gameOver){
         clearInterval(countdownInterval.current);
         gameOverModal.current.showModal();
-        dispatch(addGame({
-            player,
-            difficulty,
-            hasWon,
-            score,
-            totalScore,
-            time: countdown,
-            date: new Date().toJSON()
-        }));
-        dispatch(init());
     }
 
     const handleClick = () => {
@@ -54,7 +38,6 @@ const Game = () => {
     const handleClose = () =>{
         dispatch(init());
         setCountdown(60);
-        gameOverModal.current.close();
         navigate('/game', {replace: true});
     };
 

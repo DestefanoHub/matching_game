@@ -53,7 +53,7 @@ const getActiveTiles = (tiles) => {
     return indices;
 };
 
-const getDisplayDifficulty = (diff) => {
+export const getDisplayDifficulty = (diff) => {
     switch(diff){
         case 2: return 'normal';
         case 3: return 'hard';
@@ -171,8 +171,8 @@ export const scoreThunk = () => (dispatch, getState) => {
             player: gameState.player,
             difficulty: gameState.difficulty,
             hasWon: gameState.hasWon,
-            score: gameState.score,
-            totalScore: gameState.totalScore,
+            points: gameState.points,
+            totalPoints: gameState.totalPoints,
             time: gameState.time,
             date: new Date().toJSON()
         }));
@@ -196,8 +196,8 @@ export const decrementThunk = () => (dispatch, getState) => {
             player: gameState.player,
             difficulty: gameState.difficulty,
             hasWon: false,
-            score: gameState.score,
-            totalScore: gameState.totalScore,
+            points: gameState.points,
+            totalPoints: gameState.totalPoints,
             time: 0,
             date: new Date().toJSON()
         }));

@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 
 import styles from './Home.module.css';
 
+import RecentGames from '../components/RecentGames';
+
 const Home = () => {
     return <section className={styles.page}>
         <h1>Home Page</h1>
@@ -12,6 +14,7 @@ const Home = () => {
                 match all the word pairs to win! 
             </p>
             <Link to={'game'}>Start New Game</Link>
+            <RecentGames/>
         </div>
     </section>;
 }

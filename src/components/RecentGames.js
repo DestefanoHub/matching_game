@@ -1,12 +1,20 @@
-import { useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
 
-import { selectRecentGames } from '../store/appSlice';
+import { getRecentGames } from '../database';
+
 import GameRecord from './GameRecord';
 
 import styles from './RecentGames.module.css';
 
 const RecentGames = () => {
-    const recentGames = useSelector(selectRecentGames);
+    const [ recentGames, setRecentGames ] = useState([]);
+    
+    useEffect(() => {
+        (async () => {
+            const recentGamesQuery = await getRecentGames();
+            setRecentGames(recentGamesQuery);
+        })()
+    }, []);
 
     const gameList = recentGames.map((game, index) => {
         return <GameRecord key={index} gameInfo={game}/>;

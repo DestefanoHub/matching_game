@@ -47,7 +47,7 @@ const Game = () => {
     return <section className={styles.page}>
         <GameSetup modalRef={gameSetupModal}/>
         <GameOver modalRef={gameOverModal} onClose={handleClose}/>
-        <p className={styles.title}>Matching Game</p>
+        <h1>Matching Game</h1>
         {!initialized && <button onClick={handleClick}>Start a new game!</button>}
         {/* {initialized && <GameInfo countdown={countdown}/>} */}
         {initialized && <GameInfo/>}

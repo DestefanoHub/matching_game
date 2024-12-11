@@ -1,5 +1,7 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
 
+import { insertGame, getGames } from '../database';
+
 const initialState = {
     games: []
 };
@@ -13,6 +15,20 @@ export const appSlice = createSlice({
         },
     }
 });
+
+export const addGameThunk = (game) => async (dispatch, getState) => {
+    await insertGame(game);
+};
+
+export const getGamesThunk = () => async (dispatch, getState) => {
+    const gamesArray = [];
+    const games = await getGames();
+    games.forEach((game) => {
+        gamesArray.push(game);
+    });
+
+    return gamesArray;
+};
 
 export const { addGame } = appSlice.actions;
 export const selectGames = (state) => state.app.games;

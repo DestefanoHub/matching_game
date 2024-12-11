@@ -1,6 +1,6 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
 
-import { addGame } from './appSlice';
+import { insertGame } from '../database';
 
 const values = [
     'orange',
@@ -161,13 +161,13 @@ export const gameSlice = createSlice({
     }
 });
 
-export const scoreThunk = () => (dispatch, getState) => {
+export const scoreThunk = () => async (dispatch, getState) => {
     dispatch(score());
     
     const gameState = getState().game;
 
     if(gameState.gameOver){
-        dispatch(addGame({
+        await insertGame({
             player: gameState.player,
             difficulty: gameState.difficulty,
             hasWon: gameState.hasWon,
@@ -175,11 +175,11 @@ export const scoreThunk = () => (dispatch, getState) => {
             totalPoints: gameState.totalPoints,
             time: gameState.time,
             date: new Date().toJSON()
-        }));
+        });
     }
 };
 
-export const decrementThunk = () => (dispatch, getState) => {
+export const decrementThunk = () => async (dispatch, getState) => {
     dispatch(decrement());
 
     const gameState = getState().game;
@@ -192,7 +192,7 @@ export const decrementThunk = () => (dispatch, getState) => {
         * The only two values being recorded that would not be updated in the current state are
         * 'hasWon' and 'time', and we know what both of those should be at this point.
         */
-        dispatch(addGame({
+        await insertGame({
             player: gameState.player,
             difficulty: gameState.difficulty,
             hasWon: false,
@@ -200,7 +200,7 @@ export const decrementThunk = () => (dispatch, getState) => {
             totalPoints: gameState.totalPoints,
             time: 0,
             date: new Date().toJSON()
-        }));
+        });
     }
 };
 

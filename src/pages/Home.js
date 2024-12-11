@@ -13,7 +13,10 @@ const Home = () => {
                 point and the tiles are removed. If not, the words are hidden again. Memorize the location of the words and 
                 match all the word pairs to win! 
             </p>
-            <Link to={'game'}>Start New Game</Link>
+            <div className={styles.nav}>
+                <Link to={'game'}>Start New Game</Link>
+                <Link to={'history'}>View Game History</Link>
+            </div>
             <RecentGames/>
         </div>
     </section>;

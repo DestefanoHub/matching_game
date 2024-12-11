@@ -7,6 +7,7 @@ import reportWebVitals from './reportWebVitals';
 import App from './App';
 import Home from './pages/Home';
 import Game from './pages/Game';
+import History from './pages/History';
 import store from './store/store';
 
 import './index.css';
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
       {
         path: 'game',
         element: <Game/>
+      },
+      {
+        path: 'history',
+        element: <History/>
       }
     ]
   }

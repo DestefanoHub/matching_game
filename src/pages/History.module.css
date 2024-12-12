@@ -11,7 +11,9 @@
 }
 
 .list{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    display: grid;
+    column-gap: 1em;
+    row-gap: 1em;
+    padding: 2em;
+    grid-template-columns: repeat(2, 20em);
 }

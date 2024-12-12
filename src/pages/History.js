@@ -1,19 +1,21 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { getGames } from '../database';
+import { selectGames } from '../store/historySlice';
+import { getGamesThunk } from '../store/historySlice';
+import GameSearch from '../components/GameSearch';
 import GameRecord from '../components/GameRecord';
 
 import styles from './History.module.css';
 
 const History = () => {
-    const [ games, setGames ] = useState([]);
+    const games = useSelector(selectGames);
+
+    const dispatch = useDispatch();
     
     useEffect(() => {
-        (async () => {
-            const gamesQuery = await getGames();
-            setGames(gamesQuery);
-        })()
-    }, []);
+        dispatch(getGamesThunk());
+    }, [dispatch]);
 
     const gameList = games.map((game, index) => {
         return <GameRecord key={index} gameInfo={game}/>;
@@ -21,9 +23,9 @@ const History = () => {
 
     return <div className={styles.page}>
         <h1>Game History</h1>
+        <GameSearch/>
         <div className={styles.content}>
             <div className={styles.list}>
-                <h1>Top 5 recent games:</h1>
                 {games.length ? gameList : 'No games...yet!'}
             </div>
         </div>

@@ -12,26 +12,22 @@ const GameSearch = () => {
 
     const handleChangeSearch = (event) => {
         dispatch(search(event.target.value));
-        handleSubmit();
+        dispatch(getGamesThunk(-1));
     };
 
     const handleChangeWLFilter = (event) => {
         dispatch(wlFilter(event.target.value));
-        handleSubmit();
+        dispatch(getGamesThunk(-1));
     };
 
     const handleChangeDiffFilter = (event) => {
         dispatch(diffFilter(+event.target.value));
-        handleSubmit();
+        dispatch(getGamesThunk(-1));
     };
 
     const handleChangeSort = (event) => {
         dispatch(sort(event.target.value));
-        handleSubmit();
-    };
-    
-    const handleSubmit = async () => {
-        dispatch(getGamesThunk());
+        dispatch(getGamesThunk(-1));
     };
     
     return <form>

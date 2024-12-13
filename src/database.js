@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, startAt, limit } from "firebase/firestore";
+import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, startAfter, limit, getCountFromServer } from "firebase/firestore";
 
 import config from './firebaseConfig.json';
 
@@ -38,7 +38,6 @@ export const getRecentGames = async () => {
 export const getGames = async (player, winLoss, diff, sort, page=1) => {
     const gamesArray = [];
     const recordsPerPage = 10;
-    const recordStart = (page * recordsPerPage) - recordsPerPage;
     let gamesQuery = collection(database, 'games');
     
     //optional player search
@@ -87,17 +86,28 @@ export const getGames = async (player, winLoss, diff, sort, page=1) => {
         }
     }
 
+    //get total number of filtered games
+    const totalGamesQuery = await getCountFromServer(gamesQuery);
+    const totalGames = totalGamesQuery.data().count;
+
     //pagination - ten records per page
-    gamesQuery = query(gamesQuery, limit(recordsPerPage));
-    // const pageSetup = await getDocs(gamesQuery);
-    // const firstRecord = pageSetup.docs[0];
-    // console.log(firstRecord);
-    // gamesQuery = query(gamesQuery, startAt(firstRecord), limit(recordsPerPage));
+    if(page === 1){
+        gamesQuery = query(gamesQuery, limit(recordsPerPage));
+    }else{
+        const previousRecords = (page * recordsPerPage) - recordsPerPage;
+        gamesQuery = query(gamesQuery, limit(previousRecords));
+        const pageSetup = await getDocs(gamesQuery);
+        const lastRecord = pageSetup.docs[pageSetup.docs.length - 1];
+        gamesQuery = query(gamesQuery, startAfter(lastRecord), limit(recordsPerPage));
+    }
     
     const games = await getDocs(gamesQuery);
     games.forEach((game) => {
         gamesArray.push(game.data());
     });
 
-    return gamesArray;
+    return {
+        games: gamesArray,
+        totalGames: totalGames
+    };
 };

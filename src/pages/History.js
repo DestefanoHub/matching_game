@@ -5,6 +5,7 @@ import { selectGames } from '../store/historySlice';
 import { getGamesThunk } from '../store/historySlice';
 import GameSearch from '../components/GameSearch';
 import GameRecord from '../components/GameRecord';
+import Paginator from '../components/Paginator';
 
 import styles from './History.module.css';
 
@@ -24,11 +25,13 @@ const History = () => {
     return <div className={styles.page}>
         <h1>Game History</h1>
         <GameSearch/>
+        <Paginator/>
         <div className={styles.content}>
             <div className={styles.list}>
                 {games.length ? gameList : 'No games...yet!'}
             </div>
         </div>
+        <Paginator/>
     </div>;
 };
 

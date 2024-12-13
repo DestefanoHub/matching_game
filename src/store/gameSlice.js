@@ -173,7 +173,7 @@ export const scoreThunk = () => async (dispatch, getState) => {
             hasWon: gameState.hasWon,
             points: gameState.points,
             totalPoints: gameState.totalPoints,
-            time: gameState.time,
+            time: 60 - gameState.time,
             date: new Date().toJSON()
         });
     }

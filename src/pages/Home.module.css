@@ -13,5 +13,17 @@
 .nav{
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-evenly;
+}
+
+.nav button{
+    font-size: 14pt;
+    border: 1px solid black;
+    border-radius: 10px;
+    width: 200px;
+    height: 100px;
+}
+
+.nav button:hover{
+    cursor: pointer;
 }

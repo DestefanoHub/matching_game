@@ -14,8 +14,8 @@ const Home = () => {
                 match all the word pairs to win! 
             </p>
             <div className={styles.nav}>
-                <Link to={'game'}>Start New Game</Link>
-                <Link to={'history'}>View Game History</Link>
+                <Link to={'game'}><button type='button'>Start New Game</button></Link>
+                <Link to={'history'}><button type='button'>View Game History</button></Link>
             </div>
             <RecentGames/>
         </div>

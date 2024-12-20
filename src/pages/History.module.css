@@ -8,12 +8,13 @@
 .content{
     background-color: whitesmoke;
     width: 50%;
+    margin: 1em 0 1em 0;
 }
 
 .list{
     display: grid;
-    column-gap: 1em;
     row-gap: 1em;
     padding: 2em;
-    grid-template-columns: repeat(2, 20em);
+    grid-template-columns: repeat(2, 345px);
+    justify-items: center;
 }

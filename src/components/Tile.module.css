@@ -1,8 +1,9 @@
 .tile{
-    width: 12em;
-    height: 12em;
+    width: 160px;
+    height: 160px;
     background-color: lightgray;
     border-radius: 10px;
+    font-size: 12pt;
 }
 
 .tile:hover{
@@ -35,6 +36,7 @@
 @keyframes fadeOut{
     from{
         opacity: 1;
+        background-color: lightgreen;
     }
 
     to{

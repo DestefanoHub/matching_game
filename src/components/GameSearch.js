@@ -1,33 +1,44 @@
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { selectSearch, selectWLFilter, selectDiffFilter, selectSort, search, wlFilter, diffFilter, sort, getGamesThunk } from '../store/historySlice';
+import { selectWLFilter, selectDiffFilter, selectSort, searchThunk, wlFilterThunk, diffFilterThunk, sortThunk } from '../store/historySlice';
 
 const GameSearch = () => {
-    const searchVal = useSelector(selectSearch);
+    const [ searchValLocal, setSearchValLocal ] = useState('');
     const wlFilterVal = useSelector(selectWLFilter);
     const diffFilterVal = useSelector(selectDiffFilter);
     const sortVal = useSelector(selectSort);
 
     const dispatch = useDispatch();
 
+    useEffect(() => {
+        let searchDelayTimeout = null;
+
+        if(searchValLocal.length){
+            searchDelayTimeout = setTimeout(() => {
+                dispatch(searchThunk(searchValLocal));
+            }, 750);
+        }
+
+        return () => {
+            clearTimeout(searchDelayTimeout);
+        };
+    }, [searchValLocal, dispatch]);
+
     const handleChangeSearch = (event) => {
-        dispatch(search(event.target.value));
-        dispatch(getGamesThunk(-1));
+        setSearchValLocal(event.target.value);
     };
 
     const handleChangeWLFilter = (event) => {
-        dispatch(wlFilter(event.target.value));
-        dispatch(getGamesThunk(-1));
+        dispatch(wlFilterThunk(event.target.value));
     };
 
     const handleChangeDiffFilter = (event) => {
-        dispatch(diffFilter(+event.target.value));
-        dispatch(getGamesThunk(-1));
+        dispatch(diffFilterThunk(+event.target.value));
     };
 
     const handleChangeSort = (event) => {
-        dispatch(sort(event.target.value));
-        dispatch(getGamesThunk(-1));
+        dispatch(sortThunk(event.target.value));
     };
     
     return <form>
@@ -36,7 +47,7 @@ const GameSearch = () => {
             <input 
                 type='text'
                 id='search'
-                value={searchVal}
+                value={searchValLocal}
                 onChange={handleChangeSearch}
             />
         </label>

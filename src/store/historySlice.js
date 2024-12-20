@@ -36,6 +36,26 @@ export const historySlice = createSlice({
     }
 });
 
+export const searchThunk = (searchTerm) => async (dispatch, getState) => {
+    dispatch(search(searchTerm));
+    dispatch(getGamesThunk(-1));
+};
+
+export const wlFilterThunk = (wlFilterValue) => async (dispatch, getState) => {
+    dispatch(wlFilter(wlFilterValue));
+    dispatch(getGamesThunk(-1));
+};
+
+export const diffFilterThunk = (diffFIlterValue) => async (dispatch, getState) => {
+    dispatch(diffFilter(diffFIlterValue));
+    dispatch(getGamesThunk(-1));
+};
+
+export const sortThunk = (sortValue) => async (dispatch, getState) => {
+    dispatch(sort(sortValue));
+    dispatch(getGamesThunk(-1));
+};
+
 export const getGamesThunk = (pageNum = 0) => async (dispatch, getState) => {
     const gamesArray = [];
     const historyState = getState().history;

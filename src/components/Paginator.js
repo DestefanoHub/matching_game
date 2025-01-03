@@ -26,7 +26,10 @@ const Paginator = () => {
     
     return <div className={styles.navPane}>
         <button type='button' className={styles.navigate} disabled={prevDisabled} onClick={handlePrev}>Prev</button>
-        <p className={styles.pages}>Page {page} of {!totalPages ? 1 : totalPages}</p>
+        <div className={styles.pages}>
+            <p>Page {page} of {!totalPages ? 1 : totalPages}</p>
+            <p>{totalGames} Games</p>
+        </div>
         <button type='button' className={styles.navigate} disabled={nextDisabled} onClick={handleNext}>Next</button>
     </div>;
 };

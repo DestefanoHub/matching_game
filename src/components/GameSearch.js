@@ -50,6 +50,7 @@ const GameSearch = () => {
             id='search'
             value={searchValLocal}
             onChange={handleChangeSearch}
+            spellCheck='false'
         />
         
         <label htmlFor='wlFilter'>Win/Loss Filter:</label>

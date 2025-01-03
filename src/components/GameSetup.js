@@ -44,6 +44,7 @@ const GameSetup = (props) => {
                         value={state.player}
                         onChange={handlePlayer}
                         required
+                        spellCheck='false'
                     />
                 </div>
                 <div className={styles.formRow}>

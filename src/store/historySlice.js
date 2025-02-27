@@ -1,7 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { getGames } from '../database';
-
 const initialState = {
     search: '',
     wlFilter: 'a',
@@ -74,7 +72,20 @@ export const getGamesThunk = (pageNum = 0) => async (dispatch, getState) => {
         }
     }
 
-    const history = await getGames(historyState.search, historyState.wlFilter, historyState.diffFilter, historyState.sort, pageToSend);
+    // const history = await getGames(historyState.search, historyState.wlFilter, historyState.diffFilter, historyState.sort, pageToSend);
+    const queryParams = new URLSearchParams();
+    queryParams.append('player', historyState.search);
+    queryParams.append('winLoss', historyState.wlFilter);
+    queryParams.append('diff', historyState.diffFilter);
+    queryParams.append('sortBy', historyState.sort);
+    queryParams.append('page', pageToSend);
+    const response = await fetch(`http://localhost:3100/getGames?${queryParams}`, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json'
+        }
+    });
+    const history = await response.json();
     history.games.forEach((game) => {
         gamesArray.push(game);
     });

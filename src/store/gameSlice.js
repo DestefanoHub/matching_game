@@ -1,7 +1,5 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
 
-import { insertGame } from '../database';
-
 const values = [
     'orange',
     'orange',
@@ -167,14 +165,20 @@ export const scoreThunk = () => async (dispatch, getState) => {
     const gameState = getState().game;
 
     if(gameState.gameOver){
-        await insertGame({
-            player: gameState.player,
-            difficulty: gameState.difficulty,
-            hasWon: gameState.hasWon,
-            points: gameState.points,
-            totalPoints: gameState.totalPoints,
-            time: 60 - gameState.time,
-            date: new Date().toJSON()
+        await fetch(`http://localhost:3100/saveGame`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                player: gameState.player,
+                difficulty: gameState.difficulty,
+                hasWon: gameState.hasWon,
+                points: gameState.points,
+                totalPoints: gameState.totalPoints,
+                time: 60 - gameState.time,
+                date: new Date().toJSON()
+            })
         });
     }
 };
@@ -187,19 +191,21 @@ export const decrementThunk = () => async (dispatch, getState) => {
     //Check if the game time has expired.
     if(!gameState.time){
         dispatch(lose());
-        /*
-        * It isn't necessary to get waste time calling 'getState' again here.
-        * The only two values being recorded that would not be updated in the current state are
-        * 'hasWon' and 'time', and we know what both of those should be at this point.
-        */
-        await insertGame({
-            player: gameState.player,
-            difficulty: gameState.difficulty,
-            hasWon: false,
-            points: gameState.points,
-            totalPoints: gameState.totalPoints,
-            time: 0,
-            date: new Date().toJSON()
+        
+        await fetch(`http://localhost:3100/saveGame`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                player: gameState.player,
+                difficulty: gameState.difficulty,
+                hasWon: false,
+                points: gameState.points,
+                totalPoints: gameState.totalPoints,
+                time: 0,
+                date: new Date().toJSON()
+            })
         });
     }
 };

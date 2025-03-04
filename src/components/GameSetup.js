@@ -1,16 +1,14 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useState } from 'react';
 
 import { setup } from '../store/gameSlice';
-import { selectUsername } from '../store/sessionSlice';
 
 import Modal from './Modal';
 
 import styles from './GameSetup.module.css';
 
 const GameSetup = (props) => {   
-    const username = useSelector(selectUsername);
-    const [state, setState] = useState({player: username, difficulty: 1});
+    const [state, setState] = useState({player: '', difficulty: 1});
     
     const dispatch = useDispatch();
 

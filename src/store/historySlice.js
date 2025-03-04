@@ -72,7 +72,6 @@ export const getGamesThunk = (pageNum = 0) => async (dispatch, getState) => {
         }
     }
 
-    // const history = await getGames(historyState.search, historyState.wlFilter, historyState.diffFilter, historyState.sort, pageToSend);
     const queryParams = new URLSearchParams();
     queryParams.append('player', historyState.search);
     queryParams.append('winLoss', historyState.wlFilter);

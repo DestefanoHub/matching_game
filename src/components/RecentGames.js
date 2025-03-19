@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 
 import GameRecord from './GameRecord';
+import { getRecentGames } from '../utils/gateway';
 
 import styles from './RecentGames.module.css';
 
@@ -9,10 +10,7 @@ const RecentGames = () => {
     
     useEffect(() => {
         (async () => {
-            // const recentGamesQuery = await getRecentGames();
-            const response = await fetch('http://localhost:3100/getRecentGames');
-            const recentGames = await response.json();
-            setRecentGames(recentGames);
+            setRecentGames(await getRecentGames());
         })()
     }, []);
 

@@ -1,5 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+import { getGames } from '../utils/gateway';
+
 const initialState = {
     search: '',
     wlFilter: 'a',
@@ -55,7 +57,6 @@ export const sortThunk = (sortValue) => async (dispatch) => {
 };
 
 export const getGamesThunk = (pageNum = 0) => async (dispatch, getState) => {
-    const gamesArray = [];
     const historyState = getState().history;
     let pageToSend = 1;
 
@@ -72,26 +73,11 @@ export const getGamesThunk = (pageNum = 0) => async (dispatch, getState) => {
         }
     }
 
-    const queryParams = new URLSearchParams();
-    queryParams.append('player', historyState.search);
-    queryParams.append('winLoss', historyState.wlFilter);
-    queryParams.append('diff', historyState.diffFilter);
-    queryParams.append('sortBy', historyState.sort);
-    queryParams.append('page', pageToSend);
-    const response = await fetch(`http://localhost:3100/getGames?${queryParams}`, {
-        method: 'GET',
-        headers: {
-            'Accept': 'application/json'
-        }
-    });
-    const history = await response.json();
-    history.games.forEach((game) => {
-        gamesArray.push(game);
-    });
+    const gamesData = await getGames(historyState.search, historyState.wlFilter, historyState.diffFilter, historyState.sort, pageToSend);
 
     dispatch(setGames({
-        games: gamesArray,
-        totalGames: history.totalGames,
+        games: gamesData.gamesArray,
+        totalGames: gamesData.totalGames,
         page: pageToSend
     }));
 };

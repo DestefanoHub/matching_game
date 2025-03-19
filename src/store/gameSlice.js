@@ -1,5 +1,7 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
 
+import { saveGame } from '../utils/gateway';
+
 const values = [
     'orange',
     'orange',
@@ -165,21 +167,7 @@ export const scoreThunk = () => async (dispatch, getState) => {
     const gameState = getState().game;
 
     if(gameState.gameOver){
-        await fetch(`http://localhost:3100/saveGame`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                player: gameState.player,
-                difficulty: gameState.difficulty,
-                hasWon: gameState.hasWon,
-                points: gameState.points,
-                totalPoints: gameState.totalPoints,
-                time: 60 - gameState.time,
-                date: new Date().toJSON()
-            })
-        });
+        await saveGame(gameState.player, gameState.difficulty, gameState.hasWon, gameState.points, gameState.totalPoints, gameState.time);
     }
 };
 

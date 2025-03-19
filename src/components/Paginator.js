@@ -12,7 +12,7 @@ const Paginator = () => {
 
     const totalPages = Math.ceil(totalGames / 10);
     const prevDisabled = (page === 1) ? true : false;
-    const nextDisabled = (page === totalPages) ? true : false;
+    const nextDisabled = (page === totalPages || totalPages === 0) ? true : false;
 
     const handlePrev = (event) => {
         event.preventDefault();

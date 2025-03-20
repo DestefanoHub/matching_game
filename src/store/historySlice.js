@@ -9,7 +9,8 @@ const initialState = {
     sort: 'dd',
     page: 1,
     totalGames: 0,
-    games: []
+    games: [],
+    isLoaded: false
 };
 
 export const historySlice = createSlice({
@@ -18,20 +19,25 @@ export const historySlice = createSlice({
     reducers: {
         search: (state, action) => {
             state.search = action.payload;
+            state.isLoaded = false;
         },
         wlFilter: (state, action) => {
             state.wlFilter = action.payload;
+            state.isLoaded = false;
         },
         diffFilter: (state, action) => {
             state.diffFilter = +action.payload;
+            state.isLoaded = false;
         },
         sort: (state, action) => {
             state.sort = action.payload;
+            state.isLoaded = false;
         },
         setGames: (state, action) => {
             state.games = action.payload.games;
             state.totalGames = action.payload.totalGames;
             state.page = action.payload.page;
+            state.isLoaded = true;
         }
     }
 });
@@ -90,4 +96,5 @@ export const selectSort = (state) => state.history.sort;
 export const selectPage = (state) => state.history.page;
 export const selectTotalGames = (state) => state.history.totalGames;
 export const selectGames = (state) => state.history.games;
+export const selectIsLoaded = (state) => state.history.isLoaded;
 export default historySlice.reducer;

@@ -6,21 +6,29 @@ import { getRecentGames } from '../utils/gateway';
 import styles from './RecentGames.module.css';
 
 const RecentGames = () => {
-    const [ recentGames, setRecentGames ] = useState([]);
+    const [ recentGamesData, setRecentGamesData ] = useState({
+        isLoaded: false,
+        games: []
+    });
     
     useEffect(() => {
         (async () => {
-            setRecentGames(await getRecentGames());
+            const recentGames = await getRecentGames();
+            setRecentGamesData({
+                isLoaded: true,
+                games: recentGames
+            });
         })()
     }, []);
 
-    const gameList = recentGames.map((game, index) => {
+    const gameList = recentGamesData.games.map((game, index) => {
         return <GameRecord key={index} gameInfo={game}/>;
     });
     
     return <div className={styles.list}>
         <h1>Top 5 recent games:</h1>
-        {recentGames.length ? gameList : 'No games...yet!'}
+        {!recentGamesData.isLoaded && 'Loading...'}
+        {recentGamesData.isLoaded && (recentGamesData.games.length ? gameList : 'No games...yet!')}
     </div>;
 };
 

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { selectWLFilter, selectDiffFilter, selectSort, searchThunk, wlFilterThunk, diffFilterThunk, sortThunk } from '../store/historySlice';
@@ -6,7 +6,7 @@ import { selectWLFilter, selectDiffFilter, selectSort, searchThunk, wlFilterThun
 import styles from './GameSearch.module.css';
 
 const GameSearch = () => {
-    const isLoaded = useRef(false);
+    const searchDelayTimeout = useRef(null);
     const [ searchValLocal, setSearchValLocal ] = useState('');
     const wlFilterVal = useSelector(selectWLFilter);
     const diffFilterVal = useSelector(selectDiffFilter);
@@ -14,25 +14,14 @@ const GameSearch = () => {
 
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        if(isLoaded.current){
-            let searchDelayTimeout = null;
-
-            searchDelayTimeout = setTimeout(() => {
-                dispatch(searchThunk(searchValLocal.trim()));
-            }, 750);
-
-            return () => {
-                clearTimeout(searchDelayTimeout);
-            };
-        }else{
-            isLoaded.current = true;
-        }
-    }, [searchValLocal, dispatch]);
-
     const handleChangeSearch = (event) => {
-        console.log('search changed');
         setSearchValLocal(event.target.value);
+
+        clearTimeout(searchDelayTimeout.current);
+
+        searchDelayTimeout.current = setTimeout(() => {
+            dispatch(searchThunk(event.target.value));
+        }, 750);
     };
 
     const handleChangeWLFilter = (event) => {

@@ -6,7 +6,6 @@ import { getGamesThunk } from '../store/historySlice';
 import GameSearch from '../components/GameSearch';
 import GameRecord from '../components/GameRecord';
 import Paginator from '../components/Paginator';
-import Background from '../components/Background';
 
 import styles from './History.module.css';
 
@@ -25,7 +24,6 @@ const History = () => {
     });
 
     return <div className={styles.page}>
-        <Background/>
         <div className={styles.content}>
             <h1>Game History</h1>
             <GameSearch/>
@@ -38,7 +36,6 @@ const History = () => {
             </div>
             <Paginator/>
         </div>
-        <Background/>
     </div>;
 };
 

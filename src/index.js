@@ -8,6 +8,7 @@ import App from './App';
 import Home from './pages/Home';
 import Game from './pages/Game';
 import History from './pages/History';
+import Layout from './pages/Layout';
 import store from './store/store';
 
 import './index.css';
@@ -18,16 +19,21 @@ const router = createBrowserRouter([
     element: <App/>,
     children: [
       {
-        index: true,
-        element: <Home/>
+        element: <Layout/>,
+        children: [
+          {
+            index: true,
+            element: <Home/>
+          },
+          {
+            path: 'history',
+            element: <History/>
+          }
+        ]
       },
       {
         path: 'game',
         element: <Game/>
-      },
-      {
-        path: 'history',
-        element: <History/>
       }
     ]
   }

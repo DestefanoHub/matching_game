@@ -1,13 +1,11 @@
 import { Link } from 'react-router-dom';
 
-import Background from '../components/Background';
 import RecentGames from '../components/RecentGames';
 
 import styles from './Home.module.css';
 
 const Home = () => {
     return <section className={styles.page}>
-        <Background/>
         <div className={styles.content}>
             <h1>Home Page</h1>
             <p>
@@ -21,7 +19,6 @@ const Home = () => {
             </div>
             <RecentGames/>
         </div>
-        <Background/>
     </section>;
 }
 

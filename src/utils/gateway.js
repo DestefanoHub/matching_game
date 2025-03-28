@@ -59,7 +59,6 @@ export const saveGame = async (player, difficulty, hasWon, points, totalPoints, 
             points,
             totalPoints,
             time: 60 - time,
-            // date: new Date().toJSON()
         })
     });
 };

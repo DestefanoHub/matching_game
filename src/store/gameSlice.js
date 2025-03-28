@@ -89,9 +89,7 @@ export const gameSlice = createSlice({
             const difficultyValues = values.slice(0, gridSize);
 
             for(let i = 0; i < gridSize; i++){
-                const minCeiled = Math.ceil(0);
-                const maxFloored = Math.floor(difficultyValues.length - 1);
-                const valueIndex = Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled);
+                const valueIndex = Math.floor(Math.random() * (difficultyValues.length));
                 
                 tileGrid.push({
                     id: i,

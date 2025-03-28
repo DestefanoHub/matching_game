@@ -16,7 +16,7 @@ const RecentGames = () => {
             const recentGames = await getRecentGames();
             setRecentGamesData({
                 isLoaded: true,
-                games: recentGames
+                games: recentGames.games
             });
         })()
     }, []);

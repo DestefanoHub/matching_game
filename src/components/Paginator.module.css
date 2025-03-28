@@ -1,8 +1,8 @@
 .navPane{
     display: flex;
     flex-direction: row;
-    width: 50%;
-    justify-content: space-between;
+    width: 100%;
+    justify-content: space-evenly;
     margin-bottom: 1em;
 }
 
@@ -14,6 +14,7 @@
     width: 75px;
     height: 75px;
     font-size: 12pt;
+    background-color: darkgray;
 }
 
 .navigate:disabled{

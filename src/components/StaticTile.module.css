@@ -1,0 +1,13 @@
+.animate{
+    animation: 2s infinite alternate fadeIn;
+}
+
+@keyframes fadeIn{
+    from{
+        opacity: 0;
+    }
+
+    to{
+        opacity: 1;
+    }
+}

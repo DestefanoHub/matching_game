@@ -6,6 +6,7 @@ import { getGamesThunk } from '../store/historySlice';
 import GameSearch from '../components/GameSearch';
 import GameRecord from '../components/GameRecord';
 import Paginator from '../components/Paginator';
+import Background from '../components/Background';
 
 import styles from './History.module.css';
 
@@ -24,16 +25,20 @@ const History = () => {
     });
 
     return <div className={styles.page}>
-        <h1>Game History</h1>
-        <GameSearch/>
-        <Paginator/>
+        <Background/>
         <div className={styles.content}>
-            {!isLoaded && 'Loading...'}
-            <div className={styles.list}>
-                {isLoaded && (games.length ? gameList : 'No games...yet!')}
+            <h1>Game History</h1>
+            <GameSearch/>
+            <Paginator/>
+            <div>
+                {!isLoaded && 'Loading...'}
+                <div className={styles.list}>
+                    {isLoaded && (games.length ? gameList : 'No games...yet!')}
+                </div>
             </div>
+            <Paginator/>
         </div>
-        <Paginator/>
+        <Background/>
     </div>;
 };
 

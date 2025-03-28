@@ -1,13 +1,14 @@
 .page{
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100%;    
+    flex-direction: row;
+    justify-content: space-evenly;
 }
 
 .content{
     background-color: whitesmoke;
-    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .nav{

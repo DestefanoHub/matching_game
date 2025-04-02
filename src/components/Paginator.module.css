@@ -19,6 +19,7 @@
 
 .navigate:disabled{
     cursor: not-allowed;
+    background-color: lightgray;
 }
 
 .pages{

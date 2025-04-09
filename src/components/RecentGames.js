@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 
 import GameRecord from './GameRecord';
+import Banner from './Banner';
 import { getRecentGames } from '../utils/gateway';
 
 import styles from './RecentGames.module.css';
@@ -27,8 +28,8 @@ const RecentGames = () => {
     
     return <div className={styles.list}>
         <h1>Top 5 recent games:</h1>
-        {!recentGamesData.isLoaded && 'Loading...'}
-        {recentGamesData.isLoaded && (recentGamesData.games.length ? gameList : 'No games...yet!')}
+        {!recentGamesData.isLoaded && <Banner text='Loading...'/>}
+        {recentGamesData.isLoaded && (recentGamesData.games.length ? gameList : <Banner text='No games...yet!'/>)}
     </div>;
 };
 

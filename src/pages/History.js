@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectGames, selectIsLoaded } from '../store/historySlice';
-import { getGamesThunk } from '../store/historySlice';
+import { selectGames, selectIsLoaded, getGamesThunk } from '../store/historySlice';
 import GameSearch from '../components/GameSearch';
 import GameRecord from '../components/GameRecord';
 import Paginator from '../components/Paginator';
+import Banner from '../components/Banner';
 
 import styles from './History.module.css';
 
@@ -23,16 +23,19 @@ const History = () => {
         return <GameRecord key={index} gameInfo={game}/>;
     });
 
+    const loadBanner = <Banner text='Loading...'/>;
+    const noGamesBanner = <Banner text='No games...yet!'/>;
+    const showNoGamesBanner = isLoaded && !games.length;
+
     return <div className={styles.page}>
         <div className={styles.content}>
             <h1>Game History</h1>
             <GameSearch/>
             <Paginator/>
-            <div>
-                {!isLoaded && 'Loading...'}
-                <div className={styles.list}>
-                    {isLoaded && (games.length ? gameList : 'No games...yet!')}
-                </div>
+            {!isLoaded && loadBanner}
+            {showNoGamesBanner && noGamesBanner}
+            <div className={styles.list}>
+                {!showNoGamesBanner ? gameList : ''}
             </div>
             <Paginator/>
         </div>

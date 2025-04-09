@@ -1,0 +1,14 @@
+.banner{
+    width: 90%;
+    background-color: lightgreen;
+    border: 10px solid mediumspringgreen;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.text{
+    font-size: 20px;
+    font-weight: bold;
+}

@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, Fragment } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -44,15 +44,16 @@ const Game = () => {
         }, 1000);
     };
 
-    return <section className={styles.page}>
+    return <Fragment>
         <GameSetup modalRef={gameSetupModal}/>
         <GameOver modalRef={gameOverModal} onClose={handleClose}/>
-        <h1>Matching Game</h1>
-        {!initialized && <button onClick={handleClick}>Start a new game!</button>}
-        {/* {initialized && <GameInfo countdown={countdown}/>} */}
-        {initialized && <GameInfo/>}
-        {initialized && <GameBoard startCountdown={startCountdown}/>}
-    </section>;
+        <section className={styles.page}>
+            <h1>Matching Game</h1>
+            {!initialized && <button onClick={handleClick}>Start a new game!</button>}
+            {initialized && <GameInfo/>}
+            {initialized && <GameBoard startCountdown={startCountdown}/>}
+        </section>
+    </Fragment>;
 };
 
 export default Game;

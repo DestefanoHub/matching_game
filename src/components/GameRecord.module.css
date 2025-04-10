@@ -7,10 +7,27 @@
     height: 180px;
 }
 
+.record:hover{
+    cursor: pointer;
+
+}
+
 .win{
-    background-color: lightgreen;
+    color: white;
+    background-color: green;
+}
+
+.win:hover{
+    background-color: green;
+    box-shadow: lightgreen 5px 5px;
 }
 
 .loss{
-    background-color: coral;
+    color: white;
+    background-color: red;
+}
+
+.loss:hover{
+    background-color: red;
+    box-shadow: coral 5px 5px;
 }

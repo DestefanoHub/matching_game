@@ -36,7 +36,7 @@
 @keyframes fadeOut{
     from{
         opacity: 1;
-        background-color: lightgreen;
+        background-color: green;
     }
 
     to{

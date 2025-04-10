@@ -1,7 +1,8 @@
 .banner{
     width: 90%;
-    background-color: lightgreen;
-    border: 10px solid mediumspringgreen;
+    color: white;
+    background-color: green;
+    /* border: 10px solid mediumspringgreen; */
     border-radius: 10px;
     display: flex;
     flex-direction: row;

@@ -4,7 +4,6 @@
     padding: 1em;
     font-size: 14pt;
     width: 240px;
-    height: 180px;
 }
 
 .record:hover{
@@ -19,7 +18,7 @@
 
 .win:hover{
     background-color: green;
-    box-shadow: lightgreen 5px 5px;
+    box-shadow: gray 0 0 10px 10px;
 }
 
 .loss{
@@ -29,5 +28,5 @@
 
 .loss:hover{
     background-color: red;
-    box-shadow: coral 5px 5px;
+    box-shadow: gray 0 0 10px 10px;
 }

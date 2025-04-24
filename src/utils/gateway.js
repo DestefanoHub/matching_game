@@ -65,7 +65,8 @@ export const saveGame = async (player, difficulty, hasWon, points, totalPoints, 
     const response = await fetch(`${baseURL}saveGame`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
         },
         body: JSON.stringify({
             player,
@@ -77,5 +78,5 @@ export const saveGame = async (player, difficulty, hasWon, points, totalPoints, 
         })
     });
 
-    return response.json();
+    return await response.json();
 };

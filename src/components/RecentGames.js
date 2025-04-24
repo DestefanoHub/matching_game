@@ -43,7 +43,7 @@ const RecentGames = () => {
     });
     
     return <Fragment>
-        <GameDetails modalRef={gameDetailsModal} game={gameDetails}/>
+        <GameDetails modalRef={gameDetailsModal} gameDetails={gameDetails}/>
         <div className={styles.list}>
             <h1>Top 5 recent games:</h1>
             {!recentGamesData.isLoaded && <Banner text='Loading...'/>}

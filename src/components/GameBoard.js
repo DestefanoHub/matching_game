@@ -6,7 +6,7 @@ import Tile from './Tile';
 
 import styles from './GameBoard.module.css';
 
-const GameBoard = (props) => {
+const GameBoard = ({ startCountdown }) => {
     const [playerHasStarted, setPlayerHasStarted] = useState(false);
     
     const initialized = useSelector(selectInit);
@@ -35,7 +35,7 @@ const GameBoard = (props) => {
     const handleClick = () => {
         if(!playerHasStarted){
             setPlayerHasStarted(true);
-            props.startCountdown();
+            startCountdown();
         }
     };
 

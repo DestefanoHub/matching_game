@@ -1,8 +1,8 @@
 import styles from './Banner.module.css';
 
-const Banner = (props) => {
+const Banner = ({ text }) => {
     return <div className={styles.banner}>
-        <span className={styles.text}>{props.text}</span>
+        <span className={styles.text}>{text}</span>
     </div>;
 };
 

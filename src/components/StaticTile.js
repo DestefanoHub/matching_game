@@ -1,10 +1,10 @@
 import staticStyles from './StaticTile.module.css';
 import tileStyles from './Tile.module.css';
 
-const StaticTile = (props) => {
+const StaticTile = ({ interval }) => {
     return <button 
         type='button'
-        style={{animationDelay: `${props.interval}s`}}
+        style={{animationDelay: `${interval}s`}}
         className={`${tileStyles.tile} ${staticStyles.animate}`}
     >
     </button>

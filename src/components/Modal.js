@@ -1,8 +1,8 @@
 import styles from './Modal.module.css';
 
-const Modal = (props) => {
-    return <dialog ref={props.modalRef} className={styles.modal} onClose={props.onClose}>
-        {props.children}
+const Modal = ({ modalRef, onClose, children }) => {
+    return <dialog ref={modalRef} className={styles.modal} onClose={onClose}>
+        {children}
     </dialog>;
 };
 

@@ -7,7 +7,7 @@ import Modal from './Modal';
 
 import styles from './GameSetup.module.css';
 
-const GameSetup = (props) => {   
+const GameSetup = ({ modalRef }) => {   
     const [state, setState] = useState({player: '', difficulty: 1});
     
     const dispatch = useDispatch();
@@ -29,10 +29,10 @@ const GameSetup = (props) => {
     const handleSubmit = (event) => {
         event.preventDefault();
         dispatch(setup({player: state.player, difficulty: state.difficulty}));
-        props.modalRef.current.close();
+        modalRef.current.close();
     };
 
-    return <Modal modalRef={props.modalRef}>
+    return <Modal modalRef={modalRef}>
         <div className={styles.form}>
             <h1>Select options for a new game</h1>
             <form className={styles.form} onSubmit={handleSubmit}>

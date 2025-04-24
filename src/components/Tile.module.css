@@ -9,13 +9,13 @@
 .tile:hover{
     cursor: pointer;
     background-color: darkgrey;
-    box-shadow: gray 5px 5px;
+    box-shadow: gray 0 0 10px 10px;
 }
 
 .active{
     cursor: not-allowed;
     background-color: darkgrey;
-    box-shadow: gray 5px 5px;
+    box-shadow: gray 0 0 10px 10px;
 }
 
 .scored{

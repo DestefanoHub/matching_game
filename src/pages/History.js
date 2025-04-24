@@ -4,10 +4,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectGames, selectIsLoaded, getGamesThunk } from '../store/historySlice';
 import {  getGameInfo } from '../utils/gateway';
 import GameSearch from '../components/GameSearch';
-import GameRecord from '../components/GameRecord';
+import GameHistoryRecord from '../components/GameHistoryRecord';
 import Paginator from '../components/Paginator';
 import Banner from '../components/Banner';
-import GameDetails from '../components/GameDetails';
+import GameHistoryFull from '../components/GameHistoryFull';
 
 import styles from './History.module.css';
 
@@ -37,7 +37,7 @@ const History = () => {
     };
 
     const gameList = games.map((game, index) => {
-        return <GameRecord key={index} gameInfo={game} onClick={handleClick}/>;
+        return <GameHistoryRecord key={index} info={game} onClick={handleClick}/>;
     });
 
     const loadBanner = <Banner text='Loading...'/>;
@@ -45,7 +45,7 @@ const History = () => {
     const showNoGamesBanner = isLoaded && !games.length;
 
     return <Fragment>
-        <GameDetails modalRef={gameDetailsModal} gameDetails={gameDetails}/>
+        <GameHistoryFull modalRef={gameDetailsModal} details={gameDetails}/>
         <div className={styles.content}>
             <h1>Game History</h1>
             <GameSearch/>

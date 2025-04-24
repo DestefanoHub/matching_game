@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef, Fragment } from 'react';
 
-import GameRecord from './GameRecord';
+import GameHistoryRecord from './GameHistoryRecord';
+import GameHistoryFull from './GameHistoryFull';
 import Banner from './Banner';
-import GameDetails from './GameDetails';
 import { getRecentGames, getGameInfo } from '../utils/gateway';
 
 import styles from './RecentGames.module.css';
@@ -39,11 +39,11 @@ const RecentGames = () => {
     };
 
     const gameList = recentGamesData.games.map((game, index) => {
-        return <GameRecord key={index} gameInfo={game} onClick={handleClick}/>;
+        return <GameHistoryRecord key={index} info={game} onClick={handleClick}/>;
     });
     
     return <Fragment>
-        <GameDetails modalRef={gameDetailsModal} gameDetails={gameDetails}/>
+        <GameHistoryFull modalRef={gameDetailsModal} details={gameDetails}/>
         <div className={styles.list}>
             <h1>Top 5 recent games:</h1>
             {!recentGamesData.isLoaded && <Banner text='Loading...'/>}

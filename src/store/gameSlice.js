@@ -56,10 +56,10 @@ const getActiveTiles = (tiles) => {
 
 export const getDisplayDifficulty = (diff) => {
     switch(diff){
-        case 2: return 'normal';
-        case 3: return 'hard';
+        case 2: return 'Normal';
+        case 3: return 'Hard';
         case 1:
-        default: return 'easy';
+        default: return 'Easy';
     }
 };
 

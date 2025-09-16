@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, Fragment } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { selectGames, selectIsLoaded, getGamesThunk } from '../store/historySlice';
-import {  getGameInfo } from '../utils/gateway';
+import { getGameInfo } from '../utils/gateway';
 import GameSearch from '../components/GameSearch';
 import GameHistoryRecord from '../components/GameHistoryRecord';
 import Paginator from '../components/Paginator';

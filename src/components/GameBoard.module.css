@@ -2,7 +2,7 @@
     background-color: whitesmoke;
 }
 
-.easy{
+.Easy{
     display: grid;
     column-gap: 1em;
     row-gap: 1em;
@@ -10,7 +10,7 @@
     grid-template-columns: repeat(4, 10em);
 }
 
-.normal{
+.Normal{
     display: grid;
     column-gap: 1em;
     row-gap: 1em;
@@ -18,7 +18,7 @@
     grid-template-columns: repeat(6, 10em);
 }
 
-.hard{
+.Hard{
     display: grid;
     column-gap: 1em;
     row-gap: 1em;

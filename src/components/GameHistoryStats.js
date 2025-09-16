@@ -7,7 +7,6 @@ const GameHistoryStats = ({ details, stats, isCurrentPlayer = false }) => {
     let firstWinMsg;
     let firstDiffGameMsg;
     let firstDiffWinMsg;
-    let highestDiffScoreMsg;
     let fastestDiffTimeMsg;
     const playerName = isCurrentPlayer ? 'your' : details.player + "'s";
     const displayDifficulty = getDisplayDifficulty(details.difficulty);
@@ -28,10 +27,6 @@ const GameHistoryStats = ({ details, stats, isCurrentPlayer = false }) => {
         firstDiffWinMsg = `Nice job, this was ${playerName} first win on ${displayDifficulty}!`;
     }
 
-    if(stats.isHighestDiffScore){
-        highestDiffScoreMsg = `Excellent game, this was ${playerName} highest score on ${displayDifficulty}!`;
-    }
-
     if(stats.isFastestDiffTime){
         fastestDiffTimeMsg = `Keep it up, this was ${playerName} fastest win on ${displayDifficulty}!`;
     }
@@ -42,7 +37,6 @@ const GameHistoryStats = ({ details, stats, isCurrentPlayer = false }) => {
         {firstWinMsg && <p>{firstWinMsg}</p>}
         {firstDiffGameMsg && <p>{firstDiffGameMsg}</p>}
         {firstDiffWinMsg && <p>{firstDiffWinMsg}</p>}
-        {highestDiffScoreMsg && <p>{highestDiffScoreMsg}</p>}
         {fastestDiffTimeMsg && <p>{fastestDiffTimeMsg}</p>}
     </Fragment>;
 };

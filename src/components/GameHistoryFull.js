@@ -6,7 +6,7 @@ const GameHistoryFull = ({ modalRef, details }) => {
     if('game' in details){
         return <Modal modalRef={modalRef}>
             <GameHistoryDetails details={details.game}/>
-            <GameHistoryStats details={details.game} stats={details.stats}/>
+            <GameHistoryStats game={details.game} stats={details.stats}/>
         </Modal>;
     }
 

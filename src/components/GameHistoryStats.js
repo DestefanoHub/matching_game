@@ -2,14 +2,14 @@ import { Fragment } from 'react';
 
 import { getDisplayDifficulty } from '../store/gameSlice';
 
-const GameHistoryStats = ({ details, stats, isCurrentPlayer = false }) => {
+const GameHistoryStats = ({ game, stats, isCurrentPlayer = false }) => {
     let firstGameMsg;
     let firstWinMsg;
     let firstDiffGameMsg;
     let firstDiffWinMsg;
     let fastestDiffTimeMsg;
-    const playerName = isCurrentPlayer ? 'your' : details.player + "'s";
-    const displayDifficulty = getDisplayDifficulty(details.difficulty);
+    const playerName = isCurrentPlayer ? 'your' : game.player + "'s";
+    const displayDifficulty = getDisplayDifficulty(game.difficulty);
     
     if(stats.isFirstGame){
         firstGameMsg = `Congrats, this was ${playerName} first game!`;

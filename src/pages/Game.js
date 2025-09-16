@@ -46,7 +46,7 @@ const Game = () => {
 
     return <Fragment>
         <GameSetup modalRef={gameSetupModal}/>
-        <GameOver modalRef={gameOverModal} onClose={handleClose}/>
+        <GameOver modalRef={gameOverModal} isGameOver={gameOver} onClose={handleClose}/>
         <section className={styles.page}>
             <h1>Matching Game</h1>
             {!initialized && <button onClick={handleClick}>Start a new game!</button>}

@@ -1,13 +1,11 @@
 import { useSelector } from 'react-redux';
 
-import { selectHasWon, selectSavedGame } from '../store/gameSlice';
+import { selectHasWon } from '../store/gameSlice';
 
 import Modal from './Modal';
-import GameHistoryStats from './GameHistoryStats';
 
-const GameOver = ({ modalRef, isGameOver, onClose }) => {    
+const GameOver = ({ modalRef, onClose }) => {    
     const hasWon = useSelector(selectHasWon);
-    const savedGame = useSelector(selectSavedGame);
     
     const winMessage = 'Congrats, you won!';
     const loseMessage = 'Sorry, you lost';
@@ -22,7 +20,6 @@ const GameOver = ({ modalRef, isGameOver, onClose }) => {
         <h1>Game Over!</h1>
         <h2>{hasWon ? winMessage : loseMessage}</h2>
         <button type='button' onClick={handleClick}>{hasWon ? winNewGameText : loseNewGameText}</button>
-        {/* {isGameOver && <GameHistoryStats game={savedGame.game} stats={savedGame.stats} isCurrentPlayer={true}/>} */}
     </Modal>;
 };
 

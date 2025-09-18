@@ -39,7 +39,7 @@ const RecentGames = () => {
     };
 
     const gameList = recentGamesData.games.map((game, index) => {
-        return <GameHistoryRecord key={index} info={game} onClick={handleClick}/>;
+        return <GameHistoryRecord key={index} game={game} onClick={handleClick}/>;
     });
     
     return <Fragment>

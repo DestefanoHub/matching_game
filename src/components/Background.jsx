@@ -5,7 +5,7 @@ import styles from './Background.module.css';
 const Background = () => {
     const tiles = [];
 
-    for(let i = 0; i < 24; i++){
+    for(let i = 0; i < 18; i++){
         const tile = {
             id: i,
             interval: Math.floor(Math.random() * 11) + 4

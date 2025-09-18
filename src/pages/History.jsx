@@ -37,7 +37,7 @@ const History = () => {
     };
 
     const gameList = games.map((game, index) => {
-        return <GameHistoryRecord key={index} info={game} onClick={handleClick}/>;
+        return <GameHistoryRecord key={index} game={game} onClick={handleClick}/>;
     });
 
     const loadBanner = <Banner text='Loading...'/>;

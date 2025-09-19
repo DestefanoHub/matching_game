@@ -2,8 +2,8 @@ import { useState, useEffect, useRef, Fragment } from 'react';
 
 import GameHistoryRecord from './GameHistoryRecord';
 import GameHistoryFull from './GameHistoryFull';
-import Banner from './Banner';
-import { getRecentGames, getGameInfo } from '../utils/gateway';
+import Banner from '../generic/Banner';
+import { getRecentGames, getGameInfo } from '../../utils/gateway';
 
 import styles from './RecentGames.module.css';
 

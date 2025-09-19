@@ -2,10 +2,10 @@ import { useRef, Fragment } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import GameInfo from '../components/GameInfo';
-import GameBoard from '../components/GameBoard';
-import GameSetup from '../components/GameSetup';
-import GameOver from '../components/GameOver';
+import GameInfo from '../components/game/GameInfo';
+import GameBoard from '../components/game/GameBoard';
+import GameSetup from '../components/game/GameSetup';
+import GameOver from '../components/game/GameOver';
 
 import { init, decrementThunk, selectInit, selectGameOver } from '../store/gameSlice';
 

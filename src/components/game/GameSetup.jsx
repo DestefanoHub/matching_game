@@ -1,9 +1,9 @@
 import { useDispatch } from 'react-redux';
 import { useState } from 'react';
 
-import { setup } from '../store/gameSlice';
+import { setup } from '../../store/gameSlice';
 
-import Modal from './Modal';
+import Modal from '../generic/Modal';
 
 import styles from './GameSetup.module.css';
 

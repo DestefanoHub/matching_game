@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 
-import { getDisplayDifficulty } from '../store/gameSlice';
+import { getDisplayDifficulty } from '../../store/gameSlice';
 
 const GameHistoryStats = ({ game, stats, isCurrentPlayer = false }) => {
     let firstGameMsg;

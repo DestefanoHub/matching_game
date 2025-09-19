@@ -1,4 +1,4 @@
-import { getDisplayDifficulty } from '../store/gameSlice';
+import { getDisplayDifficulty } from '../../store/gameSlice';
 
 import styles from './GameHistoryRecord.module.css';
 

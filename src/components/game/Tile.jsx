@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
 
-import { reveal, selectActiveTiles } from '../store/gameSlice';
+import { reveal, selectActiveTiles } from '../../store/gameSlice';
 
 import styles from './Tile.module.css';
 

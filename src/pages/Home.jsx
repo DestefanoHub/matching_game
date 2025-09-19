@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import RecentGames from '../components/RecentGames';
+import RecentGames from '../components/history/RecentGames';
 
 import styles from './Home.module.css';
 

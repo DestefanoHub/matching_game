@@ -1,5 +1,5 @@
 import staticStyles from './StaticTile.module.css';
-import tileStyles from './Tile.module.css';
+import tileStyles from '../game/Tile.module.css';
 
 const StaticTile = ({ interval }) => {
     return <button 

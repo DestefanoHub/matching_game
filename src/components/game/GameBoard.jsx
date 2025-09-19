@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { scoreThunk, selectInit, selectDisplayDifficulty, selectActiveTiles, selectTiles } from '../store/gameSlice';
+import { scoreThunk, selectInit, selectDisplayDifficulty, selectActiveTiles, selectTiles } from '../../store/gameSlice';
 import Tile from './Tile';
 
 import styles from './GameBoard.module.css';

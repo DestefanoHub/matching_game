@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectTotalGames, selectPage, getGamesThunk } from '../store/historySlice';
+import { selectTotalGames, selectPage, getGamesThunk } from '../../store/historySlice';
 
 import styles from './Paginator.module.css';
 

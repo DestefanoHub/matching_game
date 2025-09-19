@@ -1,6 +1,6 @@
-import Modal from './Modal';
+import Modal from '../generic/Modal';
 import GameHistoryStats from './GameHistoryStats';
-import { getDisplayDifficulty } from '../store/gameSlice';
+import { getDisplayDifficulty } from '../../store/gameSlice';
 
 const GameHistoryFull = ({ modalRef, details }) => {
     if('game' in details){

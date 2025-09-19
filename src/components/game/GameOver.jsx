@@ -1,8 +1,8 @@
 import { useSelector } from 'react-redux';
 
-import { selectHasWon } from '../store/gameSlice';
+import { selectHasWon } from '../../store/gameSlice';
 
-import Modal from './Modal';
+import Modal from '../generic/Modal';
 
 const GameOver = ({ modalRef, onClose }) => {    
     const hasWon = useSelector(selectHasWon);

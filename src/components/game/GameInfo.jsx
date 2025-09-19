@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 
-import { selectPlayer, selectDisplayDifficulty, selectTime } from '../store/gameSlice';
+import { selectPlayer, selectDisplayDifficulty, selectTime } from '../../store/gameSlice';
 
 const GameInfo = () => {
     const player = useSelector(selectPlayer);

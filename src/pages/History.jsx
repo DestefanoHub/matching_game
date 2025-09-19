@@ -3,11 +3,11 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { selectGames, selectIsLoaded, getGamesThunk } from '../store/historySlice';
 import { getGameInfo } from '../utils/gateway';
-import GameSearch from '../components/GameSearch';
-import GameHistoryRecord from '../components/GameHistoryRecord';
-import Paginator from '../components/Paginator';
-import Banner from '../components/Banner';
-import GameHistoryFull from '../components/GameHistoryFull';
+import GameSearch from '../components/history/GameSearch';
+import GameHistoryRecord from '../components/history/GameHistoryRecord';
+import Paginator from '../components/generic/Paginator';
+import Banner from '../components/generic/Banner';
+import GameHistoryFull from '../components/history/GameHistoryFull';
 
 import styles from './History.module.css';
 

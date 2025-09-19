@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { getGames } from '../utils/gateway';
+import { type WinLoss, type Difficulty, type SortBy } from '../utils/types';
 
 const initialState = {
     search: '',
@@ -42,22 +43,22 @@ export const historySlice = createSlice({
     }
 });
 
-export const searchThunk = (searchTerm) => async (dispatch) => {
+export const searchThunk = (searchTerm: string) => async (dispatch) => {
     dispatch(search(searchTerm));
     dispatch(getGamesThunk(-1));
 };
 
-export const wlFilterThunk = (wlFilterValue) => async (dispatch) => {
+export const wlFilterThunk = (wlFilterValue: WinLoss) => async (dispatch) => {
     dispatch(wlFilter(wlFilterValue));
     dispatch(getGamesThunk(-1));
 };
 
-export const diffFilterThunk = (diffFIlterValue) => async (dispatch) => {
+export const diffFilterThunk = (diffFIlterValue: Difficulty) => async (dispatch) => {
     dispatch(diffFilter(diffFIlterValue));
     dispatch(getGamesThunk(-1));
 };
 
-export const sortThunk = (sortValue) => async (dispatch) => {
+export const sortThunk = (sortValue: SortBy) => async (dispatch) => {
     dispatch(sort(sortValue));
     dispatch(getGamesThunk(-1));
 };

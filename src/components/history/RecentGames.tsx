@@ -7,7 +7,7 @@ import { getRecentGames, getGameInfo } from '../../utils/gateway';
 
 import styles from './RecentGames.module.css';
 
-const RecentGames = () => {
+export default function RecentGames() {
     const [ recentGamesData, setRecentGamesData ] = useState({
         isLoaded: false,
         games: []
@@ -32,7 +32,7 @@ const RecentGames = () => {
         }
     }, [gameDetails]);
 
-    const handleClick = async (gameId) => {
+    const handleClick = async (gameId: string) => {
         const gameInfo = await getGameInfo(gameId);
         wasRecordClicked.current = true;
         setGameDetails(gameInfo); 
@@ -50,6 +50,4 @@ const RecentGames = () => {
             {recentGamesData.isLoaded && (recentGamesData.games.length ? gameList : <Banner text='No games...yet!'/>)}
         </div>
     </Fragment>;
-};
-
-export default RecentGames;
+}

@@ -2,7 +2,7 @@ import StaticTile from './StaticTile';
 
 import styles from './Background.module.css';
 
-const Background = () => {
+export default function Background() {
     const tiles = [];
 
     for(let i = 0; i < 18; i++){
@@ -18,6 +18,4 @@ const Background = () => {
     return <div className={styles.grid}>
         {tileGrid}
     </div>;
-};
-
-export default Background;
+}

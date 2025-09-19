@@ -4,7 +4,7 @@ import { selectTotalGames, selectPage, getGamesThunk } from '../../store/history
 
 import styles from './Paginator.module.css';
 
-const Paginator = () => {
+export default function Paginator() {
     const totalGames = useSelector(selectTotalGames);
     const page = useSelector(selectPage);
 
@@ -14,12 +14,12 @@ const Paginator = () => {
     const prevDisabled = (page === 1) ? true : false;
     const nextDisabled = (page === totalPages || totalPages === 0) ? true : false;
 
-    const handlePrev = (event) => {
+    const handlePrev = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         dispatch(getGamesThunk(page - 1));
     };
 
-    const handleNext = (event) => {
+    const handleNext = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         dispatch(getGamesThunk(page + 1));
     };
@@ -32,6 +32,4 @@ const Paginator = () => {
         </div>
         <button type='button' className={styles.navigate} disabled={nextDisabled} onClick={handleNext}>Next</button>
     </div>;
-};
-
-export default Paginator;
+}

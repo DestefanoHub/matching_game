@@ -5,7 +5,7 @@ import { selectWLFilter, selectDiffFilter, selectSort, searchThunk, wlFilterThun
 
 import styles from './GameSearch.module.css';
 
-const GameSearch = () => {
+export default function GameSearch() {
     const searchDelayTimeout = useRef(null);
     const [ searchValLocal, setSearchValLocal ] = useState('');
     const wlFilterVal = useSelector(selectWLFilter);
@@ -14,7 +14,7 @@ const GameSearch = () => {
 
     const dispatch = useDispatch();
 
-    const handleChangeSearch = (event) => {
+    const handleChangeSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchValLocal(event.target.value);
 
         clearTimeout(searchDelayTimeout.current);
@@ -24,15 +24,15 @@ const GameSearch = () => {
         }, 750);
     };
 
-    const handleChangeWLFilter = (event) => {
+    const handleChangeWLFilter = (event: React.ChangeEvent<HTMLSelectElement>) => {
         dispatch(wlFilterThunk(event.target.value));
     };
 
-    const handleChangeDiffFilter = (event) => {
+    const handleChangeDiffFilter = (event: React.ChangeEvent<HTMLSelectElement>) => {
         dispatch(diffFilterThunk(+event.target.value));
     };
 
-    const handleChangeSort = (event) => {
+    const handleChangeSort = (event: React.ChangeEvent<HTMLSelectElement>) => {
         dispatch(sortThunk(event.target.value));
     };
     
@@ -81,6 +81,4 @@ const GameSearch = () => {
             <option value='sa'>Score Asc</option>
         </select>
     </form>;
-};
-
-export default GameSearch;
+}

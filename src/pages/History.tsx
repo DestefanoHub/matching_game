@@ -11,7 +11,7 @@ import GameHistoryFull from '../components/history/GameHistoryFull';
 
 import styles from './History.module.css';
 
-const History = () => {
+export default function History() {
     const [ gameDetails, setGameDetails ] = useState({});
     const games = useSelector(selectGames);
     const isLoaded = useSelector(selectIsLoaded);
@@ -30,13 +30,13 @@ const History = () => {
         }
     }, [gameDetails]);
 
-    const handleClick = async (gameId) => {
+    const handleClick = async (gameId: string) => {
         const gameInfo = await getGameInfo(gameId);
         wasRecordClicked.current = true;
         setGameDetails(gameInfo); 
     };
 
-    const gameList = games.map((game, index) => {
+    const gameList = games.map((game, index: number) => {
         return <GameHistoryRecord key={index} game={game} onClick={handleClick}/>;
     });
 
@@ -58,6 +58,4 @@ const History = () => {
             <Paginator/>
         </div>
     </Fragment>;
-};
-
-export default History;
+}

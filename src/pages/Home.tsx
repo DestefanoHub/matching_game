@@ -4,7 +4,7 @@ import RecentGames from '../components/history/RecentGames';
 
 import styles from './Home.module.css';
 
-const Home = () => {
+export default function Home() {
     return <section className={styles.content}>
         <h1>Home Page</h1>
         <p>
@@ -19,5 +19,3 @@ const Home = () => {
         <RecentGames/>
     </section>;
 }
-
-export default Home;

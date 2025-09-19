@@ -11,7 +11,7 @@ import { init, decrementThunk, selectInit, selectGameOver } from '../store/gameS
 
 import styles from './Game.module.css';
 
-const Game = () => {
+export default function Game() {
     const initialized = useSelector(selectInit);
     const gameOver = useSelector(selectGameOver);
 
@@ -54,6 +54,4 @@ const Game = () => {
             {initialized && <GameBoard startCountdown={startCountdown}/>}
         </section>
     </Fragment>;
-};
-
-export default Game;
+}

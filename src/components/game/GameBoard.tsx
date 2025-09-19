@@ -3,10 +3,15 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { scoreThunk, selectInit, selectDisplayDifficulty, selectActiveTiles, selectTiles } from '../../store/gameSlice';
 import Tile from './Tile';
+import { type Tile as TileType } from '../../utils/types';
 
 import styles from './GameBoard.module.css';
 
-const GameBoard = ({ startCountdown }) => {
+type Props = {
+    startCountdown: Function
+}
+
+export default function GameBoard({ startCountdown }: Props) {
     const [playerHasStarted, setPlayerHasStarted] = useState(false);
     
     const initialized = useSelector(selectInit);
@@ -28,7 +33,7 @@ const GameBoard = ({ startCountdown }) => {
         }
 
         return () => {
-            clearTimeout(tileShowTimeout);
+            clearTimeout(tileShowTimeout!);
         };
     }, [activeTiles, dispatch]);
 
@@ -39,7 +44,7 @@ const GameBoard = ({ startCountdown }) => {
         }
     };
 
-    const tileGrid = tiles.map((tile) => <Tile key={tile.id} tile={tile}/>);
+    const tileGrid = tiles.map((tile: TileType) => <Tile key={tile.id} tile={tile}/>);
     
     return <div id='gameboard' 
         className={`${styles.board} ${styles[displayDifficulty]} ${activeTiles.length === 2 && styles.blocker}`}
@@ -47,6 +52,4 @@ const GameBoard = ({ startCountdown }) => {
     >
         {initialized && tileGrid}
     </div>;
-};
-
-export default GameBoard;
+}

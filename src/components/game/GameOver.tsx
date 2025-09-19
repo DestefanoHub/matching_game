@@ -4,7 +4,12 @@ import { selectHasWon } from '../../store/gameSlice';
 
 import Modal from '../generic/Modal';
 
-const GameOver = ({ modalRef, onClose }) => {    
+type Props = {
+    modalRef: ,
+    onClose: Function
+};
+
+export default function GameOver({ modalRef, onClose }: Props) {    
     const hasWon = useSelector(selectHasWon);
     
     const winMessage = 'Congrats, you won!';
@@ -21,6 +26,4 @@ const GameOver = ({ modalRef, onClose }) => {
         <h2>{hasWon ? winMessage : loseMessage}</h2>
         <button type='button' onClick={handleClick}>{hasWon ? winNewGameText : loseNewGameText}</button>
     </Modal>;
-};
-
-export default GameOver;
+}

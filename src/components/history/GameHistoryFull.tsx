@@ -2,7 +2,12 @@ import Modal from '../generic/Modal';
 import GameHistoryStats from './GameHistoryStats';
 import { getDisplayDifficulty } from '../../store/gameSlice';
 
-const GameHistoryFull = ({ modalRef, details }) => {
+type Props = {
+    modalRef: any,
+    details: any
+}
+
+export default function GameHistoryFull({ modalRef, details }: Props) {
     if('game' in details){
         const gameDateObj = new Date(details.game.date);
 
@@ -19,6 +24,4 @@ const GameHistoryFull = ({ modalRef, details }) => {
     }
 
     return;
-};
-
-export default GameHistoryFull;
+}

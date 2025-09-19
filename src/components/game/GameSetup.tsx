@@ -7,26 +7,30 @@ import Modal from '../generic/Modal';
 
 import styles from './GameSetup.module.css';
 
-const GameSetup = ({ modalRef }) => {   
+type Props = {
+    modalRef: React.RefObject<>
+};
+
+export default function GameSetup({ modalRef }: Props) {   
     const [state, setState] = useState({player: '', difficulty: 1});
     
     const dispatch = useDispatch();
 
-    const handlePlayer = (event) => {
+    const handlePlayer = (event: React.ChangeEvent<HTMLInputElement>) => {
         setState({
             ...state,
             player: event.target.value
         });
     };
 
-    const handleDifficulty = (event) => {
+    const handleDifficulty = (event: React.ChangeEvent<HTMLInputElement>) => {
         setState({
             ...state,
             difficulty: +event.target.value
         });
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = (event: Event) => {
         event.preventDefault();
         dispatch(setup({player: state.player, difficulty: state.difficulty}));
         modalRef.current.close();
@@ -87,6 +91,4 @@ const GameSetup = ({ modalRef }) => {
             </form>
         </div>
     </Modal>;
-};
-
-export default GameSetup;
+}

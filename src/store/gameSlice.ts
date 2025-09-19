@@ -1,6 +1,20 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
 
 import { saveGame } from '../utils/gateway';
+import { type Difficulty, type DifficultyText, type Tile } from '../utils/types';
+
+type State = {
+    tiles: [Tile?],
+    points: number,
+    totalPoints: number,
+    time: number,
+    gameOver: boolean,
+    hasWon: boolean,
+    init: boolean,
+    player: string|null,
+    difficulty: Difficulty,
+    savedGame: any
+}
 
 const values = [
     'orange',
@@ -29,7 +43,7 @@ const values = [
     'gold'
 ];
 
-const initialState = {
+const initialState: State = {
     tiles: [],
     points: 0,
     totalPoints: 0,
@@ -42,8 +56,8 @@ const initialState = {
     savedGame: {}
 };
 
-const getActiveTiles = (tiles) => {
-    const indices = [];
+const getActiveTiles = (tiles: [Tile?]): [number?] => {
+    const indices: [number?] = [];
 
     tiles.forEach((tile, index) => {        
         if(tile.isActive){
@@ -54,7 +68,7 @@ const getActiveTiles = (tiles) => {
     return indices;
 };
 
-export const getDisplayDifficulty = (diff) => {
+export const getDisplayDifficulty = (diff: Difficulty): DifficultyText => {
     switch(diff){
         case 2: return 'Normal';
         case 3: return 'Hard';
@@ -71,7 +85,7 @@ export const gameSlice = createSlice({
             return initialState;
         },
         setup: (state, action) => {
-            const tileGrid = [];
+            const tileGrid: [Tile?] = [];
             let gridSize = 12;
 
             switch(action.payload.difficulty){

@@ -1,9 +1,21 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 import { getGames } from '../utils/gateway';
-import { type WinLoss, type Difficulty, type SortBy } from '../utils/types';
+import type { WinLoss, Difficulty, SortBy, Game } from '../utils/types';
+import type { RootState, AppThunk } from './store';
 
-const initialState = {
+type State = {
+    search: string,
+    wlFilter: WinLoss,
+    diffFilter: Difficulty,
+    sort: SortBy,
+    page: number,
+    totalGames: number,
+    games: Game[],
+    isLoaded: boolean
+};
+
+const initialState: State = {
     search: '',
     wlFilter: 'a',
     diffFilter: 0,
@@ -18,23 +30,23 @@ export const historySlice = createSlice({
     name: 'history',
     initialState,
     reducers: {
-        search: (state, action) => {
+        search: (state, action: PayloadAction<string>) => {
             state.search = action.payload;
             state.isLoaded = false;
         },
-        wlFilter: (state, action) => {
+        wlFilter: (state, action: PayloadAction<WinLoss>) => {
             state.wlFilter = action.payload;
             state.isLoaded = false;
         },
-        diffFilter: (state, action) => {
-            state.diffFilter = +action.payload;
+        diffFilter: (state, action: PayloadAction<Difficulty>) => {
+            state.diffFilter = +action.payload as Difficulty;
             state.isLoaded = false;
         },
-        sort: (state, action) => {
+        sort: (state, action: PayloadAction<SortBy>) => {
             state.sort = action.payload;
             state.isLoaded = false;
         },
-        setGames: (state, action) => {
+        setGames: (state, action: PayloadAction<{games: Game[], totalGames: number, page: number}>) => {
             state.games = action.payload.games;
             state.totalGames = action.payload.totalGames;
             state.page = action.payload.page;
@@ -43,27 +55,27 @@ export const historySlice = createSlice({
     }
 });
 
-export const searchThunk = (searchTerm: string) => async (dispatch) => {
+export const searchThunk = (searchTerm: string): AppThunk<void> => async (dispatch) => {
     dispatch(search(searchTerm));
     dispatch(getGamesThunk(-1));
 };
 
-export const wlFilterThunk = (wlFilterValue: WinLoss) => async (dispatch) => {
+export const wlFilterThunk = (wlFilterValue: WinLoss): AppThunk<void> => async (dispatch) => {
     dispatch(wlFilter(wlFilterValue));
     dispatch(getGamesThunk(-1));
 };
 
-export const diffFilterThunk = (diffFIlterValue: Difficulty) => async (dispatch) => {
+export const diffFilterThunk = (diffFIlterValue: Difficulty): AppThunk<void> => async (dispatch) => {
     dispatch(diffFilter(diffFIlterValue));
     dispatch(getGamesThunk(-1));
 };
 
-export const sortThunk = (sortValue: SortBy) => async (dispatch) => {
+export const sortThunk = (sortValue: SortBy): AppThunk<void> => async (dispatch) => {
     dispatch(sort(sortValue));
     dispatch(getGamesThunk(-1));
 };
 
-export const getGamesThunk = (pageNum = 0) => async (dispatch, getState) => {
+export const getGamesThunk = (pageNum = 0): AppThunk<void> => async (dispatch, getState) => {
     const historyState = getState().history;
     let pageToSend = 1;
 
@@ -83,19 +95,19 @@ export const getGamesThunk = (pageNum = 0) => async (dispatch, getState) => {
     const gamesData = await getGames(historyState.search, historyState.wlFilter, historyState.diffFilter, historyState.sort, pageToSend);
 
     dispatch(setGames({
-        games: gamesData.gamesArray,
+        games: gamesData.games,
         totalGames: gamesData.totalGames,
         page: pageToSend
     }));
 };
 
 export const { search, wlFilter, diffFilter, sort, setGames } = historySlice.actions;
-export const selectSearch = (state) => state.history.search;
-export const selectWLFilter = (state) => state.history.wlFilter;
-export const selectDiffFilter = (state) => state.history.diffFilter;
-export const selectSort = (state) => state.history.sort;
-export const selectPage = (state) => state.history.page;
-export const selectTotalGames = (state) => state.history.totalGames;
-export const selectGames = (state) => state.history.games;
-export const selectIsLoaded = (state) => state.history.isLoaded;
+export const selectSearch = (state: RootState) => state.history.search;
+export const selectWLFilter = (state: RootState) => state.history.wlFilter;
+export const selectDiffFilter = (state: RootState) => state.history.diffFilter;
+export const selectSort = (state: RootState) => state.history.sort;
+export const selectPage = (state: RootState) => state.history.page;
+export const selectTotalGames = (state: RootState) => state.history.totalGames;
+export const selectGames = (state: RootState) => state.history.games;
+export const selectIsLoaded = (state: RootState) => state.history.isLoaded;
 export default historySlice.reducer;

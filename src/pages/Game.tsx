@@ -1,5 +1,5 @@
 import { useRef, Fragment } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useAppSelector, useAppDispatch } from '../utils/hooks';
 import { useNavigate } from 'react-router-dom';
 
 import GameInfo from '../components/game/GameInfo';
@@ -12,15 +12,15 @@ import { init, decrementThunk, selectInit, selectGameOver } from '../store/gameS
 import styles from './Game.module.css';
 
 export default function Game() {
-    const initialized = useSelector(selectInit);
-    const gameOver = useSelector(selectGameOver);
+    const initialized = useAppSelector(selectInit);
+    const gameOver = useAppSelector(selectGameOver);
 
     const gameSetupModal = useRef(null);
     const gameOverModal = useRef(null);
     const countdownInterval = useRef(null);
 
     const navigate = useNavigate();
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     if(gameOver){
         clearInterval(countdownInterval.current);

@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../../utils/hooks';
 import { useState } from 'react';
 
 import { setup } from '../../store/gameSlice';
@@ -14,7 +14,7 @@ type Props = {
 export default function GameSetup({ modalRef }: Props) {   
     const [state, setState] = useState({player: '', difficulty: 1});
     
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const handlePlayer = (event: React.ChangeEvent<HTMLInputElement>) => {
         setState({

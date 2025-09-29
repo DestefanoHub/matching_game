@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, Fragment } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useAppSelector, useAppDispatch } from '../utils/hooks';
 
 import { selectGames, selectIsLoaded, getGamesThunk } from '../store/historySlice';
 import { getGameInfo } from '../utils/gateway';
@@ -13,12 +13,12 @@ import styles from './History.module.css';
 
 export default function History() {
     const [ gameDetails, setGameDetails ] = useState({});
-    const games = useSelector(selectGames);
-    const isLoaded = useSelector(selectIsLoaded);
+    const games = useAppSelector(selectGames);
+    const isLoaded = useAppSelector(selectIsLoaded);
     const gameDetailsModal = useRef(null);
     const wasRecordClicked = useRef(false);
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     
     useEffect(() => {
         dispatch(getGamesThunk());

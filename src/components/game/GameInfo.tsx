@@ -1,11 +1,11 @@
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../utils/hooks';
 
 import { selectPlayer, selectDisplayDifficulty, selectTime } from '../../store/gameSlice';
 
 export default function GameInfo() {
-    const player = useSelector(selectPlayer);
-    const displayDifficulty = useSelector(selectDisplayDifficulty);
-    const time = useSelector(selectTime);
+    const player = useAppSelector(selectPlayer);
+    const displayDifficulty = useAppSelector(selectDisplayDifficulty);
+    const time = useAppSelector(selectTime);
     
     return <div>
         <p>Player: {player}</p>

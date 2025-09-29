@@ -1,6 +1,8 @@
+import type { Difficulty, GameData, MultiGamesData, SortBy, WinLoss, Game } from './types';
+
 const baseURL = 'http://localhost:3100/';
 
-export const getGameInfo = async (gameId) => {
+export async function getGameInfo(gameId: string): Promise<GameData> {
     const response = await fetch(`${baseURL}getGameInfo/${gameId}`, {
         method: 'GET',
         headers: {
@@ -15,7 +17,7 @@ export const getGameInfo = async (gameId) => {
     return await response.json();
 };
 
-export const getRecentGames = async () => {
+export async function getRecentGames(): Promise<[Game?]> {
     const response = await fetch(`${baseURL}getRecentGames`, {
         method: 'GET',
         headers: {
@@ -30,18 +32,18 @@ export const getRecentGames = async () => {
     return await response.json();
 };
 
-export const getGames = async (player, winLoss, diff, sortBy, page) => {
+export async function getGames(player: string, winLoss: WinLoss, diff: Difficulty, sortBy: SortBy, page: number): Promise<MultiGamesData> {
     const queryParams = new URLSearchParams();
     const gamesData = {
-        gamesArray: [],
+        games: [],
         totalGames: 0
     };
 
     queryParams.append('player', player);
     queryParams.append('winLoss', winLoss);
-    queryParams.append('diff',diff);
+    queryParams.append('diff', diff.toString());
     queryParams.append('sortBy', sortBy);
-    queryParams.append('page', page);
+    queryParams.append('page', page.toString());
     
     const response = await fetch(`${baseURL}getGames?${queryParams}`, {
         method: 'GET',
@@ -55,13 +57,13 @@ export const getGames = async (player, winLoss, diff, sortBy, page) => {
     }
 
     const history = await response.json();
-    gamesData.gamesArray = history.games;
+    gamesData.games = history.games;
     gamesData.totalGames = history.totalGames;
 
     return gamesData;
 };
 
-export const saveGame = async (player, difficulty, hasWon, points, totalPoints, time) => {
+export async function saveGame(player: string, difficulty: Difficulty, hasWon: boolean, points: number, totalPoints: number, time: number): Promise<GameData> {
     const response = await fetch(`${baseURL}saveGame`, {
         method: 'POST',
         headers: {

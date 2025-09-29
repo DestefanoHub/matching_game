@@ -1,10 +1,11 @@
-import { createSelector, createSlice } from '@reduxjs/toolkit';
+import { createSelector, createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 import { saveGame } from '../utils/gateway';
-import { type Difficulty, type DifficultyText, type Tile } from '../utils/types';
+import type { Difficulty, DifficultyText, Tile } from '../utils/types';
+import type { AppThunk, RootState } from './store';
 
 type State = {
-    tiles: [Tile?],
+    tiles: Tile[],
     points: number,
     totalPoints: number,
     time: number,
@@ -13,7 +14,7 @@ type State = {
     init: boolean,
     player: string|null,
     difficulty: Difficulty,
-    savedGame: any
+    // savedGame: any
 }
 
 const values = [
@@ -53,11 +54,11 @@ const initialState: State = {
     init: false,
     player: null,
     difficulty: 1,
-    savedGame: {}
+    // savedGame: {}
 };
 
-const getActiveTiles = (tiles: [Tile?]): [number?] => {
-    const indices: [number?] = [];
+const getActiveTiles = (tiles: Tile[]): number[] => {
+    const indices: number[] = [];
 
     tiles.forEach((tile, index) => {        
         if(tile.isActive){
@@ -84,8 +85,8 @@ export const gameSlice = createSlice({
         init: () => {
             return initialState;
         },
-        setup: (state, action) => {
-            const tileGrid: [Tile?] = [];
+        setup: (state, action: PayloadAction<{player: string, difficulty: Difficulty}>) => {
+            const tileGrid: Tile[] = [];
             let gridSize = 12;
 
             switch(action.payload.difficulty){
@@ -122,7 +123,7 @@ export const gameSlice = createSlice({
             state.tiles = tileGrid;
             state.totalPoints = (tileGrid.length / 2);
         },
-        reveal: (state, action) => {
+        reveal: (state, action: PayloadAction<number>) => {
             const tileIndex = state.tiles.findIndex((tile) => {
                 return tile.id === action.payload;
             });
@@ -131,7 +132,7 @@ export const gameSlice = createSlice({
 
             if(activeTiles.length < 2 && tileIndex !== -1){
                 const isTileActive = activeTiles.some((tileIndex) => {
-                    return state.tiles[tileIndex].value === action.payload;
+                    return state.tiles[tileIndex].id === action.payload;
                 });
 
                 if(!isTileActive){
@@ -171,24 +172,24 @@ export const gameSlice = createSlice({
             state.gameOver = true;
             state.hasWon = false;
         },
-        setSavedGame: (state, action) => {
-            state.savedGame = action.payload;
-        }
+        // setSavedGame: (state, action: PayloadAction<Game>) => {
+        //     state.savedGame = action.payload;
+        // }
     }
 });
 
-export const scoreThunk = () => async (dispatch, getState) => {
+export const scoreThunk = (): AppThunk<void> => async (dispatch, getState) => {
     dispatch(score());
     
     const gameState = getState().game;
 
     if(gameState.gameOver){
-        const savedGame = await saveGame(gameState.player, gameState.difficulty, gameState.hasWon, gameState.points, gameState.totalPoints, gameState.time);
-        dispatch(setSavedGame(savedGame));
+        await saveGame(gameState.player!, gameState.difficulty, gameState.hasWon, gameState.points, gameState.totalPoints, gameState.time);
+        // dispatch(setSavedGame(savedGame));
     }
 };
 
-export const decrementThunk = () => async (dispatch, getState) => {
+export const decrementThunk = (): AppThunk<void> => async (dispatch, getState) => {
     dispatch(decrement());
 
     const gameState = getState().game;
@@ -196,20 +197,20 @@ export const decrementThunk = () => async (dispatch, getState) => {
     //Check if the game time has expired.
     if(!gameState.time){
         dispatch(lose());
-        const savedGame = await saveGame(gameState.player, gameState.difficulty, false, gameState.points, gameState.totalPoints, 0)
-        dispatch(setSavedGame(savedGame));
+        await saveGame(gameState.player!, gameState.difficulty, false, gameState.points, gameState.totalPoints, 0)
+        // dispatch(setSavedGame(savedGame));
     }
 };
 
-export const { init, setup, reveal, decrement, score, lose, setSavedGame } = gameSlice.actions;
-export const selectInit = (state) => state.game.init;
-export const selectPlayer = (state) => state.game.player;
-const selectDifficulty = (state) => state.game.difficulty;
+export const { init, setup, reveal, decrement, score, lose } = gameSlice.actions;
+export const selectInit = (state: RootState) => state.game.init;
+export const selectPlayer = (state: RootState) => state.game.player;
+const selectDifficulty = (state: RootState) => state.game.difficulty;
 export const selectDisplayDifficulty = createSelector([selectDifficulty], (diff) => getDisplayDifficulty(diff));
-export const selectTiles = (state) => state.game.tiles;
+export const selectTiles = (state: RootState) => state.game.tiles;
 export const selectActiveTiles = createSelector([selectTiles], (tiles) => getActiveTiles(tiles));
-export const selectHasWon = (state) => state.game.hasWon;
-export const selectGameOver = (state) => state.game.gameOver;
-export const selectTime = (state) => state.game.time;
-export const selectSavedGame = (state) => state.game.savedGame;
+export const selectHasWon = (state: RootState) => state.game.hasWon;
+export const selectGameOver = (state: RootState) => state.game.gameOver;
+export const selectTime = (state: RootState) => state.game.time;
+// export const selectSavedGame = (state: RootState) => state.game.savedGame;
 export default gameSlice.reducer;

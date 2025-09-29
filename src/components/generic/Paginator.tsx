@@ -1,14 +1,14 @@
-import { useSelector, useDispatch } from 'react-redux';
+import { useAppSelector, useAppDispatch } from '../../utils/hooks';
 
 import { selectTotalGames, selectPage, getGamesThunk } from '../../store/historySlice';
 
 import styles from './Paginator.module.css';
 
 export default function Paginator() {
-    const totalGames = useSelector(selectTotalGames);
-    const page = useSelector(selectPage);
+    const totalGames = useAppSelector(selectTotalGames);
+    const page = useAppSelector(selectPage);
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const totalPages = Math.ceil(totalGames / 10);
     const prevDisabled = (page === 1) ? true : false;

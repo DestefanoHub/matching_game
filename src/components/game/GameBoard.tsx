@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useAppSelector, useAppDispatch } from '../../utils/hooks';
 
 import { scoreThunk, selectInit, selectDisplayDifficulty, selectActiveTiles, selectTiles } from '../../store/gameSlice';
 import Tile from './Tile';
@@ -14,12 +14,12 @@ type Props = {
 export default function GameBoard({ startCountdown }: Props) {
     const [playerHasStarted, setPlayerHasStarted] = useState(false);
     
-    const initialized = useSelector(selectInit);
-    const displayDifficulty = useSelector(selectDisplayDifficulty);
-    const tiles = useSelector(selectTiles);
-    const activeTiles = useSelector(selectActiveTiles);
+    const initialized = useAppSelector(selectInit);
+    const displayDifficulty = useAppSelector(selectDisplayDifficulty);
+    const tiles = useAppSelector(selectTiles);
+    const activeTiles = useAppSelector(selectActiveTiles);
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     
     /*
     * Wait a brief time before updating the board, otherwise players will be unable to see the value of the

@@ -1,4 +1,4 @@
-import { useSelector, useDispatch } from 'react-redux';
+import { useAppSelector, useAppDispatch } from '../../utils/hooks';
 
 import { reveal, selectActiveTiles } from '../../store/gameSlice';
 import { type Tile } from '../../utils/types';
@@ -10,8 +10,8 @@ type Props = {
 }
 
 export default function Tile({ tile }: Props) {
-    const activeTiles = useSelector(selectActiveTiles);
-    const dispatch = useDispatch();
+    const activeTiles = useAppSelector(selectActiveTiles);
+    const dispatch = useAppDispatch();
 
     const handleClick = () => {        
         if(activeTiles.length < 2){

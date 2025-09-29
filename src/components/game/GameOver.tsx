@@ -1,4 +1,4 @@
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../utils/hooks';
 
 import { selectHasWon } from '../../store/gameSlice';
 
@@ -10,7 +10,7 @@ type Props = {
 };
 
 export default function GameOver({ modalRef, onClose }: Props) {    
-    const hasWon = useSelector(selectHasWon);
+    const hasWon = useAppSelector(selectHasWon);
     
     const winMessage = 'Congrats, you won!';
     const loseMessage = 'Sorry, you lost';

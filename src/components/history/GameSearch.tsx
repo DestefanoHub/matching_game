@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppSelector, useAppDispatch } from '../../utils/hooks';
 
 import { selectWLFilter, selectDiffFilter, selectSort, searchThunk, wlFilterThunk, diffFilterThunk, sortThunk } from '../../store/historySlice';
 
@@ -8,11 +8,11 @@ import styles from './GameSearch.module.css';
 export default function GameSearch() {
     const searchDelayTimeout = useRef(null);
     const [ searchValLocal, setSearchValLocal ] = useState('');
-    const wlFilterVal = useSelector(selectWLFilter);
-    const diffFilterVal = useSelector(selectDiffFilter);
-    const sortVal = useSelector(selectSort);
+    const wlFilterVal = useAppSelector(selectWLFilter);
+    const diffFilterVal = useAppSelector(selectDiffFilter);
+    const sortVal = useAppSelector(selectSort);
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const handleChangeSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchValLocal(event.target.value);

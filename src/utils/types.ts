@@ -35,3 +35,21 @@ export type Game = {
     totalPoints: number,
     time: number
 };
+
+export type PlayerStats = {
+    isFirstGame: boolean,
+    isFirstWin: boolean,
+    isFirstDiffGame: boolean,
+    isFirstDiffWin: boolean,
+    isFastestDiffTime: boolean
+};
+
+export type GameData = {
+    game?: Game | Record<string, never>,
+    stats?: PlayerStats
+};
+
+export type MultiGamesData = {
+    games: Game[],
+    totalGames: number
+};

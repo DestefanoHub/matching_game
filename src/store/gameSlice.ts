@@ -75,7 +75,7 @@ const initialState: State = {
  * file, nothing else would actually use the tile instances in the array, and it would require more work to manage for
  * very little benefit, and an added chance of errors.
  */
-function getActiveTiles(tiles: Tile[]): number[] {
+function getActiveTileIndices(tiles: Tile[]): number[] {
     const indices: number[] = [];
 
     tiles.forEach((tile, index) => {        
@@ -148,12 +148,12 @@ export const gameSlice = createSlice({
             });
 
             //Get the indices of the active tiles from state.tiles as an array.
-            const activeTiles = getActiveTiles(state.tiles);
+            const activeTilesIndices = getActiveTileIndices(state.tiles);
 
             //Check if there are less than two active tiles, and the revealed tile exists.
-            if(activeTiles.length < 2 && tileIndex !== -1){
+            if(activeTilesIndices.length < 2 && tileIndex !== -1){
                 //Check if any of the active tiles match the revealed tile by id. This handles duplicate clicks on a revealed tile.
-                const isTileActive = activeTiles.some((tileIndex) => {
+                const isTileActive = activeTilesIndices.some((tileIndex) => {
                     return state.tiles[tileIndex].id === action.payload;
                 });
 
@@ -170,12 +170,12 @@ export const gameSlice = createSlice({
         },
         score: (state) => {
             const newScore = state.points + 1;
-            const activeTiles = getActiveTiles(state.tiles);
+            const activeTileIndices = getActiveTileIndices(state.tiles);
 
-            if(activeTiles.length === 2){
-                if(state.tiles[activeTiles[0]].value === state.tiles[activeTiles[1]].value){
-                    state.tiles[activeTiles[0]].isScored = true;
-                    state.tiles[activeTiles[1]].isScored = true;
+            if(activeTileIndices.length === 2){
+                if(state.tiles[activeTileIndices[0]].value === state.tiles[activeTileIndices[1]].value){
+                    state.tiles[activeTileIndices[0]].isScored = true;
+                    state.tiles[activeTileIndices[1]].isScored = true;
 
                     if(!state.gameOver){
                         state.points = newScore;
@@ -187,8 +187,8 @@ export const gameSlice = createSlice({
                     }
                 }
 
-                state.tiles[activeTiles[0]].isActive = false;
-                state.tiles[activeTiles[1]].isActive = false;
+                state.tiles[activeTileIndices[0]].isActive = false;
+                state.tiles[activeTileIndices[1]].isActive = false;
             }
         },
         lose: (state) => {
@@ -231,7 +231,7 @@ export const selectPlayer = (state: RootState) => state.game.player;
 const selectDifficulty = (state: RootState) => state.game.difficulty;
 export const selectDisplayDifficulty = createSelector([selectDifficulty], (diff) => getDisplayDifficulty(diff));
 export const selectTiles = (state: RootState) => state.game.tiles;
-export const selectActiveTiles = createSelector([selectTiles], (tiles) => getActiveTiles(tiles));
+export const selectActiveTiles = createSelector([selectTiles], (tiles) => getActiveTileIndices(tiles));
 export const selectHasWon = (state: RootState) => state.game.hasWon;
 export const selectGameOver = (state: RootState) => state.game.gameOver;
 export const selectTime = (state: RootState) => state.game.time;

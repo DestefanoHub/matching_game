@@ -15,7 +15,7 @@ export default function History() {
     const [ gameDetails, setGameDetails ] = useState({});
     const games = useAppSelector(selectGames);
     const isLoaded = useAppSelector(selectIsLoaded);
-    const gameDetailsModal = useRef(null);
+    const gameDetailsModal = useRef<HTMLDialogElement | null>(null);
     const wasRecordClicked = useRef(false);
 
     const dispatch = useAppDispatch();
@@ -26,7 +26,7 @@ export default function History() {
 
     useEffect(() => {
         if(wasRecordClicked.current){
-            gameDetailsModal.current.showModal();
+            gameDetailsModal.current?.showModal();
         }
     }, [gameDetails]);
 

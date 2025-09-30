@@ -4,9 +4,10 @@ import { useAppSelector, useAppDispatch } from '../../utils/hooks';
 import { selectWLFilter, selectDiffFilter, selectSort, searchThunk, wlFilterThunk, diffFilterThunk, sortThunk } from '../../store/historySlice';
 
 import styles from './GameSearch.module.css';
+import type { Difficulty, SortBy, WinLoss } from '../../utils/types';
 
 export default function GameSearch() {
-    const searchDelayTimeout = useRef(null);
+    const searchDelayTimeout = useRef<NodeJS.Timeout | null>(null);
     const [ searchValLocal, setSearchValLocal ] = useState('');
     const wlFilterVal = useAppSelector(selectWLFilter);
     const diffFilterVal = useAppSelector(selectDiffFilter);
@@ -17,7 +18,7 @@ export default function GameSearch() {
     const handleChangeSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchValLocal(event.target.value);
 
-        clearTimeout(searchDelayTimeout.current);
+        clearTimeout(searchDelayTimeout.current!);
 
         searchDelayTimeout.current = setTimeout(() => {
             dispatch(searchThunk(event.target.value));
@@ -25,15 +26,15 @@ export default function GameSearch() {
     };
 
     const handleChangeWLFilter = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        dispatch(wlFilterThunk(event.target.value));
+        dispatch(wlFilterThunk(event.target.value as WinLoss));
     };
 
     const handleChangeDiffFilter = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        dispatch(diffFilterThunk(+event.target.value));
+        dispatch(diffFilterThunk(+event.target.value as Difficulty));
     };
 
     const handleChangeSort = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        dispatch(sortThunk(event.target.value));
+        dispatch(sortThunk(event.target.value as SortBy));
     };
     
     return <form className={styles.form}>

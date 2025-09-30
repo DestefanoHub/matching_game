@@ -1,5 +1,5 @@
 import { useAppDispatch } from '../../utils/hooks';
-import { useState } from 'react';
+import { useState, type Ref } from 'react';
 
 import { setup } from '../../store/gameSlice';
 
@@ -8,7 +8,7 @@ import Modal from '../generic/Modal';
 import styles from './GameSetup.module.css';
 
 type Props = {
-    modalRef: React.RefObject<>
+    modalRef: Ref<HTMLDialogElement>
 };
 
 export default function GameSetup({ modalRef }: Props) {   
@@ -30,7 +30,7 @@ export default function GameSetup({ modalRef }: Props) {
         });
     };
 
-    const handleSubmit = (event: Event) => {
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         dispatch(setup({player: state.player, difficulty: state.difficulty}));
         modalRef.current.close();

@@ -15,21 +15,21 @@ export default function Game() {
     const initialized = useAppSelector(selectInit);
     const gameOver = useAppSelector(selectGameOver);
 
-    const gameSetupModal = useRef(null);
-    const gameOverModal = useRef(null);
-    const countdownInterval = useRef(null);
+    const gameSetupModal = useRef<HTMLDialogElement | null>(null);
+    const gameOverModal = useRef<HTMLDialogElement | null>(null);
+    const countdownInterval = useRef<NodeJS.Timeout | null>(null);
 
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
     if(gameOver){
-        clearInterval(countdownInterval.current);
-        gameOverModal.current.showModal();
+        clearInterval(countdownInterval.current!);
+        gameOverModal.current?.showModal();
     }
 
     const handleClick = () => {
         if(!initialized){
-            gameSetupModal.current.showModal();
+            gameSetupModal.current?.showModal();
         }
     };
 

@@ -4,16 +4,17 @@ import GameHistoryRecord from './GameHistoryRecord';
 import GameHistoryFull from './GameHistoryFull';
 import Banner from '../generic/Banner';
 import { getRecentGames, getGameInfo } from '../../utils/gateway';
+import type { Game } from '../../utils/types';
 
 import styles from './RecentGames.module.css';
 
 export default function RecentGames() {
-    const [ recentGamesData, setRecentGamesData ] = useState({
+    const [ recentGamesData, setRecentGamesData ] = useState<{isLoaded: boolean, games: Game[]}>({
         isLoaded: false,
         games: []
     });
     const [ gameDetails, setGameDetails ] = useState({});
-    const gameDetailsModal = useRef(null);
+    const gameDetailsModal = useRef<HTMLDialogElement | null>(null);
     const wasRecordClicked = useRef(false);
     
     useEffect(() => {
@@ -28,7 +29,7 @@ export default function RecentGames() {
 
     useEffect(() => {
         if(wasRecordClicked.current){
-            gameDetailsModal.current.showModal();
+            gameDetailsModal.current?.showModal();
         }
     }, [gameDetails]);
 

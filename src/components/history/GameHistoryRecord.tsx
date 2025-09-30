@@ -5,8 +5,8 @@ import styles from './GameHistoryRecord.module.css';
 
 type Props = {
     game: Game,
-    onClick: Function
-}
+    onClick: (arg1: string) => void
+};
 
 export default function GameHistoryRecord({ game, onClick }: Props) {
     const gameDateObj = new Date(game.date);

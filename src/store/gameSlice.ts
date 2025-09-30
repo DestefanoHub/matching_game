@@ -15,7 +15,7 @@ type State = {
     player: string|null,
     difficulty: Difficulty,
     // savedGame: any
-}
+};
 
 const values = [
     'orange',

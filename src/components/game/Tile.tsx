@@ -7,7 +7,7 @@ import styles from './Tile.module.css';
 
 type Props = {
     tile: Tile
-}
+};
 
 export default function Tile({ tile }: Props) {
     const activeTiles = useAppSelector(selectActiveTiles);

@@ -8,8 +8,8 @@ import { type Tile as TileType } from '../../utils/types';
 import styles from './GameBoard.module.css';
 
 type Props = {
-    startCountdown: Function
-}
+    startCountdown: () => void
+};
 
 export default function GameBoard({ startCountdown }: Props) {
     const [playerHasStarted, setPlayerHasStarted] = useState(false);

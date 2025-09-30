@@ -45,8 +45,8 @@ export type PlayerStats = {
 };
 
 export type GameData = {
-    game?: Game | Record<string, never>,
-    stats?: PlayerStats
+    game: Game | Record<PropertyKey, never>,
+    stats: PlayerStats
 };
 
 export type MultiGamesData = {

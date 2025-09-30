@@ -1,13 +1,13 @@
 import { Fragment } from 'react';
 
 import { getDisplayDifficulty } from '../../store/gameSlice';
-import { type Game, type Difficulty } from '../../utils/types';
+import type { Game, Difficulty, PlayerStats } from '../../utils/types';
 
 type Props = {
     game: Game,
-    stats: any,
-    isCurrentPlayer: boolean
-}
+    stats: PlayerStats,
+    isCurrentPlayer?: boolean
+};
 
 export default function GameHistoryStats({ game, stats, isCurrentPlayer = false }: Props) {
     let firstGameMsg;

@@ -1,12 +1,13 @@
 import { useAppSelector } from '../../utils/hooks';
+import { type Ref } from 'react';
 
 import { selectHasWon } from '../../store/gameSlice';
 
 import Modal from '../generic/Modal';
 
 type Props = {
-    modalRef: ,
-    onClose: Function
+    modalRef: Ref<HTMLDialogElement>,
+    onClose: () => void
 };
 
 export default function GameOver({ modalRef, onClose }: Props) {    

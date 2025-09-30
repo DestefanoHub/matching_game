@@ -57,7 +57,25 @@ const initialState: State = {
     // savedGame: {}
 };
 
-const getActiveTiles = (tiles: Tile[]): number[] => {
+/**
+ * Finding active tiles is derived from state.tiles instead of a separate array to hold the active tile instances.
+ * This is because the game board uses state.tiles to display the tiles, and each tile needs to know if it is active
+ * or not to be styled properly. Using a separate array for active tiles would create extra work to style the tiles.
+ * 
+ * This means that a separate array for active tiles is redundant, as the tile instance from state.tiles would need to
+ * have isActive updated to true, and then the entire tile object would need to be copied to active tiles. The same
+ * would apply to clearing the active tiles, as state.tiles would need to be searched to find the active tiles and have
+ * isActive set to false, and then the active tiles array would need to be emptied. 
+ * 
+ * Everything that checks active tiles ultimately calls getActiveTileIndices() which returns an array with the indices of
+ * the tiles in state.tiles that have isActive set to true. Outside this file, the only use of this array is to check
+ * the length; none of the tile instances are needed.
+ * 
+ * While a separate state.activeTiles array would make dealing with active tiles a little more straight forward in this
+ * file, nothing else would actually use the tile instances in the array, and it would require more work to manage for
+ * very little benefit, and an added chance of errors.
+ */
+function getActiveTiles(tiles: Tile[]): number[] {
     const indices: number[] = [];
 
     tiles.forEach((tile, index) => {        
@@ -124,17 +142,22 @@ export const gameSlice = createSlice({
             state.totalPoints = (tileGrid.length / 2);
         },
         reveal: (state, action: PayloadAction<number>) => {
+            //Find the index of the tile that was revealed from state.tiles, using the tile.id parameter.
             const tileIndex = state.tiles.findIndex((tile) => {
                 return tile.id === action.payload;
             });
 
+            //Get the indices of the active tiles from state.tiles as an array.
             const activeTiles = getActiveTiles(state.tiles);
 
+            //Check if there are less than two active tiles, and the revealed tile exists.
             if(activeTiles.length < 2 && tileIndex !== -1){
+                //Check if any of the active tiles match the revealed tile by id. This handles duplicate clicks on a revealed tile.
                 const isTileActive = activeTiles.some((tileIndex) => {
                     return state.tiles[tileIndex].id === action.payload;
                 });
 
+                //If the revealed tile is not a duplicate, mark it as active in state.tiles.
                 if(!isTileActive){
                     state.tiles[tileIndex].isActive = true;
                 }

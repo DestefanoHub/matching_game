@@ -12,7 +12,16 @@ import GameHistoryFull from '../components/history/GameHistoryFull';
 import styles from './History.module.css';
 
 export default function History() {
-    const [ gameDetails, setGameDetails ] = useState({});
+    const [ gameDetails, setGameDetails ] = useState({
+        game: {},
+        stats: {
+            isFirstGame: false,
+            isFirstWin: false,
+            isFirstDiffGame: false,
+            isFirstDiffWin: false,
+            isFastestDiffTime: false
+        }
+    });
     const games = useAppSelector(selectGames);
     const isLoaded = useAppSelector(selectIsLoaded);
     const gameDetailsModal = useRef<HTMLDialogElement | null>(null);

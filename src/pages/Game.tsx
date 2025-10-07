@@ -1,6 +1,6 @@
 import { useRef, Fragment } from 'react';
 import { useAppSelector, useAppDispatch } from '../utils/hooks';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import GameInfo from '../components/game/GameInfo';
 import GameBoard from '../components/game/GameBoard';
@@ -48,7 +48,7 @@ export default function Game() {
         <GameSetup modalRef={gameSetupModal}/>
         <GameOver modalRef={gameOverModal} onClose={handleClose}/>
         <section className={styles.page}>
-            <h1>Matching Game</h1>
+            <h1>New Game</h1>
             {!initialized && <button onClick={handleClick}>Start a new game!</button>}
             {initialized && <GameInfo/>}
             {initialized && <GameBoard startCountdown={startCountdown}/>}

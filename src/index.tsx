@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom/client';
-import { createBrowserRouter , RouterProvider, Outlet } from 'react-router-dom';
+import { createBrowserRouter , RouterProvider, Outlet } from 'react-router';
 import { Provider } from 'react-redux';
 
 import Home from './pages/Home';
 import Game from './pages/Game';
 import History from './pages/History';
 import Layout from './pages/Layout';
+import Header from './components/generic/Header';
 import store from './store/store';
 
 import './index.css';
@@ -14,24 +15,24 @@ import './index.css';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Outlet/>,
+    Component: Header,
     children: [
       {
-        element: <Layout/>,
+        Component: Layout,
         children: [
           {
             index: true,
-            element: <Home/>
+            Component: Home
           },
           {
             path: 'history',
-            element: <History/>
+            Component: History
           }
         ]
       },
       {
         path: 'game',
-        element: <Game/>
+        Component: Game
       }
     ]
   }

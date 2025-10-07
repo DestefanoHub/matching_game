@@ -3,22 +3,22 @@ import type { Difficulty, GameData, MultiGamesData, SortBy, WinLoss, Game } from
 const baseURL = 'http://localhost:3100/';
 
 export async function getGameInfo(gameId: string): Promise<GameData> {
-    const response = await fetch(`${baseURL}getGameInfo/${gameId}`, {
+    const response = await fetch(`${baseURL}game/getGameInfo/${gameId}`, {
         method: 'GET',
         headers: {
             'Accept': 'application/json'
         }
     });
 
-    if(response.status !== 200){
-        return {};
-    }
+    // if(response.status !== 200){
+    //     return {};
+    // }
 
     return await response.json();
 };
 
 export async function getRecentGames(): Promise<Game[]> {
-    const response = await fetch(`${baseURL}getRecentGames`, {
+    const response = await fetch(`${baseURL}game/getRecentGames`, {
         method: 'GET',
         headers: {
             'Accept': 'application/json'
@@ -45,7 +45,7 @@ export async function getGames(player: string, winLoss: WinLoss, diff: Difficult
     queryParams.append('sortBy', sortBy);
     queryParams.append('page', page.toString());
     
-    const response = await fetch(`${baseURL}getGames?${queryParams}`, {
+    const response = await fetch(`${baseURL}game/getGames?${queryParams}`, {
         method: 'GET',
         headers: {
             'Accept': 'application/json'
@@ -64,7 +64,7 @@ export async function getGames(player: string, winLoss: WinLoss, diff: Difficult
 };
 
 export async function saveGame(player: string, difficulty: Difficulty, hasWon: boolean, points: number, totalPoints: number, time: number): Promise<GameData> {
-    const response = await fetch(`${baseURL}saveGame`, {
+    const response = await fetch(`${baseURL}game/saveGame`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

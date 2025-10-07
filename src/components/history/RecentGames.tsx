@@ -13,7 +13,16 @@ export default function RecentGames() {
         isLoaded: false,
         games: []
     });
-    const [ gameDetails, setGameDetails ] = useState({});
+    const [ gameDetails, setGameDetails ] = useState({
+        game: {},
+        stats: {
+            isFirstGame: false,
+            isFirstWin: false,
+            isFirstDiffGame: false,
+            isFirstDiffWin: false,
+            isFastestDiffTime: false
+        }
+    });
     const gameDetailsModal = useRef<HTMLDialogElement | null>(null);
     const wasRecordClicked = useRef(false);
     

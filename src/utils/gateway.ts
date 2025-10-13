@@ -1,4 +1,4 @@
-import type { Difficulty, GameData, MultiGamesData, SortBy, WinLoss, Game } from './types';
+import type { Difficulty, GameData, MultiGamesData, SortBy, WinLoss, Game, AccountResponse } from './types';
 
 const baseURL = 'http://localhost:3100/';
 
@@ -15,7 +15,7 @@ export async function getGameInfo(gameId: string): Promise<GameData> {
     // }
 
     return await response.json();
-};
+}
 
 export async function getRecentGames(): Promise<Game[]> {
     const response = await fetch(`${baseURL}game/getRecentGames`, {
@@ -30,7 +30,7 @@ export async function getRecentGames(): Promise<Game[]> {
     }
 
     return await response.json();
-};
+}
 
 export async function getGames(player: string, winLoss: WinLoss, diff: Difficulty, sortBy: SortBy, page: number): Promise<MultiGamesData> {
     const queryParams = new URLSearchParams();
@@ -61,7 +61,7 @@ export async function getGames(player: string, winLoss: WinLoss, diff: Difficult
     gamesData.totalGames = history.totalGames;
 
     return gamesData;
-};
+}
 
 export async function saveGame(player: string, difficulty: Difficulty, hasWon: boolean, points: number, totalPoints: number, time: number): Promise<GameData> {
     const response = await fetch(`${baseURL}game/saveGame`, {
@@ -81,4 +81,30 @@ export async function saveGame(player: string, difficulty: Difficulty, hasWon: b
     });
 
     return await response.json();
-};
+}
+
+export async function createAccount(username: string, password: string, confirmPassword: string): Promise<AccountResponse> {    
+    const response = await fetch(`${baseURL}player/createAccount`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            username,
+            password,
+            confirmPassword
+        })
+    });
+
+    return await response.json();
+}
+
+export async function checkUsername(username: string): Promise<boolean> {
+    const response = await fetch(`${baseURL}player/checkUsername/${username}`, {
+        method: 'GET'
+    });
+
+    if(response.status !== 200){
+        return true;
+    }
+
+    return false;
+}

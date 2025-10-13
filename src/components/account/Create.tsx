@@ -1,6 +1,8 @@
 import { useState, type Ref } from 'react';
 
 import Modal from '../generic/Modal';
+import { createAccount, checkUsername } from '../../utils/gateway';
+import type { AccountResponse } from '../../utils/types';
 
 import styles from './FormStyles.module.css';
 
@@ -8,24 +10,27 @@ type Props = {
     modalRef: Ref<HTMLDialogElement>
 };
 
+const initState = {
+    usernameObj: {
+        value: '',
+        error: false,
+        message: ''
+    },
+    passwordObj: {
+        value: '',
+        error: false,
+        message: ''
+    },
+    confirmObj: {
+        value: '',
+        error: false,
+        message: ''
+    },
+    mainError: false
+}
+
 export default function Create({modalRef}: Props) {
-    const [formState, setFormState] = useState({
-        username: {
-            value: '',
-            error: false,
-            message: ''
-        },
-        password: {
-            value: '',
-            error: false,
-            message: ''
-        },
-        confirm: {
-            value: '',
-            error: false,
-            message: ''
-        }
-    });
+    const [formState, setFormState] = useState<AccountResponse>(initState);
 
     const handleUsername = (event: React.ChangeEvent<HTMLInputElement>) => {
         const username = event.target.value.trim();
@@ -40,11 +45,9 @@ export default function Create({modalRef}: Props) {
             message = 'Username too long.';
         }
 
-        //check username doesn't exist already
-
         setFormState(prevState => ({
             ...prevState,
-            username: {
+            usernameObj: {
                 value: username,
                 error,
                 message
@@ -67,7 +70,7 @@ export default function Create({modalRef}: Props) {
 
         setFormState(prevState => ({
             ...prevState,
-            password: {
+            passwordObj: {
                 value: password,
                 error,
                 message
@@ -81,14 +84,14 @@ export default function Create({modalRef}: Props) {
         let message = '';
 
         setFormState(prevState => {
-            if(prevState.password.value !== confirm) {
+            if(prevState.passwordObj.value !== confirm) {
                 error = true;
                 message = 'Password does not match.';
             }
             
             return {
                 ...prevState,
-                confirm: {
+                confirmObj: {
                     value: confirm,
                     error,
                     message
@@ -97,21 +100,28 @@ export default function Create({modalRef}: Props) {
         });
     };
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+
+        const accountResponse = await createAccount(formState.usernameObj.value, formState.passwordObj.value, formState.confirmObj.value);
+
+        if(accountResponse.usernameObj.error || accountResponse.passwordObj.error || accountResponse.confirmObj.error || accountResponse.mainError){
+            setFormState(accountResponse);
+        }else{
+            setFormState(initState);
+        }
     };
     
     return <Modal modalRef={modalRef}>
         <h1>Create Account</h1>
         <form onSubmit={handleSubmit} className={styles.form}>
             <div>
-                <div className={styles.inputSection}>
+                <div className={`${styles.inputSection} ${formState.usernameObj.error && styles.error}`}>
                     <label htmlFor='username'>Username:</label>
                     <input
-                        className={`${formState.username.error && styles.error}`}
                         type='text'
                         id='username'
-                        value={formState.username.value}
+                        value={formState.usernameObj.value}
                         onChange={handleUsername}
                         spellCheck='false'
                         required={true}
@@ -121,18 +131,17 @@ export default function Create({modalRef}: Props) {
                         autoComplete='off'
                     />
                 </div>
-                <p id='usernameHelp'>Username must be between 5 and 30 characters</p>
-                {formState.username.error && <p>{formState.username.message}</p>}
+                {formState.usernameObj.error && <p id='usernameHelp' className={styles.errorLabel}>Username must be between 5 and 30 characters</p>}
+                {formState.usernameObj.error && <p className={styles.errorLabel}>{formState.usernameObj.message}</p>}
             </div>
             
             <div>
-                <div className={styles.inputSection}>
+                <div className={`${styles.inputSection} ${formState.passwordObj.error && styles.error}`}>
                     <label htmlFor='password'>Password:</label>
                     <input 
-                        className={`${formState.password.error && styles.error}`}
                         type='password'
                         id='password'
-                        value={formState.password.value}
+                        value={formState.passwordObj.value}
                         onChange={handlePassword}
                         spellCheck='false'
                         required={true}
@@ -141,18 +150,17 @@ export default function Create({modalRef}: Props) {
                         aria-describedby='passwordHelp'
                     />
                 </div>
-                <p id='passwordHelp'>Password must be between 12 and 30 characters</p>
-                {formState.password.error && <p>{formState.password.message}</p>}
+                {formState.passwordObj.error && <p id='passwordHelp' className={styles.errorLabel}>Password must be between 12 and 30 characters</p>}
+                {formState.passwordObj.error && <p className={styles.errorLabel}>{formState.passwordObj.message}</p>}
             </div>
 
             <div>
-                <div className={styles.inputSection}>
+                <div className={`${styles.inputSection} ${formState.confirmObj.error && styles.error}`}>
                     <label htmlFor='confirm'>Confirm Password:</label>
                     <input 
-                        className={`${formState.confirm.error && styles.error}`}
                         type='password'
                         id='confirm'
-                        value={formState.confirm.value}
+                        value={formState.confirmObj.value}
                         onChange={handleConfirm}
                         spellCheck='false'
                         required={true}
@@ -160,10 +168,13 @@ export default function Create({modalRef}: Props) {
                         maxLength={30}
                     />
                 </div>
-                {formState.confirm.error && <p>{formState.confirm.message}</p>}
+                {formState.confirmObj.error && <p className={styles.errorLabel}>{formState.confirmObj.message}</p>}
             </div>
+
+            {formState.mainError && <p className={styles.errorLabel}>An error has occurred attempting to create your account.</p>}
             
             <button type='submit'>Create</button>
+            {/* <button type='reset'>Clear</button> */}
         </form>
     </Modal>;
 }

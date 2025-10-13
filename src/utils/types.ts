@@ -53,3 +53,22 @@ export type MultiGamesData = {
     games: Game[],
     totalGames: number
 };
+
+export type AccountResponse = {
+    usernameObj: {
+        value: string,
+        error: boolean,
+        message: string
+    },
+    passwordObj: {
+        value: string,
+        error: boolean,
+        message: string
+    },
+    confirmObj: {
+        value: string,
+        error: boolean,
+        message: string
+    },
+    mainError: boolean
+};

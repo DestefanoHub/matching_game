@@ -2,11 +2,13 @@ import { configureStore, type ThunkAction, type UnknownAction } from '@reduxjs/t
 
 import gameReducer from './gameSlice';
 import historyReducer from './historySlice';
+import sessionReducer from './sessionSlice';
 
 const store = configureStore({
     reducer: {
         game: gameReducer,
         history: historyReducer,
+        session: sessionReducer
     }
 });
 

@@ -72,3 +72,23 @@ export type AccountResponse = {
     },
     mainError: boolean
 };
+
+export type LoginResponse = {
+    usernameObj: {
+        value: string,
+        error: boolean,
+        message: string
+    },
+    passwordObj: {
+        value: string,
+        error: boolean,
+        message: string
+    },
+    mainError: boolean
+};
+
+export type Player = {
+    ID: string,
+    username: string,
+    JWT: string
+};

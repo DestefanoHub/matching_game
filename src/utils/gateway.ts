@@ -1,4 +1,4 @@
-import type { Difficulty, GameData, MultiGamesData, SortBy, WinLoss, Game, AccountResponse } from './types';
+import type { Difficulty, GameData, MultiGamesData, SortBy, WinLoss, Game, AccountResponse, Player } from './types';
 
 const baseURL = 'http://localhost:3100/';
 
@@ -83,10 +83,29 @@ export async function saveGame(player: string, difficulty: Difficulty, hasWon: b
     return await response.json();
 }
 
+export async function login(username: string, password: string): Promise<Response> {
+    const response = await fetch(`${baseURL}player/login`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+            username,
+            password
+        })
+    });
+
+    return response;
+}
+
 export async function createAccount(username: string, password: string, confirmPassword: string): Promise<AccountResponse> {    
     const response = await fetch(`${baseURL}player/createAccount`, {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
         body: JSON.stringify({
             username,
             password,
@@ -97,14 +116,14 @@ export async function createAccount(username: string, password: string, confirmP
     return await response.json();
 }
 
-export async function checkUsername(username: string): Promise<boolean> {
-    const response = await fetch(`${baseURL}player/checkUsername/${username}`, {
-        method: 'GET'
-    });
+// export async function checkUsername(username: string): Promise<boolean> {
+//     const response = await fetch(`${baseURL}player/checkUsername/${username}`, {
+//         method: 'GET'
+//     });
 
-    if(response.status !== 200){
-        return true;
-    }
+//     if(response.status !== 200){
+//         return true;
+//     }
 
-    return false;
-}
+//     return false;
+// }

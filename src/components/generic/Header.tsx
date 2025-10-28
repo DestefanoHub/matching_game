@@ -3,20 +3,33 @@ import { Outlet, NavLink } from 'react-router';
 
 import CreateAccount from '../account/Create';
 import EditAccount from '../account/Edit';
+import LoginAccount from '../account/Login';
+import { useAppSelector, useAppDispatch } from '../../utils/hooks';
+import { selectUsername, selectLoginState, logout } from '../../store/sessionSlice';
 
 import styles from './Header.module.css';
 
 export default function Header() {
     const createAccountModal = useRef<HTMLDialogElement | null>(null);
     const editAccountModal = useRef<HTMLDialogElement | null>(null);
+    const loginAccountModal = useRef<HTMLDialogElement | null>(null);
+    const playerName = useAppSelector(selectUsername);
+    const isLoggedIn = useAppSelector(selectLoginState);
+
+    const dispatch = useAppDispatch();
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        createAccountModal.current?.showModal();
+        if(isLoggedIn){
+            dispatch(logout());
+        }else{
+            loginAccountModal.current?.showModal();
+        }
     };
 
     return <Fragment>
-        <CreateAccount modalRef={createAccountModal}/>
+        {/* <CreateAccount modalRef={createAccountModal}/> */}
         {/* <EditAccount modalRef={editAccountModal}/> */}
+        <LoginAccount modalRef={loginAccountModal}/>
         <main className={styles.main}>
             <header className={styles.header}>
                 <h1 className={styles.title}>Matching Game</h1>
@@ -26,8 +39,8 @@ export default function Header() {
                     <button type='button'><NavLink to={'history'}>History</NavLink></button>
                 </nav>
                 <div className={styles.account}>
-                    <span>Account: NOONE</span>
-                    <button type='button' onClick={handleClick}>LOGIN</button>
+                    <span>Account: {isLoggedIn ? playerName : 'Not Logged In'}</span>
+                    <button type='button' onClick={handleClick}>{isLoggedIn ? 'Logout' : 'Login'}</button>
                 </div>
             </header>
             <section className={styles.content}>

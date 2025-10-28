@@ -1,8 +1,10 @@
 import { useState, type Ref } from 'react';
 
 import Modal from '../generic/Modal';
-import { createAccount } from '../../utils/gateway';
-import type { AccountResponse } from '../../utils/types';
+import { login as loginRequest } from '../../utils/gateway';
+import { login } from '../../store/sessionSlice';
+import type { Player, LoginResponse } from '../../utils/types';
+import { useAppDispatch } from '../../utils/hooks';
 
 import styles from './FormStyles.module.css';
 
@@ -10,7 +12,7 @@ type Props = {
     modalRef: Ref<HTMLDialogElement>
 };
 
-const initState = {
+const initState: LoginResponse = {
     usernameObj: {
         value: '',
         error: false,
@@ -21,16 +23,12 @@ const initState = {
         error: false,
         message: ''
     },
-    confirmObj: {
-        value: '',
-        error: false,
-        message: ''
-    },
     mainError: false
-}
+};
 
-export default function Create({modalRef}: Props) {
-    const [formState, setFormState] = useState<AccountResponse>(initState);
+export default function Login({modalRef}: Props) {
+    const [formState, setFormState] = useState<LoginResponse>(initState);
+    const dispatch = useAppDispatch();
 
     const handleUsername = (event: React.ChangeEvent<HTMLInputElement>) => {
         const username = event.target.value.trim();
@@ -78,42 +76,25 @@ export default function Create({modalRef}: Props) {
         }));
     };
 
-    const handleConfirm = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const confirm = event.target.value.trim();
-        let error = false;
-        let message = '';
-
-        setFormState(prevState => {
-            if(prevState.passwordObj.value !== confirm) {
-                error = true;
-                message = 'Password does not match.';
-            }
-            
-            return {
-                ...prevState,
-                confirmObj: {
-                    value: confirm,
-                    error,
-                    message
-                }
-            }
-        });
-    };
-
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        const accountResponse = await createAccount(formState.usernameObj.value, formState.passwordObj.value, formState.confirmObj.value);
+        const loginResponse = await loginRequest(formState.usernameObj.value, formState.passwordObj.value);
 
-        if(accountResponse.usernameObj.error || accountResponse.passwordObj.error || accountResponse.confirmObj.error || accountResponse.mainError){
-            setFormState(accountResponse);
+        if(loginResponse.status == 201){
+            const player: Player = await loginResponse.json();
+            dispatch(login(player));
+            modalRef.current.close();
         }else{
-            setFormState(initState);
+            setFormState({
+                ...initState,
+                mainError: true
+            });
         }
     };
     
     return <Modal modalRef={modalRef}>
-        <h1>Create Account</h1>
+        <h1>Login</h1>
         <form onSubmit={handleSubmit} className={styles.form}>
             <div>
                 <div className={`${styles.inputSection} ${formState.usernameObj.error && styles.error}`}>
@@ -154,27 +135,9 @@ export default function Create({modalRef}: Props) {
                 {formState.passwordObj.error && <p className={styles.errorLabel}>{formState.passwordObj.message}</p>}
             </div>
 
-            <div>
-                <div className={`${styles.inputSection} ${formState.confirmObj.error && styles.error}`}>
-                    <label htmlFor='confirm'>Confirm Password:</label>
-                    <input 
-                        type='password'
-                        id='confirm'
-                        value={formState.confirmObj.value}
-                        onChange={handleConfirm}
-                        spellCheck='false'
-                        required={true}
-                        minLength={12}
-                        maxLength={30}
-                    />
-                </div>
-                {formState.confirmObj.error && <p className={styles.errorLabel}>{formState.confirmObj.message}</p>}
-            </div>
-
-            {formState.mainError && <p className={styles.errorLabel}>An error has occurred attempting to create your account.</p>}
+            {formState.mainError && <p className={styles.errorLabel}>Invalid credentials.</p>}
             
-            <button type='submit'>Create</button>
-            {/* <button type='reset'>Clear</button> */}
+            <button type='submit'>Login</button>
         </form>
     </Modal>;
 }

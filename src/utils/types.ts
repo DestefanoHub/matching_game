@@ -28,7 +28,10 @@ export type Tile = {
 export type Game = {
     _id: string,
     date: Date,
-    player: string,
+    player: {
+        id: string,
+        username: string
+    },
     difficulty: number,
     hasWon: boolean,
     points: number,
@@ -55,7 +58,7 @@ export type MultiGamesData = {
 };
 
 export type AccountResponse = {
-    usernameObj: {
+    usernameObj?: {
         value: string,
         error: boolean,
         message: string
@@ -88,7 +91,7 @@ export type LoginResponse = {
 };
 
 export type Player = {
-    ID: string,
+    id: string,
     username: string,
-    JWT: string
+    JWT?: string
 };

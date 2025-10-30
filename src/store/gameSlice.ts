@@ -204,10 +204,12 @@ export const gameSlice = createSlice({
 export const scoreThunk = (): AppThunk<void> => async (dispatch, getState) => {
     dispatch(score());
     
-    const gameState = getState().game;
+    const appState = getState();
+    const gameState = appState.game;
+    const sessionState = appState.session;
 
     if(gameState.gameOver){
-        await saveGame(gameState.player!, gameState.difficulty, gameState.hasWon, gameState.points, gameState.totalPoints, gameState.time);
+        await saveGame(sessionState, gameState.difficulty, gameState.hasWon, gameState.points, gameState.totalPoints, gameState.time);
         // dispatch(setSavedGame(savedGame));
     }
 };
@@ -215,12 +217,14 @@ export const scoreThunk = (): AppThunk<void> => async (dispatch, getState) => {
 export const decrementThunk = (): AppThunk<void> => async (dispatch, getState) => {
     dispatch(decrement());
 
-    const gameState = getState().game;
+    const appState = getState();
+    const gameState = appState.game;
+    const sessionState = appState.session;
 
     //Check if the game time has expired.
     if(!gameState.time){
         dispatch(lose());
-        await saveGame(gameState.player!, gameState.difficulty, false, gameState.points, gameState.totalPoints, 0)
+        await saveGame(sessionState, gameState.difficulty, false, gameState.points, gameState.totalPoints, 0)
         // dispatch(setSavedGame(savedGame));
     }
 };

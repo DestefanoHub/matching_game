@@ -63,12 +63,13 @@ export async function getGames(player: string, winLoss: WinLoss, diff: Difficult
     return gamesData;
 }
 
-export async function saveGame(player: string, difficulty: Difficulty, hasWon: boolean, points: number, totalPoints: number, time: number): Promise<GameData> {
+export async function saveGame(player: Player, difficulty: Difficulty, hasWon: boolean, points: number, totalPoints: number, time: number): Promise<GameData> {
     const response = await fetch(`${baseURL}game/saveGame`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Accept': 'application/json'
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${player.JWT}`
         },
         body: JSON.stringify({
             player,
@@ -108,6 +109,23 @@ export async function createAccount(username: string, password: string, confirmP
         },
         body: JSON.stringify({
             username,
+            password,
+            confirmPassword
+        })
+    });
+
+    return await response.json();
+}
+
+export async function editAccount(token: string, password: string, confirmPassword: string): Promise<AccountResponse> {    
+    const response = await fetch(`${baseURL}player/changePassword`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
             password,
             confirmPassword
         })

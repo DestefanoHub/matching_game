@@ -4,7 +4,7 @@ import type { RootState, AppThunk } from './store';
 import type { Player } from '../utils/types';
 
 const initialState: Player = {
-    ID: '',
+    id: '',
     username: '',
     JWT: ''
 };
@@ -14,7 +14,7 @@ export const sessionSlice = createSlice({
     initialState,
     reducers: {
         login: (state, action: PayloadAction<Player>) => {
-            state.ID = action.payload.ID;
+            state.id = action.payload.id;
             state.username = action.payload.username;
             state.JWT = action.payload.JWT;
         },
@@ -25,7 +25,7 @@ export const sessionSlice = createSlice({
 });
 
 export const { login, logout } = sessionSlice.actions;
-export const selectID = (state: RootState) => state.session.ID;
+export const selectID = (state: RootState) => state.session.id;
 export const selectUsername = (state: RootState) => state.session.username;
 export const selectAuthToken = (state: RootState) => state.session.JWT;
 export const selectLoginState = (state: RootState) => state.session.JWT.length;

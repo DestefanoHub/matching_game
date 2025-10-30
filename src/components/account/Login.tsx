@@ -28,6 +28,7 @@ const initState: LoginResponse = {
 
 export default function Login({modalRef}: Props) {
     const [formState, setFormState] = useState<LoginResponse>(initState);
+    
     const dispatch = useAppDispatch();
 
     const handleUsername = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,7 +82,7 @@ export default function Login({modalRef}: Props) {
 
         const loginResponse = await loginRequest(formState.usernameObj.value, formState.passwordObj.value);
 
-        if(loginResponse.status == 201){
+        if(loginResponse.status === 201){
             const player: Player = await loginResponse.json();
             dispatch(login(player));
             modalRef.current.close();
@@ -92,16 +93,20 @@ export default function Login({modalRef}: Props) {
             });
         }
     };
+
+    const handleClose = () => {
+        setFormState(initState);
+    }
     
-    return <Modal modalRef={modalRef}>
+    return <Modal modalRef={modalRef} onClose={handleClose}>
         <h1>Login</h1>
         <form onSubmit={handleSubmit} className={styles.form}>
             <div>
                 <div className={`${styles.inputSection} ${formState.usernameObj.error && styles.error}`}>
-                    <label htmlFor='username'>Username:</label>
+                    <label htmlFor='loginUsername'>Username:</label>
                     <input
                         type='text'
-                        id='username'
+                        id='loginUsername'
                         value={formState.usernameObj.value}
                         onChange={handleUsername}
                         spellCheck='false'
@@ -118,10 +123,10 @@ export default function Login({modalRef}: Props) {
             
             <div>
                 <div className={`${styles.inputSection} ${formState.passwordObj.error && styles.error}`}>
-                    <label htmlFor='password'>Password:</label>
+                    <label htmlFor='loginPassword'>Password:</label>
                     <input 
                         type='password'
-                        id='password'
+                        id='loginPassword'
                         value={formState.passwordObj.value}
                         onChange={handlePassword}
                         spellCheck='false'

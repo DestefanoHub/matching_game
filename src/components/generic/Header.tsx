@@ -1,5 +1,5 @@
 import { useRef, Fragment } from 'react';
-import { Outlet, NavLink } from 'react-router';
+import { Outlet, NavLink, useNavigate } from 'react-router';
 
 import CreateAccount from '../account/Create';
 import EditAccount from '../account/Edit';
@@ -16,19 +16,37 @@ export default function Header() {
     const playerName = useAppSelector(selectUsername);
     const isLoggedIn = useAppSelector(selectLoginState);
 
+    const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const handleSession = (event: React.MouseEvent<HTMLButtonElement>) => {
         if(isLoggedIn){
             dispatch(logout());
+            navigate('/');
         }else{
             loginAccountModal.current?.showModal();
         }
     };
 
+    const handleCreateAccount = (event: React.MouseEvent<HTMLButtonElement>) => {
+        createAccountModal.current?.showModal();
+    };
+
+    const handleEditAccount = (event: React.MouseEvent<HTMLButtonElement>) => {
+        editAccountModal.current?.showModal();
+    };
+
+    const createAccountButton = <button type='button' onClick={handleCreateAccount}>
+        Create Account
+    </button>;
+
+    const editAccountButton = <button type='button' onClick={handleEditAccount}>
+        {playerName}
+    </button>;
+
     return <Fragment>
-        {/* <CreateAccount modalRef={createAccountModal}/> */}
-        {/* <EditAccount modalRef={editAccountModal}/> */}
+        <CreateAccount modalRef={createAccountModal}/>
+        <EditAccount modalRef={editAccountModal}/>
         <LoginAccount modalRef={loginAccountModal}/>
         <main className={styles.main}>
             <header className={styles.header}>
@@ -39,8 +57,8 @@ export default function Header() {
                     <button type='button'><NavLink to={'history'}>History</NavLink></button>
                 </nav>
                 <div className={styles.account}>
-                    <span>Account: {isLoggedIn ? playerName : 'Not Logged In'}</span>
-                    <button type='button' onClick={handleClick}>{isLoggedIn ? 'Logout' : 'Login'}</button>
+                    <span>Account: {isLoggedIn ? editAccountButton : createAccountButton}</span>
+                    <button type='button' onClick={handleSession}>{isLoggedIn ? 'Logout' : 'Login'}</button>
                 </div>
             </header>
             <section className={styles.content}>

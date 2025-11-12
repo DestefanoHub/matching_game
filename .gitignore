@@ -22,3 +22,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 firebaseConfig.json
+
+# Miscellaneous files/folders
+matching_game.code-workspace
+.vscode

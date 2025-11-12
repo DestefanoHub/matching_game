@@ -4,7 +4,7 @@ import Modal from '../generic/Modal';
 import { editAccount } from '../../utils/gateway';
 import type { AccountResponse } from '../../utils/types';
 import { selectAuthToken } from '../../store/sessionSlice';
-import { useAppSelector, useAppDispatch } from '../../utils/hooks';
+import { useAppSelector } from '../../utils/hooks';
 
 import styles from './FormStyles.module.css';
 
@@ -79,12 +79,14 @@ export default function Edit({modalRef}: Props) {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        const accountResponse = await editAccount(authToken, formState.passwordObj.value, formState.confirmObj.value);
+        if(authToken){
+            const accountResponse = await editAccount(authToken, formState.passwordObj.value, formState.confirmObj.value);
 
-        if(accountResponse.passwordObj.error || accountResponse.confirmObj.error || accountResponse.mainError){
-            setFormState(accountResponse);
-        }else{
-            setFormState(initState);
+            if(accountResponse.passwordObj.error || accountResponse.confirmObj.error || accountResponse.mainError){
+                setFormState(accountResponse);
+            }else{
+                setFormState(initState);
+            }
         }
     };
 

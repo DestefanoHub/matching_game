@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
-import type { RootState, AppThunk } from './store';
+import type { RootState } from './store';
 import type { Player } from '../utils/types';
 
 const initialState: Player = {
@@ -28,5 +28,5 @@ export const { login, logout } = sessionSlice.actions;
 export const selectID = (state: RootState) => state.session.id;
 export const selectUsername = (state: RootState) => state.session.username;
 export const selectAuthToken = (state: RootState) => state.session.JWT;
-export const selectLoginState = (state: RootState) => state.session.JWT.length;
+export const selectLoginState = (state: RootState) => typeof state.session.JWT === 'undefined' || !state.session.JWT.length;
 export default sessionSlice.reducer;

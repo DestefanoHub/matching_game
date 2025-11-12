@@ -2,6 +2,7 @@ import { useAppDispatch } from '../../utils/hooks';
 import { useState, type Ref } from 'react';
 
 import { setup } from '../../store/gameSlice';
+import type { Difficulty } from '../../utils/types';
 
 import Modal from '../generic/Modal';
 
@@ -32,8 +33,8 @@ export default function GameSetup({ modalRef }: Props) {
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        dispatch(setup({player: state.player, difficulty: state.difficulty}));
-        modalRef.current.close();
+        dispatch(setup({player: state.player, difficulty: state.difficulty as Difficulty}));
+        modalRef?.current.close();
     };
 
     return <Modal modalRef={modalRef}>

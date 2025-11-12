@@ -85,7 +85,7 @@ export default function Login({modalRef}: Props) {
         if(loginResponse.status === 201){
             const player: Player = await loginResponse.json();
             dispatch(login(player));
-            modalRef.current.close();
+            modalRef?.current.close();
         }else{
             setFormState({
                 ...initState,

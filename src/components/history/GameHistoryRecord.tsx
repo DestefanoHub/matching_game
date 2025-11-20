@@ -17,6 +17,6 @@ export default function GameHistoryRecord({ game, onClick }: Props) {
 
     return <div className={`${styles.record} ${game.hasWon ? styles.win : styles.loss}`} onClick={handleClick}>
         <h1>Game Details</h1>
-        <p>{game.player} {game.hasWon ? 'won :)' : 'lost :('} a {getDisplayDifficulty(game.difficulty as Difficulty)} game on {gameDateObj.toLocaleString('en-US')}</p>
+        <p>{game.player.username} {game.hasWon ? 'won :)' : 'lost :('} a {getDisplayDifficulty(game.difficulty as Difficulty)} game on {gameDateObj.toLocaleString('en-US')}</p>
     </div>;
 }

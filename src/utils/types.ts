@@ -29,7 +29,7 @@ export type Game = {
     _id: string,
     date: Date,
     player: {
-        id: string,
+        pid: string,
         username: string
     },
     difficulty: number,

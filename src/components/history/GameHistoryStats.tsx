@@ -15,7 +15,7 @@ export default function GameHistoryStats({ game, stats, isCurrentPlayer = false 
     let firstDiffGameMsg;
     let firstDiffWinMsg;
     let fastestDiffTimeMsg;
-    const playerName = isCurrentPlayer ? 'your' : game.player + "'s";
+    const playerName = isCurrentPlayer ? 'your' : game.player.username + "'s";
     const displayDifficulty = getDisplayDifficulty(game.difficulty as Difficulty);
     
     if(stats.isFirstGame){

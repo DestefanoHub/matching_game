@@ -44,8 +44,8 @@ export default function RecentGames() {
 
     const handleClick = async (gameId: string) => {
         const gameInfo = await getGameInfo(gameId);
+        setGameDetails(gameInfo);
         wasRecordClicked.current = true;
-        setGameDetails(gameInfo); 
     };
 
     const gameList = recentGamesData.games.map((game, index) => {

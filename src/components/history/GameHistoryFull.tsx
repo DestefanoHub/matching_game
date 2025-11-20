@@ -11,12 +11,12 @@ type Props = {
 };
 
 export default function GameHistoryFull({ modalRef, details }: Props) {
-    if(typeof details.game !== 'undefined'){
+    if(Object.keys(details.game).length){
         const gameDateObj = new Date(details.game.date);
 
         return <Modal modalRef={modalRef}>
             <h1>Game Details</h1>
-            <p>Player: {details.game.player}</p>
+            <p>Player: {details.game.player.username}</p>
             <p>Status: {details.game.hasWon ? 'Win! :)' : 'Loss :('}</p>
             <p>Difficulty: {getDisplayDifficulty(details.game.difficulty as Difficulty)}</p>
             <p>Timestamp: {gameDateObj.toLocaleString('en-US')}</p>

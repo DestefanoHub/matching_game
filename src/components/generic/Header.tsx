@@ -1,5 +1,5 @@
 import { useRef, Fragment } from 'react';
-import { Outlet, NavLink, useNavigate } from 'react-router';
+import { Outlet, NavLink, useNavigate, useOutletContext } from 'react-router';
 
 import CreateAccount from '../account/Create';
 import EditAccount from '../account/Edit';
@@ -8,6 +8,8 @@ import { useAppSelector, useAppDispatch } from '../../utils/hooks';
 import { selectUsername, selectLoginState, logout } from '../../store/sessionSlice';
 
 import styles from './Header.module.css';
+
+type ContextType = { showLogin: () => void };
 
 export default function Header() {
     const createAccountModal = useRef<HTMLDialogElement | null>(null);
@@ -19,20 +21,24 @@ export default function Header() {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
-    const handleSession = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const handleLogin = () => {
+        loginAccountModal.current?.showModal();
+    }
+
+    const handleSession = () => {
         if(isLoggedIn){
             dispatch(logout());
             navigate('/');
         }else{
-            loginAccountModal.current?.showModal();
+            handleLogin();
         }
     };
 
-    const handleCreateAccount = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const handleCreateAccount = () => {
         createAccountModal.current?.showModal();
     };
 
-    const handleEditAccount = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const handleEditAccount = () => {
         editAccountModal.current?.showModal();
     };
 
@@ -53,7 +59,7 @@ export default function Header() {
                 <h1 className={styles.title}>Matching Game</h1>
                 <nav className={styles.nav}>
                     <button type='button'><NavLink to={''}>Home</NavLink></button>
-                    <button type='button'><NavLink to={'game'}>New Game</NavLink></button>
+                    <button type='button'><NavLink to={'game'}>Play</NavLink></button>
                     <button type='button'><NavLink to={'history'}>History</NavLink></button>
                 </nav>
                 <div className={styles.account}>
@@ -62,8 +68,12 @@ export default function Header() {
                 </div>
             </header>
             <section className={styles.content}>
-                <Outlet/>
+                <Outlet context={{ showLogin: handleLogin } as ContextType}/>
             </section>
         </main>
     </Fragment>;
+}
+
+export function useShowLogin(){
+    return useOutletContext<ContextType>();
 }

@@ -1,8 +1,9 @@
-import { useAppDispatch } from '../../utils/hooks';
+import { useAppDispatch, useAppSelector } from '../../utils/hooks';
 import { useState, type Ref } from 'react';
 
 import { setup } from '../../store/gameSlice';
 import type { Difficulty } from '../../utils/types';
+import { selectUsername } from '../../store/sessionSlice';
 
 import Modal from '../generic/Modal';
 
@@ -13,16 +14,10 @@ type Props = {
 };
 
 export default function GameSetup({ modalRef }: Props) {   
-    const [state, setState] = useState({player: '', difficulty: 1});
+    const playerName = useAppSelector(selectUsername);
+    const [state, setState] = useState({difficulty: 1});
     
     const dispatch = useAppDispatch();
-
-    const handlePlayer = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setState({
-            ...state,
-            player: event.target.value
-        });
-    };
 
     const handleDifficulty = (event: React.ChangeEvent<HTMLInputElement>) => {
         setState({
@@ -33,7 +28,7 @@ export default function GameSetup({ modalRef }: Props) {
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        dispatch(setup({player: state.player, difficulty: state.difficulty as Difficulty}));
+        dispatch(setup({player: playerName, difficulty: state.difficulty as Difficulty}));
         modalRef?.current.close();
     };
 
@@ -41,17 +36,6 @@ export default function GameSetup({ modalRef }: Props) {
         <div className={styles.form}>
             <h1>Select options for a new game</h1>
             <form className={styles.form} onSubmit={handleSubmit}>
-                <div className={styles.formRow}>
-                    <label htmlFor='player'>Player name: </label>
-                    <input 
-                        type='text'
-                        id='player' 
-                        value={state.player}
-                        onChange={handlePlayer}
-                        required
-                        spellCheck='false'
-                    />
-                </div>
                 <div className={styles.formRow}>
                     <p className={styles.label}>Difficulty: </p>
                     <label>

@@ -6,18 +6,23 @@ import GameInfo from '../components/game/GameInfo';
 import GameBoard from '../components/game/GameBoard';
 import GameSetup from '../components/game/GameSetup';
 import GameOver from '../components/game/GameOver';
+import { useShowLogin } from '../components/generic/Header';
 
 import { init, decrementThunk, selectInit, selectGameOver } from '../store/gameSlice';
+import { selectLoginState } from '../store/sessionSlice';
 
 import styles from './Game.module.css';
 
 export default function Game() {
     const initialized = useAppSelector(selectInit);
     const gameOver = useAppSelector(selectGameOver);
+    const isLoggedIn = useAppSelector(selectLoginState);
 
     const gameSetupModal = useRef<HTMLDialogElement | null>(null);
     const gameOverModal = useRef<HTMLDialogElement | null>(null);
     const countdownInterval = useRef<NodeJS.Timeout | null>(null);
+
+    const { showLogin } = useShowLogin();
 
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
@@ -28,6 +33,11 @@ export default function Game() {
     }
 
     const handleClick = () => {
+        if(!isLoggedIn){
+            showLogin();
+            return;
+        }
+        
         if(!initialized){
             gameSetupModal.current?.showModal();
         }

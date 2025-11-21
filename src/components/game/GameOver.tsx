@@ -19,7 +19,7 @@ export default function GameOver({ modalRef, onClose }: Props) {
     const loseNewGameText = 'Try Again';
 
     const handleClick = () => {
-        modalRef.current.close();
+        modalRef?.current.close();
     };
 
     return <Modal modalRef={modalRef} onClose={onClose}>

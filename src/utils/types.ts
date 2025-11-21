@@ -91,7 +91,7 @@ export type LoginResponse = {
 };
 
 export type Player = {
-    id: string,
+    ID: string,
     username: string,
     JWT?: string
 };

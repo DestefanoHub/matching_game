@@ -4,7 +4,7 @@ import type { RootState } from './store';
 import type { Player } from '../utils/types';
 
 const initialState: Player = {
-    id: '',
+    ID: '',
     username: '',
     JWT: ''
 };
@@ -14,7 +14,7 @@ export const sessionSlice = createSlice({
     initialState,
     reducers: {
         login: (state, action: PayloadAction<Player>) => {
-            state.id = action.payload.id;
+            state.ID = action.payload.ID;
             state.username = action.payload.username;
             state.JWT = action.payload.JWT;
         },
@@ -25,8 +25,9 @@ export const sessionSlice = createSlice({
 });
 
 export const { login, logout } = sessionSlice.actions;
-export const selectID = (state: RootState) => state.session.id;
+export const selectSession = (state: RootState) => state.session;
+export const selectID = (state: RootState) => state.session.ID;
 export const selectUsername = (state: RootState) => state.session.username;
 export const selectAuthToken = (state: RootState) => state.session.JWT;
-export const selectLoginState = (state: RootState) => typeof state.session.JWT === 'undefined' || !state.session.JWT.length;
+export const selectLoginState = (state: RootState) => typeof state.session.JWT !== 'undefined' && state.session.JWT.length;
 export default sessionSlice.reducer;

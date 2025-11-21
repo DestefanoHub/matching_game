@@ -10,10 +10,6 @@ export async function getGameInfo(gameId: string): Promise<GameData> {
         }
     });
 
-    // if(response.status !== 200){
-    //     return {};
-    // }
-
     return await response.json();
 }
 
@@ -72,7 +68,10 @@ export async function saveGame(player: Player, difficulty: Difficulty, hasWon: b
             'Authorization': `Bearer ${player.JWT}`
         },
         body: JSON.stringify({
-            player,
+            player: {
+                pid: player.ID,
+                username: player.username
+            },
             difficulty,
             hasWon,
             points,
@@ -133,15 +132,3 @@ export async function editAccount(token: string, password: string, confirmPasswo
 
     return await response.json();
 }
-
-// export async function checkUsername(username: string): Promise<boolean> {
-//     const response = await fetch(`${baseURL}player/checkUsername/${username}`, {
-//         method: 'GET'
-//     });
-
-//     if(response.status !== 200){
-//         return true;
-//     }
-
-//     return false;
-// }

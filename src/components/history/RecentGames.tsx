@@ -8,7 +8,11 @@ import type { Game } from '../../utils/types';
 
 import styles from './RecentGames.module.css';
 
-export default function RecentGames() {
+type props = {
+    player?: string | undefined
+};
+
+export default function RecentGames({player}: props){
     const [ recentGamesData, setRecentGamesData ] = useState<{isLoaded: boolean, games: Game[]}>({
         isLoaded: false,
         games: []
@@ -28,7 +32,7 @@ export default function RecentGames() {
     
     useEffect(() => {
         (async () => {
-            const recentGames = await getRecentGames();
+            const recentGames = await getRecentGames(player);
             setRecentGamesData({
                 isLoaded: true,
                 games: recentGames
@@ -51,11 +55,13 @@ export default function RecentGames() {
     const gameList = recentGamesData.games.map((game, index) => {
         return <GameHistoryRecord key={index} game={game} onClick={handleClick}/>;
     });
+
+    const message = (typeof player === 'undefined') ? <h1>Top 5 Recent Games:</h1> : <h1>Your Top 5 Recent Games:</h1>
     
     return <Fragment>
         <GameHistoryFull modalRef={gameDetailsModal} details={gameDetails}/>
         <div className={styles.list}>
-            <h1>Top 5 recent games:</h1>
+            {message}
             {!recentGamesData.isLoaded && <Banner text='Loading...'/>}
             {recentGamesData.isLoaded && (recentGamesData.games.length ? gameList : <Banner text='No games...yet!'/>)}
         </div>

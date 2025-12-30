@@ -13,8 +13,8 @@ export async function getGameInfo(gameId: string): Promise<GameData> {
     return await response.json();
 }
 
-export async function getRecentGames(): Promise<Game[]> {
-    const response = await fetch(`${baseURL}game/getRecentGames`, {
+export async function getRecentGames(playerID?: string | undefined): Promise<Game[]> {
+    const response = await fetch(`${baseURL}game/getRecentGames/${(typeof playerID === 'undefined') ? '' : playerID}`, {
         method: 'GET',
         headers: {
             'Accept': 'application/json'

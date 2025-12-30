@@ -28,10 +28,7 @@ export type Tile = {
 export type Game = {
     _id: string,
     date: Date,
-    player: {
-        pid: string,
-        username: string
-    },
+    player: Player
     difficulty: number,
     hasWon: boolean,
     points: number,

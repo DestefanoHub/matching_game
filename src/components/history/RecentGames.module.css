@@ -1,9 +1,21 @@
+.container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 100%;
+    /* align-items: center; */
+}
+
 .list{
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.list div{
+.list h1{
+    font-size: 18pt;
+}
+
+.container div{
     margin-bottom: 1em;
 }

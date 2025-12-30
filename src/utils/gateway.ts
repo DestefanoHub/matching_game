@@ -13,8 +13,8 @@ export async function getGameInfo(gameId: string): Promise<GameData> {
     return await response.json();
 }
 
-export async function getRecentGames(): Promise<Game[]> {
-    const response = await fetch(`${baseURL}game/getRecentGames`, {
+export async function getRecentGames(playerID: string): Promise<Game[][]> {
+    const response = await fetch(`${baseURL}game/getRecentGames/${playerID}`, {
         method: 'GET',
         headers: {
             'Accept': 'application/json'
@@ -99,7 +99,7 @@ export async function login(username: string, password: string): Promise<Respons
     return response;
 }
 
-export async function createAccount(username: string, password: string, confirmPassword: string): Promise<AccountResponse> {    
+export async function createAccount(username: string, password: string, confirmPassword: string): Promise<[AccountResponse, Player | null]> {    
     const response = await fetch(`${baseURL}player/createAccount`, {
         method: 'POST',
         headers: {

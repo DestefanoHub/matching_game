@@ -107,16 +107,13 @@ export default function Create({modalRef}: Props) {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        const accountResponse = await createAccount(formState.usernameObj!.value, formState.passwordObj.value, formState.confirmObj.value);
+        const [accountResponse, account]= await createAccount(formState.usernameObj!.value, formState.passwordObj.value, formState.confirmObj.value);
 
         if(accountResponse.usernameObj!.error || accountResponse.passwordObj.error || accountResponse.confirmObj.error || accountResponse.mainError){
             setFormState(accountResponse);
-            
-            const loginResponse = await loginRequest(formState.usernameObj!.value, formState.passwordObj.value);
-            
-            if(loginResponse.status === 201){
-                const player: Player = await loginResponse.json();
-                dispatch(login(player));
+                        
+            if(account !== null){
+                dispatch(login(account));
                 modalRef?.current.close();
             }
         }else{

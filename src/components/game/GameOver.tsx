@@ -1,12 +1,12 @@
 import { useAppSelector } from '../../utils/hooks';
-import { type Ref } from 'react';
+import { type RefObject } from 'react';
 
 import { selectHasWon } from '../../store/gameSlice';
 
 import Modal from '../generic/Modal';
 
 type Props = {
-    modalRef: Ref<HTMLDialogElement>,
+    modalRef: RefObject<HTMLDialogElement | null>,
     onClose: () => void
 };
 
@@ -19,7 +19,7 @@ export default function GameOver({ modalRef, onClose }: Props) {
     const loseNewGameText = 'Try Again';
 
     const handleClick = () => {
-        modalRef?.current.close();
+        modalRef.current?.close();
     };
 
     return <Modal modalRef={modalRef} onClose={onClose}>

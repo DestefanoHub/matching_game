@@ -61,8 +61,6 @@ export default function RecentGames() {
     const playerRecentGames = recentGamesData.playerGames.map((game, index) => {
         return <GameHistoryRecord key={index} game={game} onClick={handleClick}/>;
     });
-
-    const message = (typeof player === 'undefined') ? <h1>Top 5 Recent Games:</h1> : <h1>Your Top 5 Recent Games:</h1>
     
     return <Fragment>
         <GameHistoryFull modalRef={gameDetailsModal} details={gameDetails}/>

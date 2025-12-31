@@ -1,15 +1,15 @@
-import { useState, type Ref } from 'react';
+import { useState, type RefObject } from 'react';
 
 import Modal from '../generic/Modal';
-import { createAccount, login as loginRequest } from '../../utils/gateway';
+import { createAccount } from '../../utils/gateway';
 import { login } from '../../store/sessionSlice';
-import type { AccountResponse, Player } from '../../utils/types';
+import type { AccountResponse } from '../../utils/types';
 import { useAppDispatch } from '../../utils/hooks';
 
 import styles from './FormStyles.module.css';
 
 type Props = {
-    modalRef: Ref<HTMLDialogElement>
+    modalRef: RefObject<HTMLDialogElement | null>
 };
 
 const initState = {
@@ -114,7 +114,7 @@ export default function Create({modalRef}: Props) {
                         
             if(account !== null){
                 dispatch(login(account));
-                modalRef?.current.close();
+                modalRef.current?.close();
             }
         }else{
             setFormState({

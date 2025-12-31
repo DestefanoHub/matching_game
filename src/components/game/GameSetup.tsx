@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '../../utils/hooks';
-import { useState, type Ref } from 'react';
+import { useState, type RefObject } from 'react';
 
 import { setup } from '../../store/gameSlice';
 import type { Difficulty } from '../../utils/types';
@@ -10,7 +10,7 @@ import Modal from '../generic/Modal';
 import styles from './GameSetup.module.css';
 
 type Props = {
-    modalRef: Ref<HTMLDialogElement>
+    modalRef: RefObject<HTMLDialogElement | null>
 };
 
 export default function GameSetup({ modalRef }: Props) {   
@@ -29,7 +29,7 @@ export default function GameSetup({ modalRef }: Props) {
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         dispatch(setup({player: playerName, difficulty: state.difficulty as Difficulty}));
-        modalRef?.current.close();
+        modalRef.current?.close();
     };
 
     return <Modal modalRef={modalRef}>

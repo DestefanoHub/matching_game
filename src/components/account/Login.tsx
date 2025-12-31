@@ -1,4 +1,4 @@
-import { useState, type Ref } from 'react';
+import { useState, type RefObject } from 'react';
 
 import Modal from '../generic/Modal';
 import { login as loginRequest } from '../../utils/gateway';
@@ -9,7 +9,7 @@ import { useAppDispatch } from '../../utils/hooks';
 import styles from './FormStyles.module.css';
 
 type Props = {
-    modalRef: Ref<HTMLDialogElement>
+    modalRef: RefObject<HTMLDialogElement | null>
 };
 
 const initState: LoginResponse = {
@@ -85,7 +85,7 @@ export default function Login({modalRef}: Props) {
         if(loginResponse.status === 201){
             const player: Player = await loginResponse.json();
             dispatch(login(player));
-            modalRef?.current.close();
+            modalRef.current?.close();
         }else{
             setFormState({
                 ...initState,

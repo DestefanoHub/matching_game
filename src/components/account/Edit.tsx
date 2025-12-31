@@ -9,7 +9,7 @@ import { useAppSelector } from '../../utils/hooks';
 import styles from './FormStyles.module.css';
 
 type Props = {
-    modalRef: Ref<HTMLDialogElement>,
+    modalRef: Ref<HTMLDialogElement | null>,
 };
 
 const initState = {

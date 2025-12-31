@@ -13,7 +13,7 @@ export async function getGameInfo(gameId: string): Promise<GameData> {
     return await response.json();
 }
 
-export async function getRecentGames(playerID?: string | undefined): Promise<Game[]> {
+export async function getRecentGames(playerID: string | undefined): Promise<Game[]> {
     const response = await fetch(`${baseURL}game/getRecentGames/${(typeof playerID === 'undefined') ? '' : playerID}`, {
         method: 'GET',
         headers: {
@@ -99,7 +99,7 @@ export async function login(username: string, password: string): Promise<Respons
     return response;
 }
 
-export async function createAccount(username: string, password: string, confirmPassword: string): Promise<AccountResponse> {    
+export async function createAccount(username: string, password: string, confirmPassword: string): Promise<[AccountResponse, Player | null]> {    
     const response = await fetch(`${baseURL}player/createAccount`, {
         method: 'POST',
         headers: {

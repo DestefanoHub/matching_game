@@ -5,17 +5,18 @@ import GameHistoryFull from './GameHistoryFull';
 import Banner from '../generic/Banner';
 import { getRecentGames, getGameInfo } from '../../utils/gateway';
 import type { Game } from '../../utils/types';
+import { useAppSelector } from '../../utils/hooks';
+import { selectLoginState, selectID } from '../../store/sessionSlice';
 
 import styles from './RecentGames.module.css';
 
-type props = {
-    player?: string | undefined
-};
-
-export default function RecentGames({player}: props){
-    const [ recentGamesData, setRecentGamesData ] = useState<{isLoaded: boolean, games: Game[]}>({
+export default function RecentGames() {
+    const isLoggedIn = useAppSelector(selectLoginState);
+    const playerID = useAppSelector(selectID);
+    const [ recentGamesData, setRecentGamesData ] = useState<{isLoaded: boolean, allGames: Game[], playerGames: Game[]}>({
         isLoaded: false,
-        games: []
+        allGames: [],
+        playerGames: []
     });
     const [ gameDetails, setGameDetails ] = useState({
         game: {},
@@ -32,13 +33,15 @@ export default function RecentGames({player}: props){
     
     useEffect(() => {
         (async () => {
-            const recentGames = await getRecentGames(player);
+            const recentGames = await getRecentGames(playerID);
+            const playerGames = (typeof recentGames[1] === 'undefined') ? [] : recentGames[1];
             setRecentGamesData({
                 isLoaded: true,
-                games: recentGames
+                allGames: recentGames[0],
+                playerGames
             });
         })()
-    }, []);
+    }, [isLoggedIn]);
 
     useEffect(() => {
         if(wasRecordClicked.current){
@@ -52,7 +55,10 @@ export default function RecentGames({player}: props){
         wasRecordClicked.current = true;
     };
 
-    const gameList = recentGamesData.games.map((game, index) => {
+    const allRecentGames = recentGamesData.allGames.map((game, index) => {
+        return <GameHistoryRecord key={index} game={game} onClick={handleClick}/>;
+    });
+    const playerRecentGames = recentGamesData.playerGames.map((game, index) => {
         return <GameHistoryRecord key={index} game={game} onClick={handleClick}/>;
     });
 
@@ -60,10 +66,10 @@ export default function RecentGames({player}: props){
     
     return <Fragment>
         <GameHistoryFull modalRef={gameDetailsModal} details={gameDetails}/>
-        <div className={styles.list}>
-            {message}
+        <div className={styles.container}>
             {!recentGamesData.isLoaded && <Banner text='Loading...'/>}
-            {recentGamesData.isLoaded && (recentGamesData.games.length ? gameList : <Banner text='No games...yet!'/>)}
+            {recentGamesData.isLoaded && (recentGamesData.allGames.length ? <div className={styles.list}><h1>Top 5 Recent Games:</h1><div>{allRecentGames}</div></div> : <Banner text='No games...yet!'/>)}
+            {(recentGamesData.isLoaded && isLoggedIn) && (recentGamesData.playerGames.length ? <div className={styles.list}><h1>Your Top 5 Recent Games:</h1><div>{playerRecentGames}</div></div> : <Banner text='No games...yet!'/>)}
         </div>
     </Fragment>;
 }

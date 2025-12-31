@@ -29,5 +29,5 @@ export const selectSession = (state: RootState) => state.session;
 export const selectID = (state: RootState) => state.session.ID;
 export const selectUsername = (state: RootState) => state.session.username;
 export const selectAuthToken = (state: RootState) => state.session.JWT;
-export const selectLoginState = (state: RootState) => typeof state.session.JWT !== 'undefined' && state.session.JWT.length;
+export const selectLoginState = (state: RootState) => (typeof state.session.JWT !== 'undefined' && state.session.JWT.length) ? true : false;
 export default sessionSlice.reducer;

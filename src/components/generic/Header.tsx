@@ -1,11 +1,11 @@
-import { useRef, Fragment } from 'react';
+import { useRef, Fragment, useEffect } from 'react';
 import { Outlet, NavLink, useNavigate, useOutletContext } from 'react-router';
 
 import CreateAccount from '../account/Create';
 import EditAccount from '../account/Edit';
 import LoginAccount from '../account/Login';
 import { useAppSelector, useAppDispatch } from '../../utils/hooks';
-import { selectUsername, selectLoginState, logout } from '../../store/sessionSlice';
+import { selectUsername, selectLoginState, logout, checkSessionStorage, setSession } from '../../store/sessionSlice';
 
 import styles from './Header.module.css';
 
@@ -20,6 +20,14 @@ export default function Header() {
 
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        const storedSession = checkSessionStorage();
+
+        if(storedSession !== null) {
+            dispatch(setSession(storedSession));
+        }
+    }, []);
 
     const handleLogin = () => {
         loginAccountModal.current?.showModal();

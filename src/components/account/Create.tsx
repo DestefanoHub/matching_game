@@ -2,7 +2,7 @@ import { useState, type RefObject } from 'react';
 
 import Modal from '../generic/Modal';
 import { createAccount } from '../../utils/gateway';
-import { login } from '../../store/sessionSlice';
+import { loginThunk } from '../../store/sessionSlice';
 import type { AccountResponse } from '../../utils/types';
 import { useAppDispatch } from '../../utils/hooks';
 
@@ -113,7 +113,7 @@ export default function Create({modalRef}: Props) {
             setFormState(accountResponse);
                         
             if(account !== null){
-                dispatch(login(account));
+                dispatch(loginThunk(account));
                 modalRef.current?.close();
             }
         }else{

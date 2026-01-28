@@ -2,7 +2,7 @@ import { useState, type RefObject } from 'react';
 
 import Modal from '../generic/Modal';
 import { login as loginRequest } from '../../utils/gateway';
-import { login } from '../../store/sessionSlice';
+import { loginThunk } from '../../store/sessionSlice';
 import type { Player, LoginResponse } from '../../utils/types';
 import { useAppDispatch } from '../../utils/hooks';
 
@@ -84,7 +84,7 @@ export default function Login({modalRef}: Props) {
 
         if(loginResponse.status === 201){
             const player: Player = await loginResponse.json();
-            dispatch(login(player));
+            dispatch(loginThunk(player));
             modalRef.current?.close();
         }else{
             setFormState({

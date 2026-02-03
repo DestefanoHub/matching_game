@@ -1,8 +1,10 @@
+@use '../common';
+
 .content{
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: whitesmoke;
+    background-color: common.$secondary-color;
 }
 
 .list{

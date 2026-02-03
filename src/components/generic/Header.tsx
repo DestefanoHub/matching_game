@@ -66,12 +66,12 @@ export default function Header() {
             <header className={styles.header}>
                 <h1 className={styles.title}>Matching Game</h1>
                 <nav className={styles.nav}>
-                    <button type='button'><NavLink to={''}>Home</NavLink></button>
-                    <button type='button'><NavLink to={'game'}>Play</NavLink></button>
-                    <button type='button'><NavLink to={'history'}>History</NavLink></button>
+                    <NavLink className={({isActive}) => isActive ? styles.active : ''} to={''}>Home</NavLink>
+                    <NavLink className={({isActive}) => isActive ? styles.active : ''} to={'game'}>Play</NavLink>
+                    <NavLink className={({isActive}) => isActive ? styles.active : ''} to={'history'}>History</NavLink>
                 </nav>
                 <div className={styles.account}>
-                    <span>Account: {isLoggedIn ? editAccountButton : createAccountButton}</span>
+                    <span>Account:</span> {isLoggedIn ? editAccountButton : createAccountButton}
                     <button type='button' onClick={handleSession}>{isLoggedIn ? 'Logout' : 'Login'}</button>
                 </div>
             </header>

@@ -1,10 +1,4 @@
-.tile{
-    width: 160px;
-    height: 160px;
-    background-color: lightgray;
-    border-radius: 10px;
-    font-size: 12pt;
-}
+@use '../tile';
 
 .tile:hover{
     cursor: pointer;
@@ -21,16 +15,6 @@
 .scored{
     animation: 0.5s 1 normal fadeOut;
     animation-fill-mode: forwards;
-}
-
-@keyframes fadeIn{
-    from{
-        opacity: 0;
-    }
-
-    to{
-        opacity: 1;
-    }
 }
 
 @keyframes fadeOut{

@@ -6,7 +6,7 @@ import { loginThunk } from '../../store/sessionSlice';
 import type { Player, LoginResponse } from '../../utils/types';
 import { useAppDispatch } from '../../utils/hooks';
 
-import styles from './FormStyles.module.css';
+import styles from './FormStyles.module.scss';
 
 type Props = {
     modalRef: RefObject<HTMLDialogElement | null>

@@ -1,4 +1,4 @@
-import styles from './Banner.module.css';
+import styles from './Banner.module.scss';
 
 type Props = {
     text: string

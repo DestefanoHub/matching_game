@@ -6,7 +6,7 @@ import type { AccountResponse } from '../../utils/types';
 import { selectAuthToken } from '../../store/sessionSlice';
 import { useAppSelector } from '../../utils/hooks';
 
-import styles from './FormStyles.module.css';
+import styles from './FormStyles.module.scss';
 
 type Props = {
     modalRef: Ref<HTMLDialogElement | null>,

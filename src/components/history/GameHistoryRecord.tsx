@@ -1,7 +1,7 @@
 import { getDisplayDifficulty } from '../../store/gameSlice';
 import { type Game, type Difficulty } from '../../utils/types';
 
-import styles from './GameHistoryRecord.module.css';
+import styles from './GameHistoryRecord.module.scss';
 
 type Props = {
     game: Game,

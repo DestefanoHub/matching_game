@@ -5,7 +5,7 @@ import { scoreThunk, selectInit, selectDisplayDifficulty, selectActiveTiles, sel
 import Tile from './Tile';
 import { type Tile as TileType } from '../../utils/types';
 
-import styles from './GameBoard.module.css';
+import styles from './GameBoard.module.scss';
 
 type Props = {
     startCountdown: () => void

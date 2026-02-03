@@ -1,6 +1,6 @@
 import StaticTile from './StaticTile';
 
-import styles from './Background.module.css';
+import styles from './Background.module.scss';
 
 export default function Background() {
     const tiles = [];

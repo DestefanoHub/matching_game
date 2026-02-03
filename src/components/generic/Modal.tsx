@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import styles from './Modal.module.css';
+import styles from './Modal.module.scss';
 
 type Props = {
     modalRef: any,

@@ -11,7 +11,7 @@ import { useShowLogin } from '../components/generic/Header';
 import { init, decrementThunk, selectInit, selectGameOver } from '../store/gameSlice';
 import { selectLoginState } from '../store/sessionSlice';
 
-import styles from './Game.module.css';
+import styles from './Game.module.scss';
 
 export default function Game() {
     const initialized = useAppSelector(selectInit);

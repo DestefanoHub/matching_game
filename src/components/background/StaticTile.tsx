@@ -1,5 +1,5 @@
-import staticStyles from './StaticTile.module.css';
-import tileStyles from '../game/Tile.module.css';
+import staticStyles from './StaticTile.module.scss';
+import tileStyles from '../game/Tile.module.scss';
 
 type Props = {
     interval: number

@@ -1,6 +1,6 @@
 import RecentGames from '../components/history/RecentGames';
 
-import styles from './Home.module.css';
+import styles from './Home.module.scss';
 
 export default function Home() {
     return <section className={styles.content}>

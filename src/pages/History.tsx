@@ -9,7 +9,7 @@ import Paginator from '../components/generic/Paginator';
 import Banner from '../components/generic/Banner';
 import GameHistoryFull from '../components/history/GameHistoryFull';
 
-import styles from './History.module.css';
+import styles from './History.module.scss';
 
 export default function History() {
     const [ gameDetails, setGameDetails ] = useState({

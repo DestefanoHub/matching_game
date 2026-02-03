@@ -3,7 +3,7 @@ import { useAppSelector, useAppDispatch } from '../../utils/hooks';
 
 import { selectWLFilter, selectDiffFilter, selectSort, searchThunk, wlFilterThunk, diffFilterThunk, sortThunk } from '../../store/historySlice';
 
-import styles from './GameSearch.module.css';
+import styles from './GameSearch.module.scss';
 import type { Difficulty, SortBy, WinLoss } from '../../utils/types';
 
 export default function GameSearch() {

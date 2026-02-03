@@ -7,7 +7,7 @@ import { selectUsername } from '../../store/sessionSlice';
 
 import Modal from '../generic/Modal';
 
-import styles from './GameSetup.module.css';
+import styles from './GameSetup.module.scss';
 
 type Props = {
     modalRef: RefObject<HTMLDialogElement | null>

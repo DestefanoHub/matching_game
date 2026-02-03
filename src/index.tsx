@@ -10,7 +10,7 @@ import Layout from './pages/Layout';
 import Header from './components/generic/Header';
 import store from './store/store';
 
-import './index.css';
+import './index.scss';
 
 const router = createBrowserRouter([
   {

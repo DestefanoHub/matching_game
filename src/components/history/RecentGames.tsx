@@ -8,7 +8,7 @@ import type { Game } from '../../utils/types';
 import { useAppSelector } from '../../utils/hooks';
 import { selectLoginState, selectID } from '../../store/sessionSlice';
 
-import styles from './RecentGames.module.css';
+import styles from './RecentGames.module.scss';
 
 export default function RecentGames() {
     const isLoggedIn = useAppSelector(selectLoginState);

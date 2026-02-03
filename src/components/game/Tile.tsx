@@ -3,7 +3,7 @@ import { useAppSelector, useAppDispatch } from '../../utils/hooks';
 import { reveal, selectActiveTiles } from '../../store/gameSlice';
 import { type Tile } from '../../utils/types';
 
-import styles from './Tile.module.css';
+import styles from './Tile.module.scss';
 
 type Props = {
     tile: Tile

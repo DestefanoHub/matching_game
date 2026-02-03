@@ -2,7 +2,7 @@ import { useAppSelector, useAppDispatch } from '../../utils/hooks';
 
 import { selectTotalGames, selectPage, getGamesThunk } from '../../store/historySlice';
 
-import styles from './Paginator.module.css';
+import styles from './Paginator.module.scss';
 
 export default function Paginator() {
     const totalGames = useAppSelector(selectTotalGames);

@@ -7,7 +7,7 @@ import LoginAccount from '../account/Login';
 import { useAppSelector, useAppDispatch } from '../../utils/hooks';
 import { selectUsername, selectLoginState, logout, checkSessionStorage, setSession } from '../../store/sessionSlice';
 
-import styles from './Header.module.css';
+import styles from './Header.module.scss';
 
 type ContextType = { showLogin: () => void };
 

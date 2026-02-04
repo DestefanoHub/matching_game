@@ -1,3 +1,5 @@
+@use '../../common';
+
 .form{
     display: flex;
     flex-direction: column;
@@ -20,17 +22,17 @@
 }
 
 .error label{
-    color: red;
+    color: common.$c-dark-red;
     
 }
 
 .errorLabel{
     border-radius: 10px;
     color: white;
-    background-color: red;
+    background-color: common.$c-dark-red;
     padding: 0 5px 0 5px;
 }
 
 .error input{
-    border-color: red;
+    border-color: common.$c-dark-red;
 }

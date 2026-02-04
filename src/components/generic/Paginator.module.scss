@@ -1,3 +1,5 @@
+@use '../../common';
+
 .navPane{
     display: flex;
     flex-direction: row;
@@ -14,12 +16,12 @@
     width: 75px;
     height: 75px;
     font-size: 12pt;
-    background-color: darkgray;
+    background-color: common.$c-dark-gray;
 }
 
 .navigate:disabled{
     cursor: not-allowed;
-    background-color: lightgray;
+    background-color: common.$c-light-gray;
 }
 
 .pages{

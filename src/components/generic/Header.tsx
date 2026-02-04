@@ -54,7 +54,7 @@ export default function Header() {
         Create Account
     </button>;
 
-    const editAccountButton = <button type='button' onClick={handleEditAccount}>
+    const editAccountButton = <button type='button' className={styles.secondary} onClick={handleEditAccount}>
         {playerName}
     </button>;
 
@@ -72,7 +72,7 @@ export default function Header() {
                 </nav>
                 <div className={styles.account}>
                     <span>Account:</span> {isLoggedIn ? editAccountButton : createAccountButton}
-                    <button type='button' onClick={handleSession}>{isLoggedIn ? 'Logout' : 'Login'}</button>
+                    <button type='button' className={isLoggedIn ? styles.secondary : ''} onClick={handleSession}>{isLoggedIn ? 'Logout' : 'Login'}</button>
                 </div>
             </header>
             <section className={styles.content}>

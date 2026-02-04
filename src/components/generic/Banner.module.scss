@@ -1,8 +1,9 @@
+@use '../../common';
+
 .banner{
     width: 90%;
     color: white;
-    background-color: green;
-    /* border: 10px solid mediumspringgreen; */
+    background-color: common.$c-dark-green;
     border-radius: 10px;
     display: flex;
     flex-direction: row;

@@ -1,14 +1,15 @@
 @use '../tile';
+@use '../../common';
 
 .tile:hover{
     cursor: pointer;
-    background-color: darkgrey;
+    background-color: common.$c-dark-gray;
     box-shadow: gray 0 0 10px 10px;
 }
 
 .active{
     cursor: not-allowed;
-    background-color: darkgrey;
+    background-color: common.$c-dark-gray;
     box-shadow: gray 0 0 10px 10px;
 }
 
@@ -20,7 +21,7 @@
 @keyframes fadeOut{
     from{
         opacity: 1;
-        background-color: green;
+        background-color: common.$c-dark-green;
     }
 
     to{

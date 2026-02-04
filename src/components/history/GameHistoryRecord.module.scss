@@ -1,3 +1,5 @@
+@use '../../common';
+
 .record{
     border: 1px solid black;
     border-radius: 10px;
@@ -13,20 +15,20 @@
 
 .win{
     color: white;
-    background-color: green;
+    background-color: common.$c-dark-green;
 }
 
 .win:hover{
-    background-color: green;
-    box-shadow: gray 0 0 10px 10px;
+    background-color: common.$c-light-green;
+    box-shadow: common.$c-dark-gray 0 0 10px 10px;
 }
 
 .loss{
     color: white;
-    background-color: red;
+    background-color: common.$c-dark-red;
 }
 
 .loss:hover{
-    background-color: red;
+    background-color: common.$c-light-red;
     box-shadow: gray 0 0 10px 10px;
 }

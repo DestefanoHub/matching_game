@@ -1,10 +1,19 @@
 @use '../common';
 
 .content{
-    background-color: common.$secondary-color;
+    background-color: common.$c-light-gray;
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.title{
+    font-size: 24pt;
+}
+
+.description{
+    padding: 0 1em 0 1em;
+    font-size: 14pt;
 }
 
 .history{

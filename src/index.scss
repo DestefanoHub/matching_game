@@ -4,6 +4,10 @@ html, body, #root {
   margin: 0;
 }
 
+*{
+  font-family: common.$funky-font;
+}
+
 body{
-  background-color: common.$main-color;
+  background-color: common.$c-gold;
 }

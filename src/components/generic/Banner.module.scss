@@ -2,9 +2,9 @@
 
 .banner{
     width: 90%;
-    color: white;
+    color: common.$c-white;
     background-color: common.$c-dark-green;
-    border-radius: 10px;
+    border-radius: common.$rounded;
     display: flex;
     flex-direction: row;
     justify-content: center;

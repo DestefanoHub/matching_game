@@ -1,12 +1,16 @@
-$c-gold: #e8a507;
+$c-white: #f5ebeb;
 $c-dark-gray: #4d4848;
 $c-light-gray: #bdb5b5;
 $c-dark-blue: #135eeb;
 $c-light-blue: #3f7beb;
+$c-purple: #4f0991;
 $c-dark-green: #278222;
 $c-light-green: #38ab57;
 $c-dark-red: #cc2923;
 $c-light-red: #e05553;
 
-$funky-font: 'Comic Sans', cursive;;
+$funky-font: 'Comic Sans', cursive;
 $mono-font: 'FreeMono', monospace;
+
+$rounded: 10px;
+$shadow: $c-dark-gray 0 0 10px 10px;

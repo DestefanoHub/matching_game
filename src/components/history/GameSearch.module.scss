@@ -1,3 +1,6 @@
+@use '../../common';
+@use '../_form';
+
 .form{
     display: grid;
     column-gap: 1em;
@@ -5,6 +8,7 @@
     grid-template-columns: repeat(2, 10em);
     margin-bottom: 1em;
     text-align: end;
+    margin-top: 1em;
 }
 
 .form label, .form input, .form select{
@@ -12,6 +16,6 @@
 }
 
 .form input, .form select{
-    border-radius: 10px;
+    border-radius: common.$rounded;
     padding: 0 0.5em 0 0.5em;
 }

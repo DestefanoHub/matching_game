@@ -3,7 +3,7 @@
 @mixin header-button{
     background-color: common.$c-dark-blue;
     border: 1px solid common.$c-dark-blue;
-    border-radius: 10px;
+    border-radius: common.$rounded;
     cursor: pointer;
 }
 
@@ -37,7 +37,7 @@
     font-weight: bold;
     font-style: italic;
     font-size: 36pt;
-    color: white;
+    color: common.$c-white;
     margin: auto 0 auto 0;
 }
 
@@ -54,7 +54,7 @@
         justify-content: center;
         align-items: center;
         margin-right: 1rem;
-        color: white;
+        color: common.$c-white;
         text-decoration: none;
         width: 120px;
         height: 50px;
@@ -68,7 +68,8 @@
 }
 
 .nav a.active{
-    background-color: common.$c-light-blue;
+    background-color: common.$c-purple;
+    border: 1px solid common.$c-purple;
     cursor: not-allowed;
 }
 
@@ -83,13 +84,13 @@
     span{
         display: block;
         font-size: 12pt;
-        color: white;
+        color: common.$c-white;
         font-family: common.$mono-font;
     }
 
     button{
         margin-left: 1rem;
-        color: white;
+        color: common.$c-white;
         width: 100px;
         height: 50px;
         max-width: 200px;
@@ -110,5 +111,5 @@ button.secondary{
 }
 
 button.secondary:hover{
-    background-color: white;
+    background-color: common.$c-white;
 }

@@ -2,33 +2,34 @@
 
 .record{
     border: 1px solid black;
-    border-radius: 10px;
+    border-radius: common.$rounded;
     padding: 1em;
     font-size: 14pt;
     width: 240px;
+    min-height: 180px;
+    max-height: 180px;
 }
 
 .record:hover{
     cursor: pointer;
-
 }
 
 .win{
-    color: white;
+    color: common.$c-white;
     background-color: common.$c-dark-green;
 }
 
 .win:hover{
     background-color: common.$c-light-green;
-    box-shadow: common.$c-dark-gray 0 0 10px 10px;
+    box-shadow: common.$shadow;
 }
 
 .loss{
-    color: white;
+    color: common.$c-white;
     background-color: common.$c-dark-red;
 }
 
 .loss:hover{
     background-color: common.$c-light-red;
-    box-shadow: gray 0 0 10px 10px;
+    box-shadow: common.$shadow;
 }

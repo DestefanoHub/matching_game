@@ -17,7 +17,7 @@
 }
 
 .form input{
-    border-radius: 10px;
+    border-radius: common.$rounded;
     padding: 0 0.5em 0 0.5em;
 }
 
@@ -27,8 +27,8 @@
 }
 
 .errorLabel{
-    border-radius: 10px;
-    color: white;
+    border-radius: common.$rounded;
+    color: common.$c-white;
     background-color: common.$c-dark-red;
     padding: 0 5px 0 5px;
 }

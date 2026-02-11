@@ -1,5 +1,7 @@
+@use '../../common';
+
 .board{
-    background-color: whitesmoke;
+    background-color: common.$c-white;
 }
 
 .Easy{

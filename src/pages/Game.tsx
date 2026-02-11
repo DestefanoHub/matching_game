@@ -58,7 +58,6 @@ export default function Game() {
         <GameSetup modalRef={gameSetupModal}/>
         <GameOver modalRef={gameOverModal} onClose={handleClose}/>
         <section className={styles.page}>
-            <h1>New Game</h1>
             {!initialized && <button onClick={handleClick}>Start a new game!</button>}
             {initialized && <GameInfo/>}
             {initialized && <GameBoard startCountdown={startCountdown}/>}

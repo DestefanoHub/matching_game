@@ -1,11 +1,11 @@
 @use '../../common';
 
 .modal{
-    border-radius: 10px;
+    border-radius: common.$rounded;
     background-color: common.$c-light-gray;
 }
 
 .modal::backdrop{
-    opacity: 0.75;
-    background-color: common.$c-dark-green;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
 };

@@ -95,7 +95,7 @@ export default function Edit({modalRef}: Props) {
     }
     
     return <Modal modalRef={modalRef} onClose={handleClose}>
-        <h1>Create Account</h1>
+        <h1>Edit Account</h1>
         <form onSubmit={handleSubmit} className={styles.form}>            
             <div>
                 <div className={`${styles.inputSection} ${formState.passwordObj.error && styles.error}`}>

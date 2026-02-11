@@ -4,13 +4,14 @@
 .tile:hover{
     cursor: pointer;
     background-color: common.$c-dark-gray;
-    box-shadow: gray 0 0 10px 10px;
+    box-shadow: common.$shadow;
 }
 
 .active{
     cursor: not-allowed;
     background-color: common.$c-dark-gray;
-    box-shadow: gray 0 0 10px 10px;
+    color: common.$c-white;
+    box-shadow: common.$shadow;
 }
 
 .scored{

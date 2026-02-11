@@ -1,0 +1,9 @@
+@use '../_common';
+
+input, select{
+    background-color: common.$c-white;
+}
+
+label{
+    cursor: pointer;
+}

@@ -56,7 +56,6 @@ export default function History() {
     return <Fragment>
         <GameHistoryFull modalRef={gameDetailsModal} details={gameDetails}/>
         <div className={styles.content}>
-            <h1>Game History</h1>
             <GameSearch/>
             <Paginator/>
             {!isLoaded && loadBanner}

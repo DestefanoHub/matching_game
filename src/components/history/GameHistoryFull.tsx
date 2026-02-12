@@ -16,7 +16,7 @@ export default function GameHistoryFull({ modalRef, details }: Props) {
 
         return <Modal modalRef={modalRef}>
             <h1>Game Details</h1>
-            <p>Player: {details.game.player.username}</p>
+            <p>Player: <span className='playerName'>{details.game.player.username}</span></p>
             <p>Status: {details.game.hasWon ? 'Win! :)' : 'Loss :('}</p>
             <p>Difficulty: {getDisplayDifficulty(details.game.difficulty as Difficulty)}</p>
             <p>Timestamp: {gameDateObj.toLocaleString('en-US')}</p>

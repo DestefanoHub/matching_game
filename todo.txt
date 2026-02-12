@@ -1,0 +1,17 @@
+CURRENT
+_______
+- Update the modal styles.
+    - Add a close button to all modals.
+- Update the form styles.
+- Adjust the username display on the header button to cut off and show a tooltip if the username is too long.
+- Adjust the login form so the form validation makes more sense and isn't just the copy from the create form.
+- Have the app handle the validation messages instead of the API returning them directly.
+- Make sure the app handles API errors properly.
+
+FUTURE
+______
+
+- Remove the modal for starting a new game and have it display directly on the page instead.
+    - When selecting a difficulty option, show an example of the game board so players can see the difference in difficulty.
+- Have the API requests timeout after a period of time.
+- Add a delay to show the loading state of game history.

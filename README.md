@@ -1,70 +1,31 @@
-# Getting Started with Create React App
+# Matching Game Front-End
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is the front-end of the matching game. It is created with:
+- Vite
+- React
+- TypeScript
+- React-Router
+- Redux
+- CSS Modules
+- SASS
 
-## Available Scripts
+In order to meaningfully interact with the app, the `matching-game-server` project must also be running, as that is the back-end REST API.
 
-In the project directory, you can run:
+## Project Structure
 
-### `npm start`
+`index.tsx` is the root of the application that encompasses the router and Redux store.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+`/pages` contains the components that represent the main application pages. `Layout.tsx` contains the sidebar background and wraps the other page components that use it.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+`/components` contains all the other components that make up the elements on the pages. `/generic/Header.tsx` is the root component in the router that wraps all the pages since every page has the header shown. The directory is further broken down to group similar components together.
 
-### `npm test`
+`/store` contains all the Redux state material.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+`/utils` contains various other files such as:
+- `gateway.ts` that defines all the API calls.
+- `hooks.ts` that provides better TypeScript integration with the app's Redux material.
+- `types.ts` where global TypeScript types are defined.
 
-### `npm run build`
+## App usage
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+`npm start` will launch the app on `localhost:3000`. Make sure to start the `matching-game-server` first or the API calls will fail, though the app will still run.

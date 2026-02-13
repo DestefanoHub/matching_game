@@ -1,4 +1,4 @@
-import { type Ref } from 'react';
+import { type RefObject } from 'react';
 
 import Modal from '../generic/Modal';
 import GameHistoryStats from './GameHistoryStats';
@@ -6,7 +6,7 @@ import { getDisplayDifficulty } from '../../store/gameSlice';
 import type { Difficulty, Game, GameData } from '../../utils/types';
 
 type Props = {
-    modalRef: Ref<HTMLDialogElement>,
+    modalRef: RefObject<HTMLDialogElement | null>,
     details: GameData
 };
 
@@ -14,8 +14,7 @@ export default function GameHistoryFull({ modalRef, details }: Props) {
     if(Object.keys(details.game).length){
         const gameDateObj = new Date(details.game.date);
 
-        return <Modal modalRef={modalRef}>
-            <h1>Game Details</h1>
+        return <Modal modalRef={modalRef} title='Game Details'>
             <p>Player: <span className='playerName'>{details.game.player.username}</span></p>
             <p>Status: {details.game.hasWon ? 'Win! :)' : 'Loss :('}</p>
             <p>Difficulty: {getDisplayDifficulty(details.game.difficulty as Difficulty)}</p>

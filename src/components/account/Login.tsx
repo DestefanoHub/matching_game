@@ -98,8 +98,7 @@ export default function Login({modalRef}: Props) {
         setFormState(initState);
     }
     
-    return <Modal modalRef={modalRef} onClose={handleClose}>
-        <h1>Login</h1>
+    return <Modal modalRef={modalRef} onClose={handleClose} title='Login'>
         <form onSubmit={handleSubmit} className={styles.form}>
             <div>
                 <div className={`${styles.inputSection} ${formState.usernameObj.error && styles.error}`}>

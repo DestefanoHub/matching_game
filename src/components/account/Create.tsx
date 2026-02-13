@@ -128,8 +128,7 @@ export default function Create({modalRef}: Props) {
         setFormState(initState);
     }
     
-    return <Modal modalRef={modalRef} onClose={handleClose}>
-        <h1>Create Account</h1>
+    return <Modal modalRef={modalRef} onClose={handleClose} title='Create Account'>
         <form onSubmit={handleSubmit} className={styles.form}>
             <div>
                 <div className={`${styles.inputSection} ${formState.usernameObj!.error && styles.error}`}>
@@ -189,7 +188,7 @@ export default function Create({modalRef}: Props) {
 
             {formState.mainError && <p className={styles.errorLabel}>An error has occurred attempting to create your account.</p>}
             
-            <button type='submit'>Create</button>
+            <button type='submit' className={styles.formButton}>Create</button>
         </form>
     </Modal>;
 }

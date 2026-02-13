@@ -7,3 +7,12 @@ input, select{
 label{
     cursor: pointer;
 }
+
+.formButton{
+    border-radius: common.$rounded;
+}
+
+.formButton:hover{
+    cursor: pointer;
+    box-shadow: common.$shadow;
+}

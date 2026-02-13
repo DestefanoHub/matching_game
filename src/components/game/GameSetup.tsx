@@ -32,7 +32,7 @@ export default function GameSetup({ modalRef }: Props) {
         modalRef.current?.close();
     };
 
-    return <Modal modalRef={modalRef}>
+    return <Modal modalRef={modalRef} title='PLACEHOLDER'>
         <div className={styles.form}>
             <h1>Select options for a new game</h1>
             <form className={styles.form} onSubmit={handleSubmit}>

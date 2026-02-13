@@ -1,17 +1,19 @@
 @use '../tile';
 @use '../../common';
 
+$tile-shadow: black 0 0 10px 10px;
+
 .tile:hover{
     cursor: pointer;
     background-color: common.$c-dark-gray;
-    box-shadow: common.$shadow;
+    box-shadow: $tile-shadow;
 }
 
 .active{
     cursor: not-allowed;
     background-color: common.$c-dark-gray;
     color: common.$c-white;
-    box-shadow: common.$shadow;
+    box-shadow: $tile-shadow;
 }
 
 .scored{

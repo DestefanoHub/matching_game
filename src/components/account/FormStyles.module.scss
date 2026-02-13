@@ -1,36 +1,41 @@
 @use '../../common';
+@use '../form';
 
 .form{
     display: flex;
     flex-direction: column;
+
+    label{
+        padding-right: 1em;
+        font-size: 14pt;
+    }
+
+    input{
+        border-radius: common.$rounded;
+        padding: 0 0.5em 0 0.5em;
+        height: 2em;
+        font-size: 14pt;
+    }
 }
 
 .inputSection{
-    display: grid;
-    column-gap: 1rem;
-    grid-template-columns: 5rem 10rem;
-    text-align: end;
-}
-
-.form label, .form input{
-    font-size: 14pt;
-}
-
-.form input{
-    border-radius: common.$rounded;
-    padding: 0 0.5em 0 0.5em;
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    align-items: center;
+    margin-bottom: 2em;
 }
 
 .error label{
     color: common.$c-dark-red;
-    
 }
 
 .errorLabel{
     border-radius: common.$rounded;
     color: common.$c-white;
     background-color: common.$c-dark-red;
-    padding: 0 5px 0 5px;
+    margin: 0 0 2em 0;
+    padding-left: 1em;
 }
 
 .error input{

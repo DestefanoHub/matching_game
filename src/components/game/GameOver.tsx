@@ -22,8 +22,7 @@ export default function GameOver({ modalRef, onClose }: Props) {
         modalRef.current?.close();
     };
 
-    return <Modal modalRef={modalRef} onClose={onClose}>
-        <h1>Game Over!</h1>
+    return <Modal modalRef={modalRef} onClose={onClose} title='Game Over!'>
         <h2>{hasWon ? winMessage : loseMessage}</h2>
         <button type='button' onClick={handleClick}>{hasWon ? winNewGameText : loseNewGameText}</button>
     </Modal>;

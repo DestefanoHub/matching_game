@@ -1,4 +1,4 @@
-import { useState, type Ref } from 'react';
+import { useState, type RefObject } from 'react';
 
 import Modal from '../generic/Modal';
 import { editAccount } from '../../utils/gateway';
@@ -9,7 +9,7 @@ import { useAppSelector } from '../../utils/hooks';
 import styles from './FormStyles.module.scss';
 
 type Props = {
-    modalRef: Ref<HTMLDialogElement | null>,
+    modalRef: RefObject<HTMLDialogElement | null>,
 };
 
 const initState = {
@@ -94,8 +94,7 @@ export default function Edit({modalRef}: Props) {
         setFormState(initState);
     }
     
-    return <Modal modalRef={modalRef} onClose={handleClose}>
-        <h1>Edit Account</h1>
+    return <Modal modalRef={modalRef} onClose={handleClose} title='Edit Account'>
         <form onSubmit={handleSubmit} className={styles.form}>            
             <div>
                 <div className={`${styles.inputSection} ${formState.passwordObj.error && styles.error}`}>
@@ -135,7 +134,7 @@ export default function Edit({modalRef}: Props) {
 
             {formState.mainError && <p className={styles.errorLabel}>An error has occurred attempting to edit your account.</p>}
             
-            <button type='submit'>Update</button>
+            <button type='submit' className={styles.formButton}>Update</button>
         </form>
     </Modal>;
 }

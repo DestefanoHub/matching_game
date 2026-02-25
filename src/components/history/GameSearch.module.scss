@@ -9,13 +9,5 @@
     margin-bottom: 1em;
     text-align: end;
     margin-top: 1em;
-}
-
-.form label, .form input, .form select{
-    font-size: 14pt;
-}
-
-.form input, .form select{
-    border-radius: common.$rounded;
-    padding: 0 0.5em 0 0.5em;
+    align-items: center;
 }

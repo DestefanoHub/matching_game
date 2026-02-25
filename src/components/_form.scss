@@ -3,6 +3,15 @@
 input, select{
     background-color: common.$c-white;
     font-family: common.$mono-font;
+    border-radius: common.$rounded;
+    padding: 0 0.5em 0 0.5em;
+    height: 2em;
+    font-size: 14pt;
+}
+
+option{
+    font-family: common.$mono-font;
+    font-size: 14pt;
 }
 
 input:focus, input:hover, select:focus, select:hover{
@@ -12,10 +21,17 @@ input:focus, input:hover, select:focus, select:hover{
 label{
     cursor: pointer;
     font-family: common.$mono-font;
+    font-size: 14pt;
+}
+
+.label{
+    font-family: common.$mono-font;
+    font-size: 14pt;
 }
 
 .formButton{
     border-radius: common.$rounded;
+    font-family: common.$mono-font;
     font-size: 20pt;
     color: common.$c-white;
     background-color: common.$c-dark-blue;

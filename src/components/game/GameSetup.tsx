@@ -32,48 +32,43 @@ export default function GameSetup({ modalRef }: Props) {
         modalRef.current?.close();
     };
 
-    return <Modal modalRef={modalRef} title='PLACEHOLDER'>
-        <div className={styles.form}>
-            <h1>Select options for a new game</h1>
-            <form className={styles.form} onSubmit={handleSubmit}>
-                <div className={styles.formRow}>
-                    <p className={styles.label}>Difficulty: </p>
-                    <label>
-                        <input 
-                            type='radio'
-                            id='easy'
-                            name='difficulty'
-                            required
-                            value='1'
-                            checked={state.difficulty === 1}
-                            onChange={handleDifficulty}
-                        />Easy
-                    </label>
-                    <label>
-                        <input 
-                            type='radio'
-                            id='normal'
-                            name='difficulty'
-                            value='2'
-                            checked={state.difficulty === 2}
-                            onChange={handleDifficulty}
-                        />Normal
-                    </label>
-                    <label>
-                        <input
-                            type='radio'
-                            id='hard'
-                            name='difficulty'
-                            value='3'
-                            checked={state.difficulty === 3}
-                            onChange={handleDifficulty}
-                        />Hard
-                    </label>
-                </div>
-                <div className={styles.formRow}>
-                    <button type='submit'>Start Game!</button>
-                </div>
-            </form>
-        </div>
+    return <Modal modalRef={modalRef} title='Set up game'>
+        <form className={styles.form} onSubmit={handleSubmit}>
+            <div className={styles.formRow}>
+                <p className={styles.label}>Difficulty: </p>
+                <input 
+                    type='radio'
+                    id='easy'
+                    name='difficulty'
+                    required
+                    value='1'
+                    checked={state.difficulty === 1}
+                    onChange={handleDifficulty}
+                />
+                <label htmlFor='easy'>Easy</label>
+                
+                <input 
+                    type='radio'
+                    id='normal'
+                    name='difficulty'
+                    value='2'
+                    checked={state.difficulty === 2}
+                    onChange={handleDifficulty}
+                />
+                <label htmlFor='normal'>Normal</label>
+
+                <input
+                    type='radio'
+                    id='hard'
+                    name='difficulty'
+                    value='3'
+                    checked={state.difficulty === 3}
+                    onChange={handleDifficulty}
+                />
+                <label htmlFor='hard'>Hard</label>
+            </div>
+
+            <button type='submit' className={styles.formButton}>Start Game!</button>
+        </form>
     </Modal>;
 }

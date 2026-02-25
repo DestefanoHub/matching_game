@@ -35,6 +35,6 @@
 }
 
 .close:hover{
+    @include common.shadow;
     cursor: pointer;
-    box-shadow: common.$shadow;
 }

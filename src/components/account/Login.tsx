@@ -6,7 +6,7 @@ import { loginThunk } from '../../store/sessionSlice';
 import type { Player, LoginResponse } from '../../utils/types';
 import { useAppDispatch } from '../../utils/hooks';
 
-import styles from './FormStyles.module.scss';
+import styles from './AccountStyles.module.scss';
 
 type Props = {
     modalRef: RefObject<HTMLDialogElement | null>
@@ -141,7 +141,7 @@ export default function Login({modalRef}: Props) {
 
             {formState.mainError && <p className={styles.errorLabel}>Invalid credentials.</p>}
             
-            <button type='submit'>Login</button>
+            <button type='submit' className={styles.formButton}>Login</button>
         </form>
     </Modal>;
 }

@@ -18,7 +18,7 @@
 }
 
 .start:hover{
-    box-shadow: common.$shadow;
+    @include common.shadow;
     background-color: common.$c-light-blue;
     cursor: pointer;
 }

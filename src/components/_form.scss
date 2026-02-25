@@ -2,17 +2,27 @@
 
 input, select{
     background-color: common.$c-white;
+    font-family: common.$mono-font;
+}
+
+input:focus, input:hover, select:focus, select:hover{
+    @include common.shadow;
 }
 
 label{
     cursor: pointer;
+    font-family: common.$mono-font;
 }
 
 .formButton{
     border-radius: common.$rounded;
+    font-size: 20pt;
+    color: common.$c-white;
+    background-color: common.$c-dark-blue;
+    border-color: common.$c-dark-blue;
 }
 
-.formButton:hover{
+.formButton:hover, .formButton:focus{
+    @include common.shadow;
     cursor: pointer;
-    box-shadow: common.$shadow;
 }

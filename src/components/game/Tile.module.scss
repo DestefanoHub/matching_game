@@ -4,16 +4,16 @@
 $tile-shadow: black 0 0 10px 10px;
 
 .tile:hover{
+    @include common.shadow($color: black);
     cursor: pointer;
     background-color: common.$c-dark-gray;
-    box-shadow: $tile-shadow;
 }
 
 .active{
+    @include common.shadow($color: black);
     cursor: not-allowed;
     background-color: common.$c-dark-gray;
     color: common.$c-white;
-    box-shadow: $tile-shadow;
 }
 
 .scored{

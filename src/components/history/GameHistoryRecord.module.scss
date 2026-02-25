@@ -20,8 +20,8 @@
 }
 
 .win:hover{
+    @include common.shadow;
     background-color: common.$c-light-green;
-    box-shadow: common.$shadow;
 }
 
 .loss{
@@ -30,6 +30,6 @@
 }
 
 .loss:hover{
+    @include common.shadow;
     background-color: common.$c-light-red;
-    box-shadow: common.$shadow;
 }

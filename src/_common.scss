@@ -13,4 +13,7 @@ $funky-font: 'Comic Sans', cursive;
 $mono-font: 'FreeMono', monospace;
 
 $rounded: 10px;
-$shadow: $c-dark-gray 0 0 10px 10px;
+
+@mixin shadow($color: $c-dark-gray){
+    box-shadow: $color 0 0 10px 10px;
+}

@@ -26,8 +26,19 @@
     margin-bottom: 2em;
 }
 
-.error label{
-    color: common.$c-dark-red;
+.error{
+
+    label{
+        color: common.$c-dark-red;
+    }
+
+    input{
+        border-color: common.$c-dark-red;
+    }
+
+    input:focus{
+        @include common.shadow($color: common.$c-dark-red)
+    }
 }
 
 .errorLabel{
@@ -36,8 +47,4 @@
     background-color: common.$c-dark-red;
     margin: 0 0 2em 0;
     padding-left: 1em;
-}
-
-.error input{
-    border-color: common.$c-dark-red;
 }

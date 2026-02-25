@@ -21,7 +21,7 @@
 }
 
 .navigate:hover{
-    box-shadow: common.$shadow;
+    @include common.shadow;
 }
 
 .navigate:disabled{

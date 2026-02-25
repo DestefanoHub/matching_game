@@ -21,6 +21,8 @@ export default function Header() {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
+    const trimmedPName = (playerName.length > 10) ? `${playerName.slice(0, 6)}...` : playerName;
+
     useEffect(() => {
         const storedSession = checkSessionStorage();
 
@@ -54,8 +56,8 @@ export default function Header() {
         Create Account
     </button>;
 
-    const editAccountButton = <button type='button' className={styles.secondary} onClick={handleEditAccount}>
-        {playerName}
+    const editAccountButton = <button type='button' className={styles.secondary} onClick={handleEditAccount} title={playerName}>
+        {trimmedPName}
     </button>;
 
     return <Fragment>

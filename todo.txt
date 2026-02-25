@@ -1,7 +1,6 @@
 CURRENT
 _______
 
-- Adjust the username display on the header button to cut off and show a tooltip if the username is too long.
 - Adjust the login form so the form validation makes more sense and isn't just the copy from the create form.
 - Have the app handle the validation messages instead of the API returning them directly.
 - Make sure the app handles API errors properly.

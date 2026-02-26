@@ -57,28 +57,25 @@ export type MultiGamesData = {
 export type AccountResponse = {
     usernameObj?: {
         value: string,
-        error: boolean,
-        message: string
+        error: AccountMessageTypes | null
     },
     passwordObj: {
         value: string,
-        error: boolean,
-        message: string
+        error: AccountMessageTypes | null
     },
     confirmObj: {
         value: string,
-        error: boolean,
-        message: string
+        error: AccountMessageTypes | null
     },
-    mainError: boolean
+    mainError: AccountMessageTypes | null,
+    canSubmit: boolean
 };
 
 export const AccountMessages = {
     INVALID: 'Invalid crednetials',
-    UNAMESHORT: 'Username too short',
-    UNAMELONG: 'Username too long',
-    PWORDSHORT: 'Password too short',
-    PWORDLONG: 'Password too long',
+    UNAMELENGTH: 'Username must be between 5 and 30 characters',
+    UNAMETAKEN: 'Cannot create an account with this username',
+    PWORDLENGTH: 'Password must be between 12 and 30 characters',
     PWORDNOMATCH: 'Passwords do not match',
     SERVERERROR: 'The server has encountered an error and was unable to process your request'
 } as const;

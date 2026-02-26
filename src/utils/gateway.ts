@@ -99,7 +99,7 @@ export async function login(username: string, password: string): Promise<Respons
     return response;
 }
 
-export async function createAccount(username: string, password: string, confirmPassword: string): Promise<[AccountResponse, Player | null]> {    
+export async function createAccount(username: string, password: string, confirmPassword: string): Promise<Response> {    
     const response = await fetch(`${baseURL}player/createAccount`, {
         method: 'POST',
         headers: {
@@ -113,7 +113,7 @@ export async function createAccount(username: string, password: string, confirmP
         })
     });
 
-    return await response.json();
+    return response;
 }
 
 export async function editAccount(token: string, password: string, confirmPassword: string): Promise<AccountResponse> {    

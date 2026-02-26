@@ -43,65 +43,61 @@ const initState: LoginResponse = {
     canSubmit: false
 };
 
-const checkCanSubmit = (username: string, nameError: AccountMessageTypes | null, password: string, passError: AccountMessageTypes | null) => (username.length > 0 && nameError === null) && (password.length > 0 && passError === null);
+const checkCanSubmit = (nameError: AccountMessageTypes | null, passError: AccountMessageTypes | null) => nameError === null && passError === null;
 
 const reducer = (state: LoginResponse, action: reducerAction) => {
-    switch(action.type){
-        case 'init': {
-            if(typeof action.payload !== 'undefined'){
-                return {
-                    ...initState,
-                    mainError: action.payload as AccountMessageTypes
-                };
-            }
-            
+    if(typeof action.payload === 'undefined'){
+        if(action.type === 'init'){
             return initState;
         }
+        
+        return state;
+    }
+    
+    switch(action.type){
+        case 'init': {
+            return {
+                ...initState,
+                mainError: action.payload as AccountMessageTypes
+            };
+        }
         case 'username': {
-            if(typeof action.payload !== 'undefined'){
-                const username = action.payload.trim();
-                let error: AccountMessageTypes | null = null;
+            const username = action.payload.trim();
+            let error: AccountMessageTypes | null = null;
 
-                if(username.length < 5) {
-                    error = AccountMessages.UNAMESHORT;
-                }else if(username.length > 30) {
-                    error = AccountMessages.UNAMELONG;
-                }
-
-                return {
-                    ...state,
-                    usernameObj: {
-                        value: username,
-                        error
-                    },
-                    canSubmit: checkCanSubmit(username, error, state.passwordObj.value, state.passwordObj.error)
-                };
+            if(username.length < 5) {
+                error = AccountMessages.UNAMELENGTH;
+            }else if(username.length > 30) {
+                error = AccountMessages.UNAMELENGTH;
             }
 
-            return state;
+            return {
+                ...state,
+                usernameObj: {
+                    value: username,
+                    error
+                },
+                canSubmit: checkCanSubmit(error, state.passwordObj.error)
+            };
         }
         case 'password': {
-            if(typeof action.payload !== 'undefined'){
-                const password = action.payload.trim();
-                let error: AccountMessageTypes | null = null;
-                
-                if(password.length < 12) {
-                    error = AccountMessages.PWORDSHORT;
-                }else if(password.length > 30) {
-                    error = AccountMessages.PWORDLONG;
-                }
-
-                return {
-                    ...state,
-                    passwordObj: {
-                        value: password,
-                        error
-                    },
-                    canSubmit: checkCanSubmit(state.usernameObj.value, state.usernameObj.error, password, error)
-                };
+            const password = action.payload.trim();
+            let error: AccountMessageTypes | null = null;
+            
+            if(password.length < 12) {
+                error = AccountMessages.PWORDLENGTH;
+            }else if(password.length > 30) {
+                error = AccountMessages.PWORDLENGTH;
             }
 
-            return state;
+            return {
+                ...state,
+                passwordObj: {
+                    value: password,
+                    error
+                },
+                canSubmit: checkCanSubmit(state.usernameObj.error, error)
+            };
         }
     }
 };
@@ -134,7 +130,7 @@ export default function Login({modalRef}: Props) {
     };
 
     const handleClose = () => {
-        localDispatch({type: 'init'})
+        localDispatch({type: 'init'});
     }
     
     return <Modal modalRef={modalRef} onClose={handleClose} title='Login'>

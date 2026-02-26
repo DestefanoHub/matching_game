@@ -1,9 +1,9 @@
-import { useState, type RefObject } from 'react';
+import { useReducer, type RefObject } from 'react';
 
 import Modal from '../generic/Modal';
 import { login as loginRequest } from '../../utils/gateway';
 import { loginThunk } from '../../store/sessionSlice';
-import type { Player, LoginResponse } from '../../utils/types';
+import { type Player, type AccountMessageTypes, AccountMessages } from '../../utils/types';
 import { useAppDispatch } from '../../utils/hooks';
 
 import styles from './AccountStyles.module.scss';
@@ -12,69 +12,111 @@ type Props = {
     modalRef: RefObject<HTMLDialogElement | null>
 };
 
+type reducerAction = {
+    type: 'init' | 'username' | 'password',
+    payload?: string
+}
+
+type LoginResponse = {
+    usernameObj: {
+        value: string,
+        error: AccountMessageTypes | null
+    },
+    passwordObj: {
+        value: string,
+        error: AccountMessageTypes | null
+    },
+    mainError: AccountMessageTypes | null,
+    canSubmit: boolean,
+};
+
 const initState: LoginResponse = {
     usernameObj: {
         value: '',
-        error: false,
-        message: ''
+        error: null,
     },
     passwordObj: {
         value: '',
-        error: false,
-        message: ''
+        error: null,
     },
-    mainError: false
+    mainError: null,
+    canSubmit: false
+};
+
+const checkCanSubmit = (username: string, nameError: AccountMessageTypes | null, password: string, passError: AccountMessageTypes | null) => (username.length > 0 && nameError === null) && (password.length > 0 && passError === null);
+
+const reducer = (state: LoginResponse, action: reducerAction) => {
+    switch(action.type){
+        case 'init': {
+            if(typeof action.payload !== 'undefined'){
+                return {
+                    ...initState,
+                    mainError: action.payload as AccountMessageTypes
+                };
+            }
+            
+            return initState;
+        }
+        case 'username': {
+            if(typeof action.payload !== 'undefined'){
+                const username = action.payload.trim();
+                let error: AccountMessageTypes | null = null;
+
+                if(username.length < 5) {
+                    error = AccountMessages.UNAMESHORT;
+                }else if(username.length > 30) {
+                    error = AccountMessages.UNAMELONG;
+                }
+
+                return {
+                    ...state,
+                    usernameObj: {
+                        value: username,
+                        error
+                    },
+                    canSubmit: checkCanSubmit(username, error, state.passwordObj.value, state.passwordObj.error)
+                };
+            }
+
+            return state;
+        }
+        case 'password': {
+            if(typeof action.payload !== 'undefined'){
+                const password = action.payload.trim();
+                let error: AccountMessageTypes | null = null;
+                
+                if(password.length < 12) {
+                    error = AccountMessages.PWORDSHORT;
+                }else if(password.length > 30) {
+                    error = AccountMessages.PWORDLONG;
+                }
+
+                return {
+                    ...state,
+                    passwordObj: {
+                        value: password,
+                        error
+                    },
+                    canSubmit: checkCanSubmit(state.usernameObj.value, state.usernameObj.error, password, error)
+                };
+            }
+
+            return state;
+        }
+    }
 };
 
 export default function Login({modalRef}: Props) {
-    const [formState, setFormState] = useState<LoginResponse>(initState);
+    const [formState, localDispatch] = useReducer(reducer, initState);
     
     const dispatch = useAppDispatch();
 
-    const handleUsername = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const username = event.target.value.trim();
-        let error = false;
-        let message = '';
-
-        if(username.length < 5) {
-            error = true;
-            message = 'Username too short.';
-        }else if(username.length > 30) {
-            error = true;
-            message = 'Username too long.';
-        }
-
-        setFormState(prevState => ({
-            ...prevState,
-            usernameObj: {
-                value: username,
-                error,
-                message
-            }
-        }));
+    const handleUsername = (event: React.ChangeEvent<HTMLInputElement>) => {        
+        localDispatch({type: 'username', payload: event.target.value});
     };
 
     const handlePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const password = event.target.value.trim();
-        let error = false
-        let message = '';
-
-        if(password.length < 12) {
-            error = true;
-            message = 'Password too short.';
-        }else if(password.length > 30) {
-            error = true;
-            message = 'Password too long.';
-        }
-
-        setFormState(prevState => ({
-            ...prevState,
-            passwordObj: {
-                value: password,
-                error,
-                message
-            }
-        }));
+        localDispatch({type: 'password', payload: event.target.value})
     };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -87,21 +129,18 @@ export default function Login({modalRef}: Props) {
             dispatch(loginThunk(player));
             modalRef.current?.close();
         }else{
-            setFormState({
-                ...initState,
-                mainError: true
-            });
+            localDispatch({type: 'init', payload: AccountMessages.INVALID});
         }
     };
 
     const handleClose = () => {
-        setFormState(initState);
+        localDispatch({type: 'init'})
     }
     
     return <Modal modalRef={modalRef} onClose={handleClose} title='Login'>
         <form onSubmit={handleSubmit} className={styles.form}>
             <div>
-                <div className={`${styles.inputSection} ${formState.usernameObj.error && styles.error}`}>
+                <div className={`${styles.inputSection} ${formState.usernameObj.error !== null && styles.error}`}>
                     <label htmlFor='loginUsername'>Username:</label>
                     <input
                         type='text'
@@ -116,12 +155,10 @@ export default function Login({modalRef}: Props) {
                         autoComplete='off'
                     />
                 </div>
-                {formState.usernameObj.error && <p id='usernameHelp' className={styles.errorLabel}>Username must be between 5 and 30 characters</p>}
-                {formState.usernameObj.error && <p className={styles.errorLabel}>{formState.usernameObj.message}</p>}
             </div>
             
             <div>
-                <div className={`${styles.inputSection} ${formState.passwordObj.error && styles.error}`}>
+                <div className={`${styles.inputSection} ${formState.passwordObj.error !== null && styles.error}`}>
                     <label htmlFor='loginPassword'>Password:</label>
                     <input 
                         type='password'
@@ -135,13 +172,11 @@ export default function Login({modalRef}: Props) {
                         aria-describedby='passwordHelp'
                     />
                 </div>
-                {formState.passwordObj.error && <p id='passwordHelp' className={styles.errorLabel}>Password must be between 12 and 30 characters</p>}
-                {formState.passwordObj.error && <p className={styles.errorLabel}>{formState.passwordObj.message}</p>}
             </div>
 
-            {formState.mainError && <p className={styles.errorLabel}>Invalid credentials.</p>}
+            {formState.mainError !== null && <p className={styles.errorLabel}>{formState.mainError}</p>}
             
-            <button type='submit' className={styles.formButton}>Login</button>
+            <button type='submit' disabled={!formState.canSubmit} className={styles.formButton}>Login</button>
         </form>
     </Modal>;
 }

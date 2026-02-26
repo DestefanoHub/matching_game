@@ -1,7 +1,7 @@
 CURRENT
 _______
 
-- Adjust the login form so the form validation makes more sense and isn't just the copy from the create form.
+- Do not allow account forms to submit if the client-side knows they aren't valid.
 - Have the app handle the validation messages instead of the API returning them directly.
 - Make sure the app handles API errors properly.
 

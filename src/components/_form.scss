@@ -38,6 +38,12 @@ label{
     border-color: common.$c-dark-blue;
 }
 
+.formButton:disabled{
+    background-color: common.$c-light-blue;
+    pointer-events: none;
+    opacity: 50%;
+}
+
 .formButton:hover, .formButton:focus{
     @include common.shadow;
     cursor: pointer;

@@ -73,19 +73,17 @@ export type AccountResponse = {
     mainError: boolean
 };
 
-export type LoginResponse = {
-    usernameObj: {
-        value: string,
-        error: boolean,
-        message: string
-    },
-    passwordObj: {
-        value: string,
-        error: boolean,
-        message: string
-    },
-    mainError: boolean
-};
+export const AccountMessages = {
+    INVALID: 'Invalid crednetials',
+    UNAMESHORT: 'Username too short',
+    UNAMELONG: 'Username too long',
+    PWORDSHORT: 'Password too short',
+    PWORDLONG: 'Password too long',
+    PWORDNOMATCH: 'Passwords do not match',
+    SERVERERROR: 'The server has encountered an error and was unable to process your request'
+} as const;
+
+export type AccountMessageTypes = typeof AccountMessages[keyof typeof AccountMessages];
 
 export type Player = {
     ID: string,

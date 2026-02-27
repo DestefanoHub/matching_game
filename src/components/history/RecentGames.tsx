@@ -66,8 +66,8 @@ export default function RecentGames() {
         <GameHistoryFull modalRef={gameDetailsModal} details={gameDetails}/>
         <div className={styles.container}>
             {!recentGamesData.isLoaded && <Banner text='Loading...'/>}
-            {recentGamesData.isLoaded && (recentGamesData.allGames.length ? <div className={styles.list}><h1>Top 5 Recent Games:</h1><div>{allRecentGames}</div></div> : <Banner text='No games...yet!'/>)}
-            {(recentGamesData.isLoaded && isLoggedIn) && (recentGamesData.playerGames.length ? <div className={styles.list}><h1>Your Top 5 Recent Games:</h1><div>{playerRecentGames}</div></div> : <Banner text='No games...yet!'/>)}
+            {recentGamesData.isLoaded && <div className={styles.list}><h1>Top 5 Recent Games:</h1>{recentGamesData.allGames.length ? <div>{allRecentGames}</div> : <Banner text='No games...yet!'/>}</div>}
+            {(recentGamesData.isLoaded && isLoggedIn) && <div className={styles.list}><h1>Your Top 5 Recent Games:</h1>{recentGamesData.playerGames.length ? <div>{playerRecentGames}</div> : <Banner text='No games...yet!'/>}</div>}
         </div>
     </Fragment>;
 }

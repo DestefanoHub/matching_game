@@ -45,7 +45,7 @@ const initState: LoginResponse = {
 
 const checkCanSubmit = (nameError: AccountMessageTypes | null, passError: AccountMessageTypes | null) => nameError === null && passError === null;
 
-const reducer = (state: LoginResponse, action: reducerAction) => {
+const reducer = (state: LoginResponse, action: reducerAction): LoginResponse => {
     if(typeof action.payload === 'undefined'){
         if(action.type === 'init'){
             return initState;

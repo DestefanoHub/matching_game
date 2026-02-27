@@ -17,7 +17,7 @@ type reducerAction = {
     payload?: string | number[]
 }
 
-const initState = {
+const initState: AccountResponse = {
     usernameObj: {
         value: '',
         error: null,
@@ -36,7 +36,7 @@ const initState = {
 
 const checkCanSubmit = (nameError: AccountMessageTypes | null, passError: AccountMessageTypes | null, confirmError: AccountMessageTypes | null) => nameError === null && passError === null && confirmError === null;
 
-const reducer = (state: AccountResponse, action: reducerAction) => {
+const reducer = (state: AccountResponse, action: reducerAction): AccountResponse => {
     if(typeof action.payload === 'undefined'){
         if(action.type === 'init'){
             return initState;
@@ -53,101 +53,116 @@ const reducer = (state: AccountResponse, action: reducerAction) => {
             };
         }
         case 'username': {
-            const username = action.payload.trim();
-            let error: AccountMessageTypes | null = null;
+            if(typeof action.payload === 'string'){
+                const username = action.payload.trim();
+                let error: AccountMessageTypes | null = null;
 
-            if(username.length < 5) {
-                error = AccountMessages.UNAMELENGTH;
-            }else if(username.length > 30) {
-                error = AccountMessages.UNAMELENGTH;
+                if(username.length < 5) {
+                    error = AccountMessages.UNAMELENGTH;
+                }else if(username.length > 30) {
+                    error = AccountMessages.UNAMELENGTH;
+                }
+
+                return {
+                    ...state,
+                    usernameObj: {
+                        value: username,
+                        error
+                    },
+                    canSubmit: checkCanSubmit(error, state.passwordObj.error, state.confirmObj.error)
+                };
             }
-
-            return {
-                ...state,
-                usernameObj: {
-                    value: username,
-                    error
-                },
-                canSubmit: checkCanSubmit(error, state.passwordObj.error, state.confirmObj.error)
-            };
+            break;
         }
         case 'password': {
-            const password = action.payload.trim();
-            let error: AccountMessageTypes | null = null;
-            
-            if(password.length < 12) {
-                error = AccountMessages.PWORDLENGTH;
-            }else if(password.length > 30) {
-                error = AccountMessages.PWORDLENGTH;
-            }
+            if(typeof action.payload === 'string'){
+                const password = action.payload.trim();
+                let error: AccountMessageTypes | null = null;
+                
+                if(password.length < 12) {
+                    error = AccountMessages.PWORDLENGTH;
+                }else if(password.length > 30) {
+                    error = AccountMessages.PWORDLENGTH;
+                }
 
-            return {
-                ...state,
-                passwordObj: {
-                    value: password,
-                    error
-                },
-                canSubmit: checkCanSubmit(state.usernameObj!.error, error, state.confirmObj.error)
-            };
+                return {
+                    ...state,
+                    passwordObj: {
+                        value: password,
+                        error
+                    },
+                    canSubmit: checkCanSubmit(state.usernameObj!.error, error, state.confirmObj.error)
+                };
+            }
+            break;
         }
         case 'confirm': {
-            const confirm = action.payload.trim();
-            let error: AccountMessageTypes | null = null;
+            if(typeof action.payload === 'string'){
+                const confirm = action.payload.trim();
+                let error: AccountMessageTypes | null = null;
 
-            if(state.passwordObj.value !== confirm){
-                error = AccountMessages.PWORDNOMATCH;
+                if(state.passwordObj.value !== confirm){
+                    error = AccountMessages.PWORDNOMATCH;
+                }
+
+                return {
+                    ...state,
+                    confirmObj: {
+                        value: confirm,
+                        error
+                    },
+                    canSubmit: checkCanSubmit(state.usernameObj!.error, state.passwordObj.error, error)
+                };
             }
-
-            return {
-                ...state,
-                confirmObj: {
-                    value: confirm,
-                    error
-                },
-                canSubmit: checkCanSubmit(state.usernameObj!.error, state.passwordObj.error, error)
-            };
+            break;
         }
         case 'server': {
             let unameError = null;
             let pwordError = null;
             let confirmError = null;
             
-            action.payload.forEach((error) => {
-                switch(error){
-                    case 1:
-                        unameError = AccountMessages.UNAMELENGTH;
-                        break;
-                    case 2:
-                        unameError = AccountMessages.UNAMETAKEN;
-                        break;
-                    case 3:
-                        pwordError = AccountMessages.PWORDLENGTH;
-                        break;
-                    case 4:
-                        confirmError = AccountMessages.PWORDNOMATCH;
-                        break;
-                    default:
-                        break;
-                }
-            });
+            if(Array.isArray(action.payload)){
+                action.payload.forEach((error) => {
+                    switch(error){
+                        case 1:
+                            unameError = AccountMessages.UNAMELENGTH;
+                            break;
+                        case 2:
+                            unameError = AccountMessages.UNAMETAKEN;
+                            break;
+                        case 3:
+                            pwordError = AccountMessages.PWORDLENGTH;
+                            break;
+                        case 4:
+                            confirmError = AccountMessages.PWORDNOMATCH;
+                            break;
+                        default:
+                            break;
+                    }
+                });
             
-            return {
-                ...state,
-                usernameObj: {
-                    ...state.usernameObj,
-                    error: unameError
-                },
-                passwordObj: {
-                    ...state.passwordObj,
-                    error: pwordError
-                },
-                confirmObj: {
-                    ...state.confirmObj,
-                    error: confirmError
+                return {
+                    ...state,
+                    usernameObj: {
+                        //Specifically define the entire usernameObj here because it is potentially undefined in TS (even though we know it isn't here)
+                        value: state.usernameObj!.value,
+                        error: unameError
+                    },
+                    passwordObj: {
+                        ...state.passwordObj,
+                        error: pwordError
+                    },
+                    confirmObj: {
+                        ...state.confirmObj,
+                        error: confirmError
+                    }
                 }
             }
+            break;
         }
     }
+
+    return state;
 };
 
 export default function Create({modalRef}: Props) {
@@ -182,6 +197,7 @@ export default function Create({modalRef}: Props) {
             case 400: {
                 const [errors]: [number[]] = await accountResponse.json();
                 localDispatch({type: 'server', payload: errors});
+                break;
             }
             default: {
                 localDispatch({type: 'init', payload: AccountMessages.SERVERERROR});
@@ -212,7 +228,6 @@ export default function Create({modalRef}: Props) {
                         autoComplete='off'
                     />
                 </div>
-                {/* {formState.usernameObj!.error !== null && <p id='usernameHelp' className={styles.errorLabel}>Username must be between 5 and 30 characters</p>} */}
                 {formState.usernameObj!.error !== null && <p className={styles.errorLabel}>{formState.usernameObj!.error}</p>}
             </div>
             
@@ -231,7 +246,6 @@ export default function Create({modalRef}: Props) {
                         aria-describedby='passwordHelp'
                     />
                 </div>
-                {/* {formState.passwordObj.error !== null && <p id='passwordHelp' className={styles.errorLabel}>Password must be between 12 and 30 characters</p>} */}
                 {formState.passwordObj.error !== null && <p className={styles.errorLabel}>{formState.passwordObj.error}</p>}
             </div>
 

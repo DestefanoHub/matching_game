@@ -28,7 +28,7 @@
         border-color: common.$c-dark-red;
     }
 
-    input:focus{
+    input:focus, input:hover{
         @include common.shadow($color: common.$c-dark-red)
     }
 }

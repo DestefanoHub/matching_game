@@ -1,8 +1,7 @@
 CURRENT
 _______
 
-- Do not allow account forms to submit if the client-side knows they aren't valid.
-- Have the app handle the validation messages instead of the API returning them directly.
+- Create account might have more than one error for username field, so handle that.
 - Make sure the app handles API errors properly.
 
 FUTURE

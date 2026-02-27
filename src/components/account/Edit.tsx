@@ -1,8 +1,8 @@
-import { useState, type RefObject } from 'react';
+import { useReducer, type RefObject } from 'react';
 
 import Modal from '../generic/Modal';
 import { editAccount } from '../../utils/gateway';
-import type { AccountResponse } from '../../utils/types';
+import { type AccountResponse, type AccountMessageTypes, AccountMessages } from '../../utils/types';
 import { selectAuthToken } from '../../store/sessionSlice';
 import { useAppSelector } from '../../utils/hooks';
 
@@ -12,68 +12,135 @@ type Props = {
     modalRef: RefObject<HTMLDialogElement | null>,
 };
 
-const initState = {
+type reducerAction = {
+    type: 'init' | 'password' | 'confirm' | 'server',
+    payload?: string | number[]
+}
+
+const initState: AccountResponse = {
     passwordObj: {
         value: '',
-        error: false,
-        message: ''
+        error: null,
     },
     confirmObj: {
         value: '',
-        error: false,
-        message: ''
+        error: null,
     },
-    mainError: false
+    mainError: null,
+    canSubmit: false
 }
 
+const checkCanSubmit = (passError: AccountMessageTypes | null, confirmError: AccountMessageTypes | null) => passError === null && confirmError === null;
+
+const reducer = (state: AccountResponse, action: reducerAction): AccountResponse => {
+    if(typeof action.payload === 'undefined'){
+        if(action.type === 'init'){
+            return initState;
+        }
+        
+        return state;
+    }
+    
+    switch(action.type){
+        case 'init': {
+            return {
+                ...initState,
+                mainError: action.payload as AccountMessageTypes
+            };
+        }
+        case 'password': {
+            if(typeof action.payload === 'string'){
+                const password = action.payload.trim();
+                let error: AccountMessageTypes | null = null;
+                
+                if(password.length < 12) {
+                    error = AccountMessages.PWORDLENGTH;
+                }else if(password.length > 30) {
+                    error = AccountMessages.PWORDLENGTH;
+                }
+
+                return {
+                    ...state,
+                    passwordObj: {
+                        value: password,
+                        error
+                    },
+                    canSubmit: checkCanSubmit(error, state.confirmObj.error)
+                };
+            }
+            break;
+        }
+        case 'confirm': {
+            if(typeof action.payload === 'string'){
+                const confirm = action.payload.trim();
+                let error: AccountMessageTypes | null = null;
+
+                if(state.passwordObj.value !== confirm){
+                    error = AccountMessages.PWORDNOMATCH;
+                }
+
+                return {
+                    ...state,
+                    confirmObj: {
+                        value: confirm,
+                        error
+                    },
+                    canSubmit: checkCanSubmit(state.passwordObj.error, error)
+                };
+            }
+            break;
+        }
+        case 'server': {
+            let pwordError = null;
+            let confirmError = null;
+            
+            if(Array.isArray(action.payload)){
+                action.payload.forEach((error) => {
+                    switch(error){
+                        case 1:
+                            pwordError = AccountMessages.PWORDLENGTH;
+                            break;
+                        case 2:
+                            pwordError = AccountMessages.PWORDOLD;
+                            break;
+                        case 3:
+                            confirmError = AccountMessages.PWORDNOMATCH;
+                            break;
+                        default:
+                            break;
+                    }
+                });
+            
+                return {
+                    ...state,
+                    passwordObj: {
+                        ...state.passwordObj,
+                        error: pwordError
+                    },
+                    confirmObj: {
+                        ...state.confirmObj,
+                        error: confirmError
+                    }
+                }
+            }
+            break;
+        }
+    }
+
+    return state;
+};
+
 export default function Edit({modalRef}: Props) {
-    const [formState, setFormState] = useState<AccountResponse>(initState);
+    const [formState, localDispatch] = useReducer(reducer, initState);
 
     const authToken = useAppSelector(selectAuthToken);
 
     const handlePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const password = event.target.value.trim();
-        let error = false
-        let message = '';
-
-        if(password.length < 12) {
-            error = true;
-            message = 'Password too short.';
-        }else if(password.length > 30) {
-            error = true;
-            message = 'Password too long.';
-        }
-
-        setFormState(prevState => ({
-            ...prevState,
-            passwordObj: {
-                value: password,
-                error,
-                message
-            }
-        }));
+        localDispatch({type: 'password', payload: event.target.value});
     };
 
     const handleConfirm = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const confirm = event.target.value.trim();
-        let error = false;
-        let message = '';
-
-        setFormState(prevState => {
-            if(prevState.passwordObj.value !== confirm) {
-                error = true;
-                message = 'Password does not match.';
-            }
-            
-            return {
-                ...prevState,
-                confirmObj: {
-                    value: confirm,
-                    error,
-                    message
-                }
-            }
-        });
+        localDispatch({type: 'confirm', payload: event.target.value});
     };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -81,17 +148,28 @@ export default function Edit({modalRef}: Props) {
 
         if(authToken){
             const accountResponse = await editAccount(authToken, formState.passwordObj.value, formState.confirmObj.value);
+            const errors: number[] = await accountResponse.json();
 
-            if(accountResponse.passwordObj.error || accountResponse.confirmObj.error || accountResponse.mainError){
-                setFormState(accountResponse);
-            }else{
-                setFormState(initState);
+            switch(accountResponse.status){
+                case 200: {
+                    localDispatch({type: 'init'});
+                    modalRef.current?.close();
+                    break;
+                }
+                case 400: {
+                    localDispatch({type: 'server', payload: errors});
+                    break;
+                }
+                default: {
+                    localDispatch({type: 'init', payload: AccountMessages.SERVERERROR});
+                    break;
+                }
             }
         }
     };
 
     const handleClose = () => {
-        setFormState(initState);
+        localDispatch({type: 'init'});
     }
     
     return <Modal modalRef={modalRef} onClose={handleClose} title='Edit Account'>
@@ -111,8 +189,8 @@ export default function Edit({modalRef}: Props) {
                         aria-describedby='passwordHelp'
                     />
                 </div>
-                {formState.passwordObj.error && <p id='passwordHelp' className={styles.errorLabel}>Password must be between 12 and 30 characters</p>}
-                {formState.passwordObj.error && <p className={styles.errorLabel}>{formState.passwordObj.message}</p>}
+                <p className={`${styles.infoLabel} ${styles.label}`}>Password cannot contain spaces</p>
+                {formState.passwordObj.error !== null && <p className={styles.errorLabel}>{formState.passwordObj.error}</p>}
             </div>
 
             <div>
@@ -129,12 +207,12 @@ export default function Edit({modalRef}: Props) {
                         maxLength={30}
                     />
                 </div>
-                {formState.confirmObj.error && <p className={styles.errorLabel}>{formState.confirmObj.message}</p>}
+                {formState.confirmObj.error !== null && <p className={styles.errorLabel}>{formState.confirmObj.error}</p>}
             </div>
 
-            {formState.mainError && <p className={styles.errorLabel}>An error has occurred attempting to edit your account.</p>}
+            {formState.mainError !== null && <p className={styles.errorLabel}>{formState.mainError}</p>}
             
-            <button type='submit' className={styles.formButton}>Update</button>
+            <button type='submit' disabled={!formState.canSubmit} className={styles.formButton}>Update</button>
         </form>
     </Modal>;
 }

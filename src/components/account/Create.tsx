@@ -228,6 +228,7 @@ export default function Create({modalRef}: Props) {
                         autoComplete='off'
                     />
                 </div>
+                <p className={`${styles.infoLabel} ${styles.label}`}>Username cannot contain spaces</p>
                 {formState.usernameObj!.error !== null && <p className={styles.errorLabel}>{formState.usernameObj!.error}</p>}
             </div>
             
@@ -246,6 +247,7 @@ export default function Create({modalRef}: Props) {
                         aria-describedby='passwordHelp'
                     />
                 </div>
+                <p className={`${styles.infoLabel} ${styles.label}`}>Password cannot contain spaces</p>
                 {formState.passwordObj.error !== null && <p className={styles.errorLabel}>{formState.passwordObj.error}</p>}
             </div>
 

@@ -1,4 +1,4 @@
-import type { Difficulty, GameData, MultiGamesData, SortBy, WinLoss, Game, AccountResponse, Player } from './types';
+import type { Difficulty, GameData, MultiGamesData, SortBy, WinLoss, Game, Player } from './types';
 
 const baseURL = 'http://localhost:3100/';
 
@@ -116,7 +116,7 @@ export async function createAccount(username: string, password: string, confirmP
     return response;
 }
 
-export async function editAccount(token: string, password: string, confirmPassword: string): Promise<AccountResponse> {    
+export async function editAccount(token: string, password: string, confirmPassword: string): Promise<Response> {    
     const response = await fetch(`${baseURL}player/changePassword`, {
         method: 'PATCH',
         headers: {
@@ -130,5 +130,5 @@ export async function editAccount(token: string, password: string, confirmPasswo
         })
     });
 
-    return await response.json();
+    return response;
 }

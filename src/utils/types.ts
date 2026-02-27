@@ -77,6 +77,7 @@ export const AccountMessages = {
     UNAMETAKEN: 'Cannot create an account with this username',
     PWORDLENGTH: 'Password must be between 12 and 30 characters',
     PWORDNOMATCH: 'Passwords do not match',
+    PWORDOLD: 'New password cannont be your old password',
     SERVERERROR: 'The server has encountered an error and was unable to process your request'
 } as const;
 

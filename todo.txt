@@ -3,11 +3,12 @@ _______
 
 - Create account might have more than one error for username field, so handle that.
 - Make sure the app handles API errors properly.
+    - Save game needs to indicate to the player if the game saved or not.
+    - Clicking on game details should display the modal with a message that the details cannot be retrieved.
 
 FUTURE
 ______
 
 - Remove the modal for starting a new game and have it display directly on the page instead.
     - When selecting a difficulty option, show an example of the game board so players can see the difference in difficulty.
-- Have the API requests timeout after a period of time.
 - Add a delay to show the loading state of game history.

@@ -120,12 +120,19 @@ export default function Login({modalRef}: Props) {
 
         const loginResponse = await loginRequest(formState.usernameObj.value, formState.passwordObj.value);
 
-        if(loginResponse.status === 201){
-            const player: Player = await loginResponse.json();
-            dispatch(loginThunk(player));
-            modalRef.current?.close();
-        }else{
-            localDispatch({type: 'init', payload: AccountMessages.INVALID});
+        switch(loginResponse.status){
+            case 201: {
+                const player: Player = await loginResponse.json();
+                dispatch(loginThunk(player));
+                modalRef.current?.close();
+                break;
+            }
+            case 401: 
+                localDispatch({type: 'init', payload: AccountMessages.INVALID});
+                break;
+            default:
+                localDispatch({type: 'init', payload: AccountMessages.SERVERERROR});
+                break;
         }
     };
 

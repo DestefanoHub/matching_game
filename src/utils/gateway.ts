@@ -3,132 +3,191 @@ import type { Difficulty, GameData, MultiGamesData, SortBy, WinLoss, Game, Playe
 const baseURL = 'http://localhost:3100/';
 
 export async function getGameInfo(gameId: string): Promise<GameData> {
-    const response = await fetch(`${baseURL}game/getGameInfo/${gameId}`, {
-        method: 'GET',
-        headers: {
-            'Accept': 'application/json'
+    let gameData: GameData = {
+        game: {},
+        stats: {
+            isFirstGame: false,
+            isFirstWin: false,
+            isFirstDiffGame: false,
+            isFirstDiffWin: false,
+            isFastestDiffTime: false
         }
-    });
+    };
+    
+    try{
+        const response = await fetch(`${baseURL}game/getGameInfo/${gameId}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
 
-    return await response.json();
+        gameData = await response.json();
+    }catch(error){
+        console.log(error);
+    }finally{
+        return gameData;
+    }
 }
 
 export async function getRecentGames(playerID: string | undefined): Promise<Game[][]> {
-    const response = await fetch(`${baseURL}game/getRecentGames/${(typeof playerID === 'undefined') ? '' : playerID}`, {
-        method: 'GET',
-        headers: {
-            'Accept': 'application/json'
+    let recentGames: Game[][] = [[]];
+
+    try{
+        const response = await fetch(`${baseURL}game/getRecentGames/${(typeof playerID === 'undefined') ? '' : playerID}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+
+        if(response.status !== 200){
+            return recentGames;
         }
-    });
 
-    if(response.status !== 200){
-        return [[], []];
+        recentGames = await response.json();
+    }catch(error){
+        console.log(error);
+    }finally{
+        return recentGames;
     }
-
-    return await response.json();
 }
 
 export async function getGames(player: string, winLoss: WinLoss, diff: Difficulty, sortBy: SortBy, page: number): Promise<MultiGamesData> {
     const queryParams = new URLSearchParams();
-    const gamesData = {
+    let gamesData: MultiGamesData = {
         games: [],
         totalGames: 0
     };
 
-    queryParams.append('player', player);
-    queryParams.append('winLoss', winLoss);
-    queryParams.append('diff', diff.toString());
-    queryParams.append('sortBy', sortBy);
-    queryParams.append('page', page.toString());
-    
-    const response = await fetch(`${baseURL}game/getGames?${queryParams}`, {
-        method: 'GET',
-        headers: {
-            'Accept': 'application/json'
-        }
-    });
+    try{
+        queryParams.append('player', player);
+        queryParams.append('winLoss', winLoss);
+        queryParams.append('diff', diff.toString());
+        queryParams.append('sortBy', sortBy);
+        queryParams.append('page', page.toString());
+        
+        const response = await fetch(`${baseURL}game/getGames?${queryParams}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
 
-    if(response.status !== 200){
+        if(response.status !== 200){
+            return gamesData;
+        }
+
+        gamesData = await response.json();
+    }catch(error){
+        console.log(error);
+    }finally{
         return gamesData;
     }
-
-    const history = await response.json();
-    gamesData.games = history.games;
-    gamesData.totalGames = history.totalGames;
-
-    return gamesData;
 }
 
-export async function saveGame(player: Player, difficulty: Difficulty, hasWon: boolean, points: number, totalPoints: number, time: number): Promise<GameData> {
-    const response = await fetch(`${baseURL}game/saveGame`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': `Bearer ${player.JWT}`
-        },
-        body: JSON.stringify({
-            player: {
-                pid: player.ID,
-                username: player.username
-            },
-            difficulty,
-            hasWon,
-            points,
-            totalPoints,
-            time: 60 - time,
-        })
+export async function saveGame(player: Player, difficulty: Difficulty, hasWon: boolean, points: number, totalPoints: number, time: number): Promise<Response> {
+    let response = new Response(null, {
+        status: 500
     });
-
-    return await response.json();
+    
+    try{
+        response = await fetch(`${baseURL}game/saveGame`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                // 'Accept': 'application/json',
+                'Authorization': `Bearer ${player.JWT}`
+            },
+            body: JSON.stringify({
+                player: {
+                    pid: player.ID,
+                    username: player.username
+                },
+                difficulty,
+                hasWon,
+                points,
+                totalPoints,
+                time: 60 - time,
+            })
+        });
+    }catch(error){
+        console.log(error);
+    }finally{
+        return response;
+    }
 }
 
 export async function login(username: string, password: string): Promise<Response> {
-    const response = await fetch(`${baseURL}player/login`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify({
-            username,
-            password
-        })
+    let response = new Response(null, {
+        status: 500
     });
-
-    return response;
+    
+    try{
+        response = await fetch(`${baseURL}player/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                username,
+                password
+            })
+        });
+    }catch(error){
+        console.log(error);
+    }finally{
+        return response;
+    }
 }
 
 export async function createAccount(username: string, password: string, confirmPassword: string): Promise<Response> {    
-    const response = await fetch(`${baseURL}player/createAccount`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify({
-            username,
-            password,
-            confirmPassword
-        })
+    let response = new Response(null, {
+        status: 500
     });
-
-    return response;
+    
+    try{
+        response = await fetch(`${baseURL}player/createAccount`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                username,
+                password,
+                confirmPassword
+            })
+        });
+    }catch(error){
+        console.log(error);
+    }finally{
+        return response;
+    }
 }
 
 export async function editAccount(token: string, password: string, confirmPassword: string): Promise<Response> {    
-    const response = await fetch(`${baseURL}player/changePassword`, {
-        method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-            password,
-            confirmPassword
-        })
+    let response = new Response(null, {
+        status: 500
     });
-
-    return response;
+    
+    try{
+        response = await fetch(`${baseURL}player/changePassword`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                password,
+                confirmPassword
+            })
+        });
+    }catch(error){
+        console.log(error);
+    }finally{
+        return response;
+    }
 }

@@ -96,7 +96,6 @@ export async function saveGame(player: Player, difficulty: Difficulty, hasWon: b
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                // 'Accept': 'application/json',
                 'Authorization': `Bearer ${player.JWT}`
             },
             body: JSON.stringify({

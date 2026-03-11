@@ -1,9 +1,11 @@
 import { useAppSelector } from '../../utils/hooks';
 import { type RefObject } from 'react';
 
-import { selectHasWon } from '../../store/gameSlice';
+import { selectHasWon, selectGameSaved } from '../../store/gameSlice';
 
 import Modal from '../generic/Modal';
+
+import styles from './GameOver.module.scss';
 
 type Props = {
     modalRef: RefObject<HTMLDialogElement | null>,
@@ -12,6 +14,7 @@ type Props = {
 
 export default function GameOver({ modalRef, onClose }: Props) {    
     const hasWon = useAppSelector(selectHasWon);
+    const gameSaved = useAppSelector(selectGameSaved);
     
     const winMessage = 'Congrats, you won!';
     const loseMessage = 'Sorry, you lost';
@@ -23,7 +26,10 @@ export default function GameOver({ modalRef, onClose }: Props) {
     };
 
     return <Modal modalRef={modalRef} onClose={onClose} title='Game Over!'>
-        <h2>{hasWon ? winMessage : loseMessage}</h2>
-        <button type='button' onClick={handleClick}>{hasWon ? winNewGameText : loseNewGameText}</button>
+        <div className={styles.display}>
+            <h2>{hasWon ? winMessage : loseMessage}</h2>
+            {!gameSaved && <h2>An error has prevented this game from being saved.</h2>}
+            <button type='button' className={styles.formButton} onClick={handleClick}>{hasWon ? winNewGameText : loseNewGameText}</button>
+        </div>
     </Modal>;
 }

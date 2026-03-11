@@ -1,10 +1,12 @@
 CURRENT
 _______
 
+- Update Game Over Modal styles.
+- Fix Game Setup radio button hover/active styling.
 - Create account might have more than one error for username field, so handle that.
 - Make sure the app handles API errors properly.
-    - Save game needs to indicate to the player if the game saved or not.
     - Clicking on game details should display the modal with a message that the details cannot be retrieved.
+- Can the form info and error labels be replaced with the Banner component?
 
 FUTURE
 ______

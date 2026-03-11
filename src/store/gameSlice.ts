@@ -14,7 +14,7 @@ type State = {
     init: boolean,
     player: string|null,
     difficulty: Difficulty,
-    // savedGame: any
+    gameSaved: boolean
 };
 
 const values = [
@@ -54,7 +54,7 @@ const initialState: State = {
     init: false,
     player: null,
     difficulty: 1,
-    // savedGame: {}
+    gameSaved: false
 };
 
 /**
@@ -195,9 +195,9 @@ export const gameSlice = createSlice({
             state.gameOver = true;
             state.hasWon = false;
         },
-        // setSavedGame: (state, action: PayloadAction<Game>) => {
-        //     state.savedGame = action.payload;
-        // }
+        setGameSaved: (state, action: PayloadAction<boolean>) => {
+            state.gameSaved = action.payload;
+        }
     }
 });
 
@@ -209,8 +209,11 @@ export const scoreThunk = (): AppThunk<void> => async (dispatch, getState) => {
     const sessionState = appState.session;
 
     if(gameState.gameOver){
-        await saveGame(sessionState, gameState.difficulty, gameState.hasWon, gameState.points, gameState.totalPoints, gameState.time);
-        // dispatch(setSavedGame(savedGame));
+        const saveResponse = await saveGame(sessionState, gameState.difficulty, gameState.hasWon, gameState.points, gameState.totalPoints, gameState.time);
+
+        if(saveResponse.status === 201){
+            dispatch(setGameSaved(true));
+        }
     }
 };
 
@@ -224,12 +227,15 @@ export const decrementThunk = (): AppThunk<void> => async (dispatch, getState) =
     //Check if the game time has expired.
     if(!gameState.time){
         dispatch(lose());
-        await saveGame(sessionState, gameState.difficulty, false, gameState.points, gameState.totalPoints, 0)
-        // dispatch(setSavedGame(savedGame));
+        const saveResponse = await saveGame(sessionState, gameState.difficulty, false, gameState.points, gameState.totalPoints, 0)
+       
+         if(saveResponse.status === 201){
+            dispatch(setGameSaved(true));
+        }
     }
 };
 
-export const { init, setup, reveal, decrement, score, lose } = gameSlice.actions;
+export const { init, setup, reveal, decrement, score, lose, setGameSaved } = gameSlice.actions;
 export const selectInit = (state: RootState) => state.game.init;
 export const selectPlayer = (state: RootState) => state.game.player;
 const selectDifficulty = (state: RootState) => state.game.difficulty;
@@ -239,5 +245,5 @@ export const selectActiveTiles = createSelector([selectTiles], (tiles) => getAct
 export const selectHasWon = (state: RootState) => state.game.hasWon;
 export const selectGameOver = (state: RootState) => state.game.gameOver;
 export const selectTime = (state: RootState) => state.game.time;
-// export const selectSavedGame = (state: RootState) => state.game.savedGame;
+export const selectGameSaved = (state: RootState) => state.game.gameSaved;
 export default gameSlice.reducer;

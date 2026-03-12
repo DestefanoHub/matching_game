@@ -1,13 +1,25 @@
 @use '../../common';
 
-.banner{
-    width: 90%;
+@mixin banner($color: common.$c-dark-gray){
     color: common.$c-white;
-    background-color: common.$c-dark-green;
+    background-color: $color;
     border-radius: common.$rounded;
     display: flex;
     flex-direction: row;
     justify-content: center;
+    padding: 0.5em 1em 0.5em 1em;
+}
+
+.info{
+    @include banner();
+}
+
+.success{
+    @include banner($color: common.$c-dark-green);
+}
+
+.error{
+    @include banner($color: common.$c-dark-red);
 }
 
 .text{

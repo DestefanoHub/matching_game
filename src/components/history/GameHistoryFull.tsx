@@ -7,11 +7,11 @@ import type { Difficulty, Game, GameData } from '../../utils/types';
 
 type Props = {
     modalRef: RefObject<HTMLDialogElement | null>,
-    details: GameData
+    details: GameData | symbol
 };
 
 export default function GameHistoryFull({ modalRef, details }: Props) {
-    if(Object.keys(details.game).length){
+    if(typeof details !== 'symbol'){
         const gameDateObj = new Date(details.game.date);
 
         return <Modal modalRef={modalRef} title='Game Details'>
@@ -23,7 +23,9 @@ export default function GameHistoryFull({ modalRef, details }: Props) {
             {details.game.hasWon && <p>Time: {details.game.time} seconds</p>}
             <GameHistoryStats game={details.game as Game} stats={details.stats}/>
         </Modal>;
+    }else{
+        return <Modal modalRef={modalRef} title='Game Details'>
+            <h2>Unable to retrieve game info.</h2>
+        </Modal>
     }
-
-    return;
 }

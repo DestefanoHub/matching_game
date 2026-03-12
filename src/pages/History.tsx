@@ -8,20 +8,12 @@ import GameHistoryRecord from '../components/history/GameHistoryRecord';
 import Paginator from '../components/generic/Paginator';
 import Banner from '../components/generic/Banner';
 import GameHistoryFull from '../components/history/GameHistoryFull';
+import type { GameData } from '../utils/types';
 
 import styles from './History.module.scss';
 
 export default function History() {
-    const [ gameDetails, setGameDetails ] = useState({
-        game: {},
-        stats: {
-            isFirstGame: false,
-            isFirstWin: false,
-            isFirstDiffGame: false,
-            isFirstDiffWin: false,
-            isFastestDiffTime: false
-        }
-    });
+    const [ gameDetails, setGameDetails ] = useState<GameData | symbol>(Symbol());
     const games = useAppSelector(selectGames);
     const isLoaded = useAppSelector(selectIsLoaded);
     const gameDetailsModal = useRef<HTMLDialogElement | null>(null);

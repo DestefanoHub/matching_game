@@ -4,7 +4,7 @@ import GameHistoryRecord from './GameHistoryRecord';
 import GameHistoryFull from './GameHistoryFull';
 import Banner from '../generic/Banner';
 import { getRecentGames, getGameInfo } from '../../utils/gateway';
-import type { Game } from '../../utils/types';
+import type { Game, GameData } from '../../utils/types';
 import { useAppSelector } from '../../utils/hooks';
 import { selectLoginState, selectID } from '../../store/sessionSlice';
 
@@ -18,16 +18,7 @@ export default function RecentGames() {
         allGames: [],
         playerGames: []
     });
-    const [ gameDetails, setGameDetails ] = useState({
-        game: {},
-        stats: {
-            isFirstGame: false,
-            isFirstWin: false,
-            isFirstDiffGame: false,
-            isFirstDiffWin: false,
-            isFastestDiffTime: false
-        }
-    });
+    const [ gameDetails, setGameDetails ] = useState<GameData | symbol>(Symbol());
     const gameDetailsModal = useRef<HTMLDialogElement | null>(null);
     const wasRecordClicked = useRef(false);
     

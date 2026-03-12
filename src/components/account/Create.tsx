@@ -1,6 +1,7 @@
 import { useReducer, type RefObject } from 'react';
 
 import Modal from '../generic/Modal';
+import Banner from '../generic/Banner';
 import { createAccount } from '../../utils/gateway';
 import { loginThunk } from '../../store/sessionSlice';
 import { type AccountResponse, type AccountMessageTypes, AccountMessages, type Player } from '../../utils/types';
@@ -212,7 +213,7 @@ export default function Create({modalRef}: Props) {
     
     return <Modal modalRef={modalRef} onClose={handleClose} title='Create Account'>
         <form onSubmit={handleSubmit} className={styles.form}>
-            <div>
+            <div className={styles.formRow}>
                 <div className={`${styles.inputSection} ${formState.usernameObj!.error && styles.error}`}>
                     <label htmlFor='createUsername'>Username:</label>
                     <input
@@ -228,11 +229,11 @@ export default function Create({modalRef}: Props) {
                         autoComplete='off'
                     />
                 </div>
-                <p className={`${styles.infoLabel} ${styles.label}`}>Username cannot contain spaces</p>
-                {formState.usernameObj!.error !== null && <p className={styles.errorLabel}>{formState.usernameObj!.error}</p>}
+                <Banner text='Username cannot contain spaces' style='info'/>
+                {formState.usernameObj!.error !== null && <Banner text={formState.usernameObj!.error} style='error'/>}
             </div>
             
-            <div>
+            <div className={styles.formRow}>
                 <div className={`${styles.inputSection} ${formState.passwordObj.error && styles.error}`}>
                     <label htmlFor='createPassword'>Password:</label>
                     <input 
@@ -247,11 +248,11 @@ export default function Create({modalRef}: Props) {
                         aria-describedby='passwordHelp'
                     />
                 </div>
-                <p className={`${styles.infoLabel} ${styles.label}`}>Password cannot contain spaces</p>
-                {formState.passwordObj.error !== null && <p className={styles.errorLabel}>{formState.passwordObj.error}</p>}
+                <Banner text='Password cannot contain spaces' style='info'/>
+                {formState.passwordObj.error !== null && <Banner text={formState.passwordObj.error} style='error'/>}
             </div>
 
-            <div>
+            <div className={styles.formRow}>
                 <div className={`${styles.inputSection} ${formState.confirmObj.error && styles.error}`}>
                     <label htmlFor='createConfirm'>Confirm Password:</label>
                     <input 
@@ -265,10 +266,10 @@ export default function Create({modalRef}: Props) {
                         maxLength={30}
                     />
                 </div>
-                {formState.confirmObj.error !== null && <p className={styles.errorLabel}>{formState.confirmObj.error}</p>}
+                {formState.confirmObj.error !== null && <Banner text={formState.confirmObj.error} style='error'/>}
             </div>
 
-            {formState.mainError !== null && <p className={styles.errorLabel}>{formState.mainError}</p>}
+            {formState.mainError !== null && <div className={styles.formRow}><Banner text={formState.mainError} style='error'/></div>}
             
             <button type='submit' disabled={!formState.canSubmit} className={styles.formButton}>Create</button>
         </form>

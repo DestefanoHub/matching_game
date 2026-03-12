@@ -1,6 +1,7 @@
 import { useReducer, type RefObject } from 'react';
 
 import Modal from '../generic/Modal';
+import Banner from '../generic/Banner';
 import { login as loginRequest } from '../../utils/gateway';
 import { loginThunk } from '../../store/sessionSlice';
 import { type Player, type AccountMessageTypes, AccountMessages } from '../../utils/types';
@@ -142,7 +143,7 @@ export default function Login({modalRef}: Props) {
     
     return <Modal modalRef={modalRef} onClose={handleClose} title='Login'>
         <form onSubmit={handleSubmit} className={styles.form}>
-            <div>
+            <div className={styles.formRow}>
                 <div className={`${styles.inputSection} ${formState.usernameObj.error !== null && styles.error}`}>
                     <label htmlFor='loginUsername'>Username:</label>
                     <input
@@ -160,7 +161,7 @@ export default function Login({modalRef}: Props) {
                 </div>
             </div>
             
-            <div>
+            <div className={styles.formRow}>
                 <div className={`${styles.inputSection} ${formState.passwordObj.error !== null && styles.error}`}>
                     <label htmlFor='loginPassword'>Password:</label>
                     <input 
@@ -177,8 +178,8 @@ export default function Login({modalRef}: Props) {
                 </div>
             </div>
 
-            {formState.mainError !== null && <p className={styles.errorLabel}>{formState.mainError}</p>}
-            
+            {formState.mainError !== null && <div className={styles.formRow}><Banner text={formState.mainError} style='error'/></div>}
+           
             <button type='submit' disabled={!formState.canSubmit} className={styles.formButton}>Login</button>
         </form>
     </Modal>;

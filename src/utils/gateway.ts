@@ -2,17 +2,8 @@ import type { Difficulty, GameData, MultiGamesData, SortBy, WinLoss, Game, Playe
 
 const baseURL = 'http://localhost:3100/';
 
-export async function getGameInfo(gameId: string): Promise<GameData> {
-    let gameData: GameData = {
-        game: {},
-        stats: {
-            isFirstGame: false,
-            isFirstWin: false,
-            isFirstDiffGame: false,
-            isFirstDiffWin: false,
-            isFastestDiffTime: false
-        }
-    };
+export async function getGameInfo(gameId: string): Promise<GameData | symbol> {
+    let gameData: GameData | symbol = Symbol();
     
     try{
         const response = await fetch(`${baseURL}game/getGameInfo/${gameId}`, {

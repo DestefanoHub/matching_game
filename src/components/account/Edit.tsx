@@ -1,6 +1,7 @@
 import { useReducer, type RefObject } from 'react';
 
 import Modal from '../generic/Modal';
+import Banner from '../generic/Banner';
 import { editAccount } from '../../utils/gateway';
 import { type AccountResponse, type AccountMessageTypes, AccountMessages } from '../../utils/types';
 import { selectAuthToken } from '../../store/sessionSlice';
@@ -174,7 +175,7 @@ export default function Edit({modalRef}: Props) {
     
     return <Modal modalRef={modalRef} onClose={handleClose} title='Edit Account'>
         <form onSubmit={handleSubmit} className={styles.form}>            
-            <div>
+            <div className={styles.formRow}>
                 <div className={`${styles.inputSection} ${formState.passwordObj.error && styles.error}`}>
                     <label htmlFor='editPassword'>New Password:</label>
                     <input 
@@ -189,11 +190,11 @@ export default function Edit({modalRef}: Props) {
                         aria-describedby='passwordHelp'
                     />
                 </div>
-                <p className={`${styles.infoLabel} ${styles.label}`}>Password cannot contain spaces</p>
-                {formState.passwordObj.error !== null && <p className={styles.errorLabel}>{formState.passwordObj.error}</p>}
+                <Banner text='Password cannot contain spaces' style='info'/>
+                {formState.passwordObj.error !== null && <Banner text={formState.passwordObj.error} style='error'/>}
             </div>
 
-            <div>
+            <div className={styles.formRow}>
                 <div className={`${styles.inputSection} ${formState.confirmObj.error && styles.error}`}>
                     <label htmlFor='editConfirm'>Confirm New Password:</label>
                     <input 
@@ -207,10 +208,10 @@ export default function Edit({modalRef}: Props) {
                         maxLength={30}
                     />
                 </div>
-                {formState.confirmObj.error !== null && <p className={styles.errorLabel}>{formState.confirmObj.error}</p>}
+                {formState.confirmObj.error !== null && <Banner text={formState.confirmObj.error} style='error'/>}
             </div>
 
-            {formState.mainError !== null && <p className={styles.errorLabel}>{formState.mainError}</p>}
+            {formState.mainError !== null && <div className={styles.formRow}><Banner text={formState.mainError} style='error'/></div>}
             
             <button type='submit' disabled={!formState.canSubmit} className={styles.formButton}>Update</button>
         </form>

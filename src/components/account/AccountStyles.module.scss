@@ -10,12 +10,20 @@
     }
 }
 
+.formRow{
+    display: flex;
+    flex-direction: column;
+
+    > *{
+        margin-bottom: 1em;
+    }
+}
+
 .inputSection{
     display: flex;
     flex-direction: row;
     justify-content: right;
     align-items: center;
-    margin-bottom: 2em;
 }
 
 .error{
@@ -31,20 +39,4 @@
     input:focus, input:hover{
         @include common.shadow($color: common.$c-dark-red)
     }
-}
-
-.errorLabel{
-    border-radius: common.$rounded;
-    color: common.$c-white;
-    background-color: common.$c-dark-red;
-    margin: 0 0 2em 0;
-    padding-left: 1em;
-}
-
-.infoLabel{
-    border-radius: common.$rounded;
-    color: common.$c-white;
-    background-color: common.$c-dark-gray;
-    margin: 0 0 2em 0;
-    padding-left: 1em;
 }

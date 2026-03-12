@@ -88,3 +88,5 @@ export type Player = {
     username: string,
     JWT?: string
 };
+
+export type BannerClass = 'info' | 'success' | 'error';

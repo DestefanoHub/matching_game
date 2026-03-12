@@ -145,7 +145,7 @@ export default function Login({modalRef}: Props) {
         <form onSubmit={handleSubmit} className={styles.form}>
             <div className={styles.formRow}>
                 <div className={`${styles.inputSection} ${formState.usernameObj.error !== null && styles.error}`}>
-                    <label htmlFor='loginUsername'>Username:</label>
+                    <label className={styles.label} htmlFor='loginUsername'>Username:</label>
                     <input
                         type='text'
                         id='loginUsername'
@@ -157,13 +157,14 @@ export default function Login({modalRef}: Props) {
                         maxLength={30}
                         aria-describedby='usernameHelp'
                         autoComplete='off'
+                        className={styles.input}
                     />
                 </div>
             </div>
             
             <div className={styles.formRow}>
                 <div className={`${styles.inputSection} ${formState.passwordObj.error !== null && styles.error}`}>
-                    <label htmlFor='loginPassword'>Password:</label>
+                    <label className={styles.label} htmlFor='loginPassword'>Password:</label>
                     <input 
                         type='password'
                         id='loginPassword'
@@ -174,6 +175,7 @@ export default function Login({modalRef}: Props) {
                         minLength={12}
                         maxLength={30}
                         aria-describedby='passwordHelp'
+                        className={styles.input}
                     />
                 </div>
             </div>

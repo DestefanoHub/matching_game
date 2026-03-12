@@ -177,7 +177,7 @@ export default function Edit({modalRef}: Props) {
         <form onSubmit={handleSubmit} className={styles.form}>            
             <div className={styles.formRow}>
                 <div className={`${styles.inputSection} ${formState.passwordObj.error && styles.error}`}>
-                    <label htmlFor='editPassword'>New Password:</label>
+                    <label className={styles.label} htmlFor='editPassword'>New Password:</label>
                     <input 
                         type='password'
                         id='editPassword'
@@ -188,6 +188,7 @@ export default function Edit({modalRef}: Props) {
                         minLength={12}
                         maxLength={30}
                         aria-describedby='passwordHelp'
+                        className={styles.input}
                     />
                 </div>
                 <Banner text='Password cannot contain spaces' style='info'/>
@@ -196,7 +197,7 @@ export default function Edit({modalRef}: Props) {
 
             <div className={styles.formRow}>
                 <div className={`${styles.inputSection} ${formState.confirmObj.error && styles.error}`}>
-                    <label htmlFor='editConfirm'>Confirm New Password:</label>
+                    <label className={styles.label} htmlFor='editConfirm'>Confirm New Password:</label>
                     <input 
                         type='password'
                         id='editConfirm'
@@ -206,6 +207,7 @@ export default function Edit({modalRef}: Props) {
                         required={true}
                         minLength={12}
                         maxLength={30}
+                        className={styles.input}
                     />
                 </div>
                 {formState.confirmObj.error !== null && <Banner text={formState.confirmObj.error} style='error'/>}

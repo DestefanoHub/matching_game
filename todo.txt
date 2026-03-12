@@ -1,7 +1,6 @@
 CURRENT
 _______
 
-- Fix Game Setup radio button hover/active styling.
 - Create account might have more than one error for username field, so handle that.
 
 FUTURE

@@ -38,31 +38,34 @@ export default function GameSearch() {
     };
     
     return <form className={styles.form}>
-        <label htmlFor='search'>Player search:</label>
+        <label className={styles.label} htmlFor='search'>Player search:</label>
         <input 
             type='text'
             id='search'
             value={searchValLocal}
             onChange={handleChangeSearch}
             spellCheck='false'
+            className={styles.input}
         />
         
-        <label htmlFor='wlFilter'>Win/Loss Filter:</label>
+        <label className={styles.label} htmlFor='wlFilter'>Win/Loss Filter:</label>
         <select
             id='wlFilter'
             value={wlFilterVal}
             onChange={handleChangeWLFilter}
+            className={styles.input}
         >
             <option value='a'>All</option>
             <option value='w'>Win</option>
             <option value='l'>Loss</option>
         </select>
         
-        <label htmlFor='diffFilter'>Difficulty Filter:</label>
+        <label className={styles.label} htmlFor='diffFilter'>Difficulty Filter:</label>
         <select
             id='diffFilter'
             value={diffFilterVal}
             onChange={handleChangeDiffFilter}
+            className={styles.input}
         >
             <option value='0'>All</option>
             <option value='1'>Easy</option>
@@ -70,11 +73,12 @@ export default function GameSearch() {
             <option value='3'>Hard</option>
         </select>
         
-        <label htmlFor='sort'>Sorting:</label>
+        <label className={styles.label} htmlFor='sort'>Sorting:</label>
         <select
             id='sort'
             value={sortVal}
             onChange={handleChangeSort}
+            className={styles.input}
         >
             <option value='dd'>Date Desc</option>
             <option value='da'>Date Asc</option>

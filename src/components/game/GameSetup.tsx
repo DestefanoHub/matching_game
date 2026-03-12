@@ -36,36 +36,42 @@ export default function GameSetup({ modalRef }: Props) {
         <form className={styles.form} onSubmit={handleSubmit}>
             <div className={styles.formRow}>
                 <p className={styles.label}>Difficulty: </p>
-                <input 
-                    type='radio'
-                    id='easy'
-                    name='difficulty'
-                    required
-                    value='1'
-                    checked={state.difficulty === 1}
-                    onChange={handleDifficulty}
-                />
-                <label htmlFor='easy'>Easy</label>
+                <div className={styles.radioElement}>
+                    <input 
+                        type='radio'
+                        id='easy'
+                        name='difficulty'
+                        required
+                        value='1'
+                        checked={state.difficulty === 1}
+                        onChange={handleDifficulty}
+                    />
+                    <label className={styles.label} htmlFor='easy'>Easy</label>
+                </div>
                 
-                <input 
-                    type='radio'
-                    id='normal'
-                    name='difficulty'
-                    value='2'
-                    checked={state.difficulty === 2}
-                    onChange={handleDifficulty}
-                />
-                <label htmlFor='normal'>Normal</label>
+                <div className={styles.radioElement}>
+                    <input 
+                        type='radio'
+                        id='normal'
+                        name='difficulty'
+                        value='2'
+                        checked={state.difficulty === 2}
+                        onChange={handleDifficulty}
+                    />
+                    <label className={styles.label} htmlFor='normal'>Normal</label>
+                </div>
 
-                <input
-                    type='radio'
-                    id='hard'
-                    name='difficulty'
-                    value='3'
-                    checked={state.difficulty === 3}
-                    onChange={handleDifficulty}
-                />
-                <label htmlFor='hard'>Hard</label>
+                <div className={styles.radioElement}>
+                    <input
+                        type='radio'
+                        id='hard'
+                        name='difficulty'
+                        value='3'
+                        checked={state.difficulty === 3}
+                        onChange={handleDifficulty}
+                    />
+                    <label className={styles.label} htmlFor='hard'>Hard</label>
+                </div>
             </div>
 
             <button type='submit' className={styles.formButton}>Start Game!</button>

@@ -215,7 +215,7 @@ export default function Create({modalRef}: Props) {
         <form onSubmit={handleSubmit} className={styles.form}>
             <div className={styles.formRow}>
                 <div className={`${styles.inputSection} ${formState.usernameObj!.error && styles.error}`}>
-                    <label htmlFor='createUsername'>Username:</label>
+                    <label className={styles.label} htmlFor='createUsername'>Username:</label>
                     <input
                         type='text'
                         id='createUsername'
@@ -227,6 +227,7 @@ export default function Create({modalRef}: Props) {
                         maxLength={30}
                         aria-describedby='usernameHelp'
                         autoComplete='off'
+                        className={styles.input}
                     />
                 </div>
                 <Banner text='Username cannot contain spaces' style='info'/>
@@ -235,7 +236,7 @@ export default function Create({modalRef}: Props) {
             
             <div className={styles.formRow}>
                 <div className={`${styles.inputSection} ${formState.passwordObj.error && styles.error}`}>
-                    <label htmlFor='createPassword'>Password:</label>
+                    <label className={styles.label} htmlFor='createPassword'>Password:</label>
                     <input 
                         type='password'
                         id='createPassword'
@@ -246,6 +247,7 @@ export default function Create({modalRef}: Props) {
                         minLength={12}
                         maxLength={30}
                         aria-describedby='passwordHelp'
+                        className={styles.input}
                     />
                 </div>
                 <Banner text='Password cannot contain spaces' style='info'/>
@@ -254,7 +256,7 @@ export default function Create({modalRef}: Props) {
 
             <div className={styles.formRow}>
                 <div className={`${styles.inputSection} ${formState.confirmObj.error && styles.error}`}>
-                    <label htmlFor='createConfirm'>Confirm Password:</label>
+                    <label className={styles.label} htmlFor='createConfirm'>Confirm Password:</label>
                     <input 
                         type='password'
                         id='createConfirm'
@@ -264,6 +266,7 @@ export default function Create({modalRef}: Props) {
                         required={true}
                         minLength={12}
                         maxLength={30}
+                        className={styles.input}
                     />
                 </div>
                 {formState.confirmObj.error !== null && <Banner text={formState.confirmObj.error} style='error'/>}

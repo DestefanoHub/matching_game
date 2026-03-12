@@ -21,17 +21,17 @@ type reducerAction = {
 const initState: AccountResponse = {
     passwordObj: {
         value: '',
-        error: null,
+        errors: [],
     },
     confirmObj: {
         value: '',
-        error: null,
+        errors: [],
     },
     mainError: null,
     canSubmit: false
 }
 
-const checkCanSubmit = (passError: AccountMessageTypes | null, confirmError: AccountMessageTypes | null) => passError === null && confirmError === null;
+const checkCanSubmit = (passError: AccountMessageTypes[], confirmError: AccountMessageTypes[]) => !(passError.length && confirmError.length);
 
 const reducer = (state: AccountResponse, action: reducerAction): AccountResponse => {
     if(typeof action.payload === 'undefined'){
@@ -52,21 +52,21 @@ const reducer = (state: AccountResponse, action: reducerAction): AccountResponse
         case 'password': {
             if(typeof action.payload === 'string'){
                 const password = action.payload.trim();
-                let error: AccountMessageTypes | null = null;
+                let errors: AccountMessageTypes[] = [];
                 
                 if(password.length < 12) {
-                    error = AccountMessages.PWORDLENGTH;
+                    errors.push(AccountMessages.PWORDLENGTH);
                 }else if(password.length > 30) {
-                    error = AccountMessages.PWORDLENGTH;
+                    errors.push(AccountMessages.PWORDLENGTH);
                 }
 
                 return {
                     ...state,
                     passwordObj: {
                         value: password,
-                        error
+                        errors
                     },
-                    canSubmit: checkCanSubmit(error, state.confirmObj.error)
+                    canSubmit: checkCanSubmit(errors, state.confirmObj.errors)
                 };
             }
             break;
@@ -74,38 +74,38 @@ const reducer = (state: AccountResponse, action: reducerAction): AccountResponse
         case 'confirm': {
             if(typeof action.payload === 'string'){
                 const confirm = action.payload.trim();
-                let error: AccountMessageTypes | null = null;
+                let errors: AccountMessageTypes[] = [];
 
                 if(state.passwordObj.value !== confirm){
-                    error = AccountMessages.PWORDNOMATCH;
+                    errors.push(AccountMessages.PWORDNOMATCH);
                 }
 
                 return {
                     ...state,
                     confirmObj: {
                         value: confirm,
-                        error
+                        errors
                     },
-                    canSubmit: checkCanSubmit(state.passwordObj.error, error)
+                    canSubmit: checkCanSubmit(state.passwordObj.errors, errors)
                 };
             }
             break;
         }
         case 'server': {
-            let pwordError = null;
-            let confirmError = null;
+            const pwordErrors: AccountMessageTypes[] = [];
+            const confirmErrors: AccountMessageTypes[] = [];
             
             if(Array.isArray(action.payload)){
                 action.payload.forEach((error) => {
                     switch(error){
                         case 1:
-                            pwordError = AccountMessages.PWORDLENGTH;
+                            pwordErrors.push(AccountMessages.PWORDLENGTH);
                             break;
                         case 2:
-                            pwordError = AccountMessages.PWORDOLD;
+                            pwordErrors.push(AccountMessages.PWORDOLD);
                             break;
                         case 3:
-                            confirmError = AccountMessages.PWORDNOMATCH;
+                            confirmErrors.push(AccountMessages.PWORDNOMATCH);
                             break;
                         default:
                             break;
@@ -116,11 +116,11 @@ const reducer = (state: AccountResponse, action: reducerAction): AccountResponse
                     ...state,
                     passwordObj: {
                         ...state.passwordObj,
-                        error: pwordError
+                        errors: pwordErrors
                     },
                     confirmObj: {
                         ...state.confirmObj,
-                        error: confirmError
+                        errors: confirmErrors
                     }
                 }
             }
@@ -172,11 +172,19 @@ export default function Edit({modalRef}: Props) {
     const handleClose = () => {
         localDispatch({type: 'init'});
     }
+
+    const getPasswordErrors = formState.passwordObj.errors.map((error) => {
+        return <Banner text={error} style='error'/>;
+    });
+
+    const getConfirmErrors = formState.confirmObj.errors.map((error) => {
+        return <Banner text={error} style='error'/>;
+    });
     
     return <Modal modalRef={modalRef} onClose={handleClose} title='Edit Account'>
         <form onSubmit={handleSubmit} className={styles.form}>            
             <div className={styles.formRow}>
-                <div className={`${styles.inputSection} ${formState.passwordObj.error && styles.error}`}>
+                <div className={`${styles.inputSection} ${formState.passwordObj.errors.length && styles.error}`}>
                     <label className={styles.label} htmlFor='editPassword'>New Password:</label>
                     <input 
                         type='password'
@@ -192,11 +200,11 @@ export default function Edit({modalRef}: Props) {
                     />
                 </div>
                 <Banner text='Password cannot contain spaces' style='info'/>
-                {formState.passwordObj.error !== null && <Banner text={formState.passwordObj.error} style='error'/>}
+                {formState.passwordObj.errors.length > 0 && getPasswordErrors}
             </div>
 
             <div className={styles.formRow}>
-                <div className={`${styles.inputSection} ${formState.confirmObj.error && styles.error}`}>
+                <div className={`${styles.inputSection} ${formState.confirmObj.errors.length && styles.error}`}>
                     <label className={styles.label} htmlFor='editConfirm'>Confirm New Password:</label>
                     <input 
                         type='password'
@@ -210,7 +218,7 @@ export default function Edit({modalRef}: Props) {
                         className={styles.input}
                     />
                 </div>
-                {formState.confirmObj.error !== null && <Banner text={formState.confirmObj.error} style='error'/>}
+                {formState.confirmObj.errors.length > 0 && getConfirmErrors}
             </div>
 
             {formState.mainError !== null && <div className={styles.formRow}><Banner text={formState.mainError} style='error'/></div>}

@@ -1,11 +1,13 @@
 CURRENT
 _______
 
-- Create account might have more than one error for username field, so handle that.
+- Edit account should display a message on success.
+- Add option to delete account.
 
 FUTURE
 ______
 
 - Remove the modal for starting a new game and have it display directly on the page instead.
     - When selecting a difficulty option, show an example of the game board so players can see the difference in difficulty.
-- Add a delay to show the loading state of game history.
+- Add a delay to show the loading state of anything that uses the API.
+- The game history could show an error message instead of no reults if the server response errors.

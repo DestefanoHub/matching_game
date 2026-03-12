@@ -21,21 +21,21 @@ type reducerAction = {
 const initState: AccountResponse = {
     usernameObj: {
         value: '',
-        error: null,
+        errors: [],
     },
     passwordObj: {
         value: '',
-        error: null,
+        errors: [],
     },
     confirmObj: {
         value: '',
-        error: null,
+        errors: [],
     },
     mainError: null,
     canSubmit: false
 }
 
-const checkCanSubmit = (nameError: AccountMessageTypes | null, passError: AccountMessageTypes | null, confirmError: AccountMessageTypes | null) => nameError === null && passError === null && confirmError === null;
+const checkCanSubmit = (nameErrors: AccountMessageTypes[], passErrors: AccountMessageTypes[], confirmErrors: AccountMessageTypes[]) => !(nameErrors.length && passErrors.length && confirmErrors.length);
 
 const reducer = (state: AccountResponse, action: reducerAction): AccountResponse => {
     if(typeof action.payload === 'undefined'){
@@ -56,21 +56,21 @@ const reducer = (state: AccountResponse, action: reducerAction): AccountResponse
         case 'username': {
             if(typeof action.payload === 'string'){
                 const username = action.payload.trim();
-                let error: AccountMessageTypes | null = null;
+                let errors: AccountMessageTypes[] = [];
 
                 if(username.length < 5) {
-                    error = AccountMessages.UNAMELENGTH;
+                    errors.push(AccountMessages.UNAMELENGTH);
                 }else if(username.length > 30) {
-                    error = AccountMessages.UNAMELENGTH;
+                    errors.push(AccountMessages.UNAMELENGTH);
                 }
 
                 return {
                     ...state,
                     usernameObj: {
                         value: username,
-                        error
+                        errors
                     },
-                    canSubmit: checkCanSubmit(error, state.passwordObj.error, state.confirmObj.error)
+                    canSubmit: checkCanSubmit(errors, state.passwordObj.errors, state.confirmObj.errors)
                 };
             }
             break;
@@ -78,21 +78,21 @@ const reducer = (state: AccountResponse, action: reducerAction): AccountResponse
         case 'password': {
             if(typeof action.payload === 'string'){
                 const password = action.payload.trim();
-                let error: AccountMessageTypes | null = null;
+                let errors: AccountMessageTypes[] = [];
                 
                 if(password.length < 12) {
-                    error = AccountMessages.PWORDLENGTH;
+                    errors.push(AccountMessages.PWORDLENGTH);
                 }else if(password.length > 30) {
-                    error = AccountMessages.PWORDLENGTH;
+                    errors.push(AccountMessages.PWORDLENGTH);
                 }
 
                 return {
                     ...state,
                     passwordObj: {
                         value: password,
-                        error
+                        errors
                     },
-                    canSubmit: checkCanSubmit(state.usernameObj!.error, error, state.confirmObj.error)
+                    canSubmit: checkCanSubmit(state.usernameObj!.errors, errors, state.confirmObj.errors)
                 };
             }
             break;
@@ -100,42 +100,42 @@ const reducer = (state: AccountResponse, action: reducerAction): AccountResponse
         case 'confirm': {
             if(typeof action.payload === 'string'){
                 const confirm = action.payload.trim();
-                let error: AccountMessageTypes | null = null;
+                let errors: AccountMessageTypes[] = [];
 
                 if(state.passwordObj.value !== confirm){
-                    error = AccountMessages.PWORDNOMATCH;
+                    errors.push(AccountMessages.PWORDNOMATCH);
                 }
 
                 return {
                     ...state,
                     confirmObj: {
                         value: confirm,
-                        error
+                        errors
                     },
-                    canSubmit: checkCanSubmit(state.usernameObj!.error, state.passwordObj.error, error)
+                    canSubmit: checkCanSubmit(state.usernameObj!.errors, state.passwordObj.errors, errors)
                 };
             }
             break;
         }
         case 'server': {
-            let unameError = null;
-            let pwordError = null;
-            let confirmError = null;
+            const unameErrors: AccountMessageTypes[] = [];
+            const pwordErrors: AccountMessageTypes[] = [];
+            const confirmErrors: AccountMessageTypes[] = [];
             
             if(Array.isArray(action.payload)){
                 action.payload.forEach((error) => {
                     switch(error){
                         case 1:
-                            unameError = AccountMessages.UNAMELENGTH;
+                            unameErrors.push(AccountMessages.UNAMELENGTH);
                             break;
                         case 2:
-                            unameError = AccountMessages.UNAMETAKEN;
+                            unameErrors.push(AccountMessages.UNAMETAKEN);
                             break;
                         case 3:
-                            pwordError = AccountMessages.PWORDLENGTH;
+                            pwordErrors.push(AccountMessages.PWORDLENGTH);
                             break;
                         case 4:
-                            confirmError = AccountMessages.PWORDNOMATCH;
+                            confirmErrors.push(AccountMessages.PWORDNOMATCH);
                             break;
                         default:
                             break;
@@ -147,15 +147,15 @@ const reducer = (state: AccountResponse, action: reducerAction): AccountResponse
                     usernameObj: {
                         //Specifically define the entire usernameObj here because it is potentially undefined in TS (even though we know it isn't here)
                         value: state.usernameObj!.value,
-                        error: unameError
+                        errors: unameErrors
                     },
                     passwordObj: {
                         ...state.passwordObj,
-                        error: pwordError
+                        errors: pwordErrors
                     },
                     confirmObj: {
                         ...state.confirmObj,
-                        error: confirmError
+                        errors: confirmErrors
                     }
                 }
             }
@@ -210,11 +210,23 @@ export default function Create({modalRef}: Props) {
     const handleClose = () => {
         localDispatch({type: 'init'});
     }
+
+    const getUsernameErrors = formState.usernameObj!.errors.map((error) => {
+        return <Banner text={error} style='error'/>;
+    });
+
+    const getPasswordErrors = formState.passwordObj.errors.map((error) => {
+        return <Banner text={error} style='error'/>;
+    });
+
+    const getConfirmErrors = formState.confirmObj.errors.map((error) => {
+        return <Banner text={error} style='error'/>;
+    });
     
     return <Modal modalRef={modalRef} onClose={handleClose} title='Create Account'>
         <form onSubmit={handleSubmit} className={styles.form}>
             <div className={styles.formRow}>
-                <div className={`${styles.inputSection} ${formState.usernameObj!.error && styles.error}`}>
+                <div className={`${styles.inputSection} ${formState.usernameObj!.errors.length && styles.error}`}>
                     <label className={styles.label} htmlFor='createUsername'>Username:</label>
                     <input
                         type='text'
@@ -231,11 +243,11 @@ export default function Create({modalRef}: Props) {
                     />
                 </div>
                 <Banner text='Username cannot contain spaces' style='info'/>
-                {formState.usernameObj!.error !== null && <Banner text={formState.usernameObj!.error} style='error'/>}
+                {formState.usernameObj!.errors.length > 0 && getUsernameErrors}
             </div>
             
             <div className={styles.formRow}>
-                <div className={`${styles.inputSection} ${formState.passwordObj.error && styles.error}`}>
+                <div className={`${styles.inputSection} ${formState.passwordObj.errors.length && styles.error}`}>
                     <label className={styles.label} htmlFor='createPassword'>Password:</label>
                     <input 
                         type='password'
@@ -251,11 +263,11 @@ export default function Create({modalRef}: Props) {
                     />
                 </div>
                 <Banner text='Password cannot contain spaces' style='info'/>
-                {formState.passwordObj.error !== null && <Banner text={formState.passwordObj.error} style='error'/>}
+                {formState.passwordObj.errors.length > 0 && getPasswordErrors}
             </div>
 
             <div className={styles.formRow}>
-                <div className={`${styles.inputSection} ${formState.confirmObj.error && styles.error}`}>
+                <div className={`${styles.inputSection} ${formState.confirmObj.errors.length && styles.error}`}>
                     <label className={styles.label} htmlFor='createConfirm'>Confirm Password:</label>
                     <input 
                         type='password'
@@ -269,7 +281,7 @@ export default function Create({modalRef}: Props) {
                         className={styles.input}
                     />
                 </div>
-                {formState.confirmObj.error !== null && <Banner text={formState.confirmObj.error} style='error'/>}
+                {formState.confirmObj.errors.length > 0 && getConfirmErrors}
             </div>
 
             {formState.mainError !== null && <div className={styles.formRow}><Banner text={formState.mainError} style='error'/></div>}

@@ -1,4 +1,4 @@
-import { useReducer, type RefObject } from 'react';
+import { useReducer, useRef, type RefObject } from 'react';
 
 import Modal from '../generic/Modal';
 import Banner from '../generic/Banner';
@@ -31,7 +31,7 @@ const initState: AccountResponse = {
     canSubmit: false
 }
 
-const checkCanSubmit = (passError: AccountMessageTypes[], confirmError: AccountMessageTypes[]) => !(passError.length && confirmError.length);
+const checkCanSubmit = (passError: AccountMessageTypes[], confirmError: AccountMessageTypes[]) => !(passError.length || confirmError.length);
 
 const reducer = (state: AccountResponse, action: reducerAction): AccountResponse => {
     if(typeof action.payload === 'undefined'){
@@ -52,21 +52,35 @@ const reducer = (state: AccountResponse, action: reducerAction): AccountResponse
         case 'password': {
             if(typeof action.payload === 'string'){
                 const password = action.payload.trim();
-                let errors: AccountMessageTypes[] = [];
+                let pWordErrors: AccountMessageTypes[] = [];
+                let confirmErrors: AccountMessageTypes[] = [];
                 
+                //Check if the password field is correct by itself.
                 if(password.length < 12) {
-                    errors.push(AccountMessages.PWORDLENGTH);
+                    pWordErrors.push(AccountMessages.PWORDLENGTH);
                 }else if(password.length > 30) {
-                    errors.push(AccountMessages.PWORDLENGTH);
+                    pWordErrors.push(AccountMessages.PWORDLENGTH);
+                }
+
+                /*
+                 * Check if the confirm field is also correct. If this isn't also checked, changing the password after entering
+                 * the confirm field will not generate an error.
+                 */
+                if(password !== state.confirmObj.value){
+                    confirmErrors.push(AccountMessages.PWORDNOMATCH);
                 }
 
                 return {
                     ...state,
                     passwordObj: {
                         value: password,
-                        errors
+                        errors: pWordErrors
                     },
-                    canSubmit: checkCanSubmit(errors, state.confirmObj.errors)
+                    confirmObj: {
+                        ...state.confirmObj,
+                        errors: confirmErrors
+                    },
+                    canSubmit: checkCanSubmit(pWordErrors, confirmErrors)
                 };
             }
             break;
@@ -75,7 +89,7 @@ const reducer = (state: AccountResponse, action: reducerAction): AccountResponse
             if(typeof action.payload === 'string'){
                 const confirm = action.payload.trim();
                 let errors: AccountMessageTypes[] = [];
-
+                               
                 if(state.passwordObj.value !== confirm){
                     errors.push(AccountMessages.PWORDNOMATCH);
                 }
@@ -133,6 +147,7 @@ const reducer = (state: AccountResponse, action: reducerAction): AccountResponse
 
 export default function Edit({modalRef}: Props) {
     const [formState, localDispatch] = useReducer(reducer, initState);
+    const successfulEdit = useRef(false);
 
     const authToken = useAppSelector(selectAuthToken);
 
@@ -154,7 +169,8 @@ export default function Edit({modalRef}: Props) {
             switch(accountResponse.status){
                 case 200: {
                     localDispatch({type: 'init'});
-                    modalRef.current?.close();
+                    // modalRef.current?.close();
+                    successfulEdit.current = true;
                     break;
                 }
                 case 400: {
@@ -170,6 +186,7 @@ export default function Edit({modalRef}: Props) {
     };
 
     const handleClose = () => {
+        successfulEdit.current = false;
         localDispatch({type: 'init'});
     }
 
@@ -222,6 +239,7 @@ export default function Edit({modalRef}: Props) {
             </div>
 
             {formState.mainError !== null && <div className={styles.formRow}><Banner text={formState.mainError} style='error'/></div>}
+            {successfulEdit.current && <div className={styles.formRow}><Banner text='Password changed' style='success'/></div>}
             
             <button type='submit' disabled={!formState.canSubmit} className={styles.formButton}>Update</button>
         </form>

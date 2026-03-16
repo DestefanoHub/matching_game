@@ -35,7 +35,7 @@ const initState: AccountResponse = {
     canSubmit: false
 }
 
-const checkCanSubmit = (nameErrors: AccountMessageTypes[], passErrors: AccountMessageTypes[], confirmErrors: AccountMessageTypes[]) => !(nameErrors.length && passErrors.length && confirmErrors.length);
+const checkCanSubmit = (nameErrors: AccountMessageTypes[], passErrors: AccountMessageTypes[], confirmErrors: AccountMessageTypes[]) => !(nameErrors.length || passErrors.length || confirmErrors.length);
 
 const reducer = (state: AccountResponse, action: reducerAction): AccountResponse => {
     if(typeof action.payload === 'undefined'){
@@ -78,21 +78,35 @@ const reducer = (state: AccountResponse, action: reducerAction): AccountResponse
         case 'password': {
             if(typeof action.payload === 'string'){
                 const password = action.payload.trim();
-                let errors: AccountMessageTypes[] = [];
+                let pWordErrors: AccountMessageTypes[] = [];
+                let confirmErrors: AccountMessageTypes[] = [];
                 
+                //Check if the password field is correct by itself.
                 if(password.length < 12) {
-                    errors.push(AccountMessages.PWORDLENGTH);
+                    pWordErrors.push(AccountMessages.PWORDLENGTH);
                 }else if(password.length > 30) {
-                    errors.push(AccountMessages.PWORDLENGTH);
+                    pWordErrors.push(AccountMessages.PWORDLENGTH);
+                }
+
+                /*
+                 * Check if the confirm field is also correct. If this isn't also checked, changing the password after entering
+                 * the confirm field will not generate an error.
+                 */
+                if(password !== state.confirmObj.value){
+                    confirmErrors.push(AccountMessages.PWORDNOMATCH);
                 }
 
                 return {
                     ...state,
                     passwordObj: {
                         value: password,
-                        errors
+                        errors: pWordErrors
                     },
-                    canSubmit: checkCanSubmit(state.usernameObj!.errors, errors, state.confirmObj.errors)
+                    confirmObj: {
+                        ...state.confirmObj,
+                        errors: confirmErrors
+                    },
+                    canSubmit: checkCanSubmit(state.usernameObj!.errors, pWordErrors, confirmErrors)
                 };
             }
             break;

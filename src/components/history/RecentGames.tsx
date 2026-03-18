@@ -46,19 +46,18 @@ export default function RecentGames() {
         wasRecordClicked.current = true;
     };
 
-    const allRecentGames = recentGamesData.allGames.map((game, index) => {
-        return <GameHistoryRecord key={index} game={game} onClick={handleClick}/>;
-    });
-    const playerRecentGames = recentGamesData.playerGames.map((game, index) => {
-        return <GameHistoryRecord key={index} game={game} onClick={handleClick}/>;
-    });
+    const showRecentGames = (games: Game[]) => {
+        return games.map((game, index) => {
+            return <GameHistoryRecord key={index} game={game} onClick={handleClick}/>;
+        });
+    };
     
     return <Fragment>
         <GameHistoryFull modalRef={gameDetailsModal} details={gameDetails}/>
         <div className={styles.container}>
             {!recentGamesData.isLoaded && <Banner text='Loading...'/>}
-            {recentGamesData.isLoaded && <div className={styles.list}><h1>Top 5 Recent Games:</h1>{recentGamesData.allGames.length ? <div>{allRecentGames}</div> : <Banner text='No games...yet!'/>}</div>}
-            {(recentGamesData.isLoaded && isLoggedIn) && <div className={styles.list}><h1>Your Top 5 Recent Games:</h1>{recentGamesData.playerGames.length ? <div>{playerRecentGames}</div> : <Banner text='No games...yet!'/>}</div>}
+            {recentGamesData.isLoaded && <div className={styles.list}><h1>Top 5 Recent Games:</h1>{recentGamesData.allGames.length ? <div>{showRecentGames(recentGamesData.allGames)}</div> : <Banner text='No games...yet!'/>}</div>}
+            {(recentGamesData.isLoaded && isLoggedIn) && <div className={styles.list}><h1>Your Top 5 Recent Games:</h1>{recentGamesData.playerGames.length ? <div>{showRecentGames(recentGamesData.playerGames)}</div> : <Banner text='No games...yet!'/>}</div>}
         </div>
     </Fragment>;
 }

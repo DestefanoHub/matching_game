@@ -47,6 +47,10 @@ const initState: LoginResponse = {
 const checkCanSubmit = (nameError: AccountMessageTypes | null, passError: AccountMessageTypes | null) => nameError === null && passError === null;
 
 const reducer = (state: LoginResponse, action: reducerAction): LoginResponse => {
+    /*
+    * If there is no payload, just return the state as-is, unless the action is 'init'.
+    * This short-circuts the processing of the switch statement since payload is almost always required.
+    */
     if(typeof action.payload === 'undefined'){
         if(action.type === 'init'){
             return initState;

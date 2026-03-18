@@ -15,7 +15,7 @@ type Props = {
 
 type reducerAction = {
     type: 'init' | 'username' | 'password' | 'confirm' | 'server',
-    payload?: string | number[]
+    payload?: { value: string, error: boolean } | number[]
 }
 
 const initState: AccountResponse = {
@@ -32,12 +32,17 @@ const initState: AccountResponse = {
         errors: [],
     },
     mainError: null,
+    mainSuccess: null,
     canSubmit: false
 }
 
 const checkCanSubmit = (nameErrors: AccountMessageTypes[], passErrors: AccountMessageTypes[], confirmErrors: AccountMessageTypes[]) => !(nameErrors.length || passErrors.length || confirmErrors.length);
 
 const reducer = (state: AccountResponse, action: reducerAction): AccountResponse => {
+    /*
+    * If there is no payload, just return the state as-is, unless the action is 'init'.
+    * This short-circuts the processing of the switch statement since payload is almost always required.
+    */
     if(typeof action.payload === 'undefined'){
         if(action.type === 'init'){
             return initState;
@@ -48,15 +53,18 @@ const reducer = (state: AccountResponse, action: reducerAction): AccountResponse
     
     switch(action.type){
         case 'init': {
-            return {
-                ...initState,
-                mainError: action.payload as AccountMessageTypes
-            };
+            if(!Array.isArray(action.payload)){
+                return {
+                    ...initState,
+                    mainError: action.payload.value as AccountMessageTypes
+                };
+            }
+            break;
         }
         case 'username': {
-            if(typeof action.payload === 'string'){
-                const username = action.payload.trim();
-                let errors: AccountMessageTypes[] = [];
+            if(!Array.isArray(action.payload)){
+                const username = action.payload.value.trim();
+                const errors: AccountMessageTypes[] = [];
 
                 if(username.length < 5) {
                     errors.push(AccountMessages.UNAMELENGTH);
@@ -76,10 +84,10 @@ const reducer = (state: AccountResponse, action: reducerAction): AccountResponse
             break;
         }
         case 'password': {
-            if(typeof action.payload === 'string'){
-                const password = action.payload.trim();
-                let pWordErrors: AccountMessageTypes[] = [];
-                let confirmErrors: AccountMessageTypes[] = [];
+            if(!Array.isArray(action.payload)){
+                const password = action.payload.value.trim();
+                const pWordErrors: AccountMessageTypes[] = [];
+                const confirmErrors: AccountMessageTypes[] = [];
                 
                 //Check if the password field is correct by itself.
                 if(password.length < 12) {
@@ -112,9 +120,9 @@ const reducer = (state: AccountResponse, action: reducerAction): AccountResponse
             break;
         }
         case 'confirm': {
-            if(typeof action.payload === 'string'){
-                const confirm = action.payload.trim();
-                let errors: AccountMessageTypes[] = [];
+            if(!Array.isArray(action.payload)){
+                const confirm = action.payload.value.trim();
+                const errors: AccountMessageTypes[] = [];
 
                 if(state.passwordObj.value !== confirm){
                     errors.push(AccountMessages.PWORDNOMATCH);
@@ -159,7 +167,7 @@ const reducer = (state: AccountResponse, action: reducerAction): AccountResponse
                 return {
                     ...state,
                     usernameObj: {
-                        //Specifically define the entire usernameObj here because it is potentially undefined in TS (even though we know it isn't here)
+                        //Specifically define the entire usernameObj here because it is potentially undefined in TS (even though we know it is defined here)
                         value: state.usernameObj!.value,
                         errors: unameErrors
                     },
@@ -177,6 +185,10 @@ const reducer = (state: AccountResponse, action: reducerAction): AccountResponse
         }
     }
 
+    /*
+    * Since the switch statements only return a new state if the payload is of a certain datatype, this final return prevents
+    * each statement from having an ...else{ return state } block.
+    */
     return state;
 };
 
@@ -186,15 +198,15 @@ export default function Create({modalRef}: Props) {
     const dispatch = useAppDispatch();
 
     const handleUsername = (event: React.ChangeEvent<HTMLInputElement>) => {
-        localDispatch({type: 'username', payload: event.target.value});
+        localDispatch({type: 'username', payload: {value: event.target.value, error: false}});
     };
 
     const handlePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
-        localDispatch({type: 'password', payload: event.target.value});
+        localDispatch({type: 'password', payload: {value: event.target.value, error: false}});
     };
 
     const handleConfirm = (event: React.ChangeEvent<HTMLInputElement>) => {
-        localDispatch({type: 'confirm', payload: event.target.value});
+        localDispatch({type: 'confirm', payload: {value: event.target.value, error: false}});
     };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -215,7 +227,7 @@ export default function Create({modalRef}: Props) {
                 break;
             }
             default: {
-                localDispatch({type: 'init', payload: AccountMessages.SERVERERROR});
+                localDispatch({type: 'init', payload: {value: AccountMessages.SERVERERROR, error: true}});
                 break;
             }
         }
@@ -225,17 +237,11 @@ export default function Create({modalRef}: Props) {
         localDispatch({type: 'init'});
     }
 
-    const getUsernameErrors = formState.usernameObj!.errors.map((error) => {
-        return <Banner text={error} style='error'/>;
-    });
-
-    const getPasswordErrors = formState.passwordObj.errors.map((error) => {
-        return <Banner text={error} style='error'/>;
-    });
-
-    const getConfirmErrors = formState.confirmObj.errors.map((error) => {
-        return <Banner text={error} style='error'/>;
-    });
+    const getErrors = (errors: AccountMessageTypes[]) => {
+        return errors.map((error) => {
+            return <Banner text={error} style='error'/>;
+        });
+    };
     
     return <Modal modalRef={modalRef} onClose={handleClose} title='Create Account'>
         <form onSubmit={handleSubmit} className={styles.form}>
@@ -257,7 +263,7 @@ export default function Create({modalRef}: Props) {
                     />
                 </div>
                 <Banner text='Username cannot contain spaces' style='info'/>
-                {formState.usernameObj!.errors.length > 0 && getUsernameErrors}
+                {formState.usernameObj!.errors.length > 0 && getErrors(formState.usernameObj!.errors)}
             </div>
             
             <div className={styles.formRow}>
@@ -277,7 +283,7 @@ export default function Create({modalRef}: Props) {
                     />
                 </div>
                 <Banner text='Password cannot contain spaces' style='info'/>
-                {formState.passwordObj.errors.length > 0 && getPasswordErrors}
+                {formState.passwordObj.errors.length > 0 && getErrors(formState.passwordObj.errors)}
             </div>
 
             <div className={styles.formRow}>
@@ -295,7 +301,7 @@ export default function Create({modalRef}: Props) {
                         className={styles.input}
                     />
                 </div>
-                {formState.confirmObj.errors.length > 0 && getConfirmErrors}
+                {formState.confirmObj.errors.length > 0 && getErrors(formState.confirmObj.errors)}
             </div>
 
             {formState.mainError !== null && <div className={styles.formRow}><Banner text={formState.mainError} style='error'/></div>}

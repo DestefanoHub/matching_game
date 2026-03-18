@@ -1,4 +1,4 @@
-import { useReducer, useRef, type RefObject } from 'react';
+import { useReducer, type RefObject } from 'react';
 
 import Modal from '../generic/Modal';
 import Banner from '../generic/Banner';
@@ -15,7 +15,7 @@ type Props = {
 
 type reducerAction = {
     type: 'init' | 'password' | 'confirm' | 'server',
-    payload?: string | number[]
+    payload?: { value: string, error: boolean } | number[]
 }
 
 const initState: AccountResponse = {
@@ -28,12 +28,17 @@ const initState: AccountResponse = {
         errors: [],
     },
     mainError: null,
+    mainSuccess: null,
     canSubmit: false
 }
 
 const checkCanSubmit = (passError: AccountMessageTypes[], confirmError: AccountMessageTypes[]) => !(passError.length || confirmError.length);
 
 const reducer = (state: AccountResponse, action: reducerAction): AccountResponse => {
+    /*
+    * If there is no payload, just return the state as-is, unless the action is 'init'.
+    * This short-circuts the processing of the switch statement since payload is almost always required.
+    */
     if(typeof action.payload === 'undefined'){
         if(action.type === 'init'){
             return initState;
@@ -44,16 +49,26 @@ const reducer = (state: AccountResponse, action: reducerAction): AccountResponse
     
     switch(action.type){
         case 'init': {
-            return {
-                ...initState,
-                mainError: action.payload as AccountMessageTypes
-            };
+            if(!Array.isArray(action.payload)){
+                if(action.payload.error === true){
+                    return {
+                        ...initState,
+                        mainError: action.payload.value as AccountMessageTypes
+                    };
+                }else{
+                    return {
+                        ...initState,
+                        mainSuccess: action.payload.value as AccountMessageTypes
+                    };
+                }
+            }
+            break;
         }
         case 'password': {
-            if(typeof action.payload === 'string'){
-                const password = action.payload.trim();
-                let pWordErrors: AccountMessageTypes[] = [];
-                let confirmErrors: AccountMessageTypes[] = [];
+            if(!Array.isArray(action.payload)){
+                const password = action.payload.value.trim();
+                const pWordErrors: AccountMessageTypes[] = [];
+                const confirmErrors: AccountMessageTypes[] = [];
                 
                 //Check if the password field is correct by itself.
                 if(password.length < 12) {
@@ -86,9 +101,9 @@ const reducer = (state: AccountResponse, action: reducerAction): AccountResponse
             break;
         }
         case 'confirm': {
-            if(typeof action.payload === 'string'){
-                const confirm = action.payload.trim();
-                let errors: AccountMessageTypes[] = [];
+            if(!Array.isArray(action.payload)){
+                const confirm = action.payload.value.trim();
+                const errors: AccountMessageTypes[] = [];
                                
                 if(state.passwordObj.value !== confirm){
                     errors.push(AccountMessages.PWORDNOMATCH);
@@ -142,21 +157,24 @@ const reducer = (state: AccountResponse, action: reducerAction): AccountResponse
         }
     }
 
+    /*
+    * Since the switch statements only return a new state if the payload is of a certain datatype, this final return prevents
+    * each statement from having an ...else{ return state } block.
+    */
     return state;
 };
 
 export default function Edit({modalRef}: Props) {
     const [formState, localDispatch] = useReducer(reducer, initState);
-    const successfulEdit = useRef(false);
 
     const authToken = useAppSelector(selectAuthToken);
 
     const handlePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
-        localDispatch({type: 'password', payload: event.target.value});
+        localDispatch({type: 'password', payload: {value: event.target.value, error: false}});
     };
 
     const handleConfirm = (event: React.ChangeEvent<HTMLInputElement>) => {
-        localDispatch({type: 'confirm', payload: event.target.value});
+        localDispatch({type: 'confirm', payload: {value: event.target.value, error: false}});
     };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -168,9 +186,7 @@ export default function Edit({modalRef}: Props) {
 
             switch(accountResponse.status){
                 case 200: {
-                    localDispatch({type: 'init'});
-                    // modalRef.current?.close();
-                    successfulEdit.current = true;
+                    localDispatch({type: 'init', payload: {error: false, value: AccountMessages.PWORDCHANGED}});
                     break;
                 }
                 case 400: {
@@ -178,7 +194,7 @@ export default function Edit({modalRef}: Props) {
                     break;
                 }
                 default: {
-                    localDispatch({type: 'init', payload: AccountMessages.SERVERERROR});
+                    localDispatch({type: 'init', payload: {error: true, value: AccountMessages.SERVERERROR}});
                     break;
                 }
             }
@@ -186,17 +202,14 @@ export default function Edit({modalRef}: Props) {
     };
 
     const handleClose = () => {
-        successfulEdit.current = false;
         localDispatch({type: 'init'});
     }
 
-    const getPasswordErrors = formState.passwordObj.errors.map((error) => {
-        return <Banner text={error} style='error'/>;
-    });
-
-    const getConfirmErrors = formState.confirmObj.errors.map((error) => {
-        return <Banner text={error} style='error'/>;
-    });
+    const getErrors = (errors: AccountMessageTypes[]) => {
+        return errors.map((error) => {
+            return <Banner text={error} style='error'/>;
+        });
+    };
     
     return <Modal modalRef={modalRef} onClose={handleClose} title='Edit Account'>
         <form onSubmit={handleSubmit} className={styles.form}>            
@@ -217,7 +230,7 @@ export default function Edit({modalRef}: Props) {
                     />
                 </div>
                 <Banner text='Password cannot contain spaces' style='info'/>
-                {formState.passwordObj.errors.length > 0 && getPasswordErrors}
+                {formState.passwordObj.errors.length > 0 && getErrors(formState.passwordObj.errors)}
             </div>
 
             <div className={styles.formRow}>
@@ -235,11 +248,11 @@ export default function Edit({modalRef}: Props) {
                         className={styles.input}
                     />
                 </div>
-                {formState.confirmObj.errors.length > 0 && getConfirmErrors}
+                {formState.confirmObj.errors.length > 0 && getErrors(formState.confirmObj.errors)}
             </div>
 
             {formState.mainError !== null && <div className={styles.formRow}><Banner text={formState.mainError} style='error'/></div>}
-            {successfulEdit.current && <div className={styles.formRow}><Banner text='Password changed' style='success'/></div>}
+            {formState.mainSuccess !== null && <div className={styles.formRow}><Banner text={formState.mainSuccess} style='success'/></div>}
             
             <button type='submit' disabled={!formState.canSubmit} className={styles.formButton}>Update</button>
         </form>

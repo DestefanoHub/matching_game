@@ -68,6 +68,7 @@ export type AccountResponse = {
         errors: AccountMessageTypes[]
     },
     mainError: AccountMessageTypes | null,
+    mainSuccess: AccountMessageTypes | null,
     canSubmit: boolean
 };
 
@@ -78,7 +79,8 @@ export const AccountMessages = {
     PWORDLENGTH: 'Password must be between 12 and 30 characters',
     PWORDNOMATCH: 'Passwords do not match',
     PWORDOLD: 'New password cannont be your old password',
-    SERVERERROR: 'The server has encountered an error and was unable to process your request'
+    SERVERERROR: 'The server has encountered an error and was unable to process your request',
+    PWORDCHANGED: 'Password successfully updated'
 } as const;
 
 export type AccountMessageTypes = typeof AccountMessages[keyof typeof AccountMessages];

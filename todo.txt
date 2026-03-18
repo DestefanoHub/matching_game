@@ -7,6 +7,7 @@ _______
 FUTURE
 ______
 
+- App should be aware of when the JWT expires, perform a log out, and present a a specific message to the user.
 - Remove the modal for starting a new game and have it display directly on the page instead.
     - When selecting a difficulty option, show an example of the game board so players can see the difference in difficulty.
 - Add a delay to show the loading state of anything that uses the API.

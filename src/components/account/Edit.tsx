@@ -3,7 +3,7 @@ import { useReducer, type RefObject } from 'react';
 import Modal from '../generic/Modal';
 import Banner from '../generic/Banner';
 import { editAccount } from '../../utils/gateway';
-import { type AccountResponse, type AccountMessageTypes, AccountMessages } from '../../utils/types';
+import { type AccountResponse, type AccountMessageTypes, type AccountField, AccountMessages } from '../../utils/types';
 import { selectAuthToken } from '../../store/sessionSlice';
 import { useAppSelector } from '../../utils/hooks';
 
@@ -32,7 +32,7 @@ const initState: AccountResponse = {
     canSubmit: false
 }
 
-const checkCanSubmit = (passError: AccountMessageTypes[], confirmError: AccountMessageTypes[]) => !(passError.length || confirmError.length);
+const checkCanSubmit = (passField: AccountField, confirmField: AccountField) => !((passField.value.length === 0 || passField.errors.length !== 0) || (confirmField.value.length === 0 ||confirmField.errors.length !== 0));
 
 const reducer = (state: AccountResponse, action: reducerAction): AccountResponse => {
     /*
@@ -95,7 +95,7 @@ const reducer = (state: AccountResponse, action: reducerAction): AccountResponse
                         ...state.confirmObj,
                         errors: confirmErrors
                     },
-                    canSubmit: checkCanSubmit(pWordErrors, confirmErrors)
+                    canSubmit: checkCanSubmit({value: password, errors: pWordErrors}, {value: state.confirmObj.value, errors: confirmErrors})
                 };
             }
             break;
@@ -115,7 +115,7 @@ const reducer = (state: AccountResponse, action: reducerAction): AccountResponse
                         value: confirm,
                         errors
                     },
-                    canSubmit: checkCanSubmit(state.passwordObj.errors, errors)
+                    canSubmit: checkCanSubmit(state.passwordObj, {value: confirm, errors})
                 };
             }
             break;

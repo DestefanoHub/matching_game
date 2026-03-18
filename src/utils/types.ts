@@ -54,19 +54,15 @@ export type MultiGamesData = {
     totalGames: number
 };
 
+export type AccountField = {
+    value: string,
+    errors: AccountMessageTypes[]
+};
+
 export type AccountResponse = {
-    usernameObj?: {
-        value: string,
-        errors: AccountMessageTypes[]
-    },
-    passwordObj: {
-        value: string,
-        errors: AccountMessageTypes[]
-    },
-    confirmObj: {
-        value: string,
-        errors: AccountMessageTypes[]
-    },
+    usernameObj?: AccountField,
+    passwordObj: AccountField,
+    confirmObj: AccountField,
     mainError: AccountMessageTypes | null,
     mainSuccess: AccountMessageTypes | null,
     canSubmit: boolean

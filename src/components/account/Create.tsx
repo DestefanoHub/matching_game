@@ -4,7 +4,7 @@ import Modal from '../generic/Modal';
 import Banner from '../generic/Banner';
 import { createAccount } from '../../utils/gateway';
 import { loginThunk } from '../../store/sessionSlice';
-import { type AccountResponse, type AccountMessageTypes, AccountMessages, type Player } from '../../utils/types';
+import { type AccountResponse, type AccountMessageTypes, type AccountField, AccountMessages, type Player } from '../../utils/types';
 import { useAppDispatch } from '../../utils/hooks';
 
 import styles from './AccountStyles.module.scss';
@@ -36,7 +36,7 @@ const initState: AccountResponse = {
     canSubmit: false
 }
 
-const checkCanSubmit = (nameErrors: AccountMessageTypes[], passErrors: AccountMessageTypes[], confirmErrors: AccountMessageTypes[]) => !(nameErrors.length || passErrors.length || confirmErrors.length);
+const checkCanSubmit = (nameField: AccountField, passField: AccountField, confirmField: AccountField) => !((nameField.value.length === 0 || nameField.errors.length !== 0) || (passField.value.length === 0 || passField.errors.length !== 0) || (confirmField.value.length === 0 || confirmField.errors.length !== 0));
 
 const reducer = (state: AccountResponse, action: reducerAction): AccountResponse => {
     /*
@@ -78,7 +78,7 @@ const reducer = (state: AccountResponse, action: reducerAction): AccountResponse
                         value: username,
                         errors
                     },
-                    canSubmit: checkCanSubmit(errors, state.passwordObj.errors, state.confirmObj.errors)
+                    canSubmit: checkCanSubmit({value: username, errors}, state.passwordObj, state.confirmObj)
                 };
             }
             break;
@@ -114,7 +114,7 @@ const reducer = (state: AccountResponse, action: reducerAction): AccountResponse
                         ...state.confirmObj,
                         errors: confirmErrors
                     },
-                    canSubmit: checkCanSubmit(state.usernameObj!.errors, pWordErrors, confirmErrors)
+                    canSubmit: checkCanSubmit(state.usernameObj!, {value: password, errors: pWordErrors}, {value: state.confirmObj.value, errors: confirmErrors})
                 };
             }
             break;
@@ -134,7 +134,7 @@ const reducer = (state: AccountResponse, action: reducerAction): AccountResponse
                         value: confirm,
                         errors
                     },
-                    canSubmit: checkCanSubmit(state.usernameObj!.errors, state.passwordObj.errors, errors)
+                    canSubmit: checkCanSubmit(state.usernameObj!, state.passwordObj, {value: confirm, errors})
                 };
             }
             break;

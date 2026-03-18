@@ -1,7 +1,6 @@
 CURRENT
 _______
 
-- Edit account should display a message on success.
 - Add option to delete account.
 
 FUTURE

@@ -1,7 +1,8 @@
-import { useReducer, type RefObject } from 'react';
+import { useState, useReducer, type RefObject } from 'react';
 
 import Modal from '../generic/Modal';
 import Banner from '../generic/Banner';
+import Delete from './Delete';
 import { editAccount } from '../../utils/gateway';
 import { type AccountResponse, type AccountMessageTypes, type AccountField, AccountMessages } from '../../utils/types';
 import { selectAuthToken } from '../../store/sessionSlice';
@@ -10,7 +11,7 @@ import { useAppSelector } from '../../utils/hooks';
 import styles from './AccountStyles.module.scss';
 
 type Props = {
-    modalRef: RefObject<HTMLDialogElement | null>,
+    modalRef: RefObject<HTMLDialogElement | null>
 };
 
 type reducerAction = {
@@ -165,6 +166,7 @@ const reducer = (state: AccountResponse, action: reducerAction): AccountResponse
 };
 
 export default function Edit({modalRef}: Props) {
+    const [editMode, setEditMode] = useState(true);
     const [formState, localDispatch] = useReducer(reducer, initState);
 
     const authToken = useAppSelector(selectAuthToken);
@@ -201,7 +203,12 @@ export default function Edit({modalRef}: Props) {
         }
     };
 
+    const handleDelete = () => {
+        setEditMode(false);
+    };
+
     const handleClose = () => {
+        setEditMode(true);
         localDispatch({type: 'init'});
     }
 
@@ -210,51 +217,59 @@ export default function Edit({modalRef}: Props) {
             return <Banner text={error} style='error'/>;
         });
     };
+
+    const modalTitle = (editMode) ? 'Edit Account' : 'Delete Account';
     
-    return <Modal modalRef={modalRef} onClose={handleClose} title='Edit Account'>
-        <form onSubmit={handleSubmit} className={styles.form}>            
-            <div className={styles.formRow}>
-                <div className={`${styles.inputSection} ${formState.passwordObj.errors.length && styles.error}`}>
-                    <label className={styles.label} htmlFor='editPassword'>New Password:</label>
-                    <input 
-                        type='password'
-                        id='editPassword'
-                        value={formState.passwordObj.value}
-                        onChange={handlePassword}
-                        spellCheck='false'
-                        required={true}
-                        minLength={12}
-                        maxLength={30}
-                        aria-describedby='passwordHelp'
-                        className={styles.input}
-                    />
+    return <Modal modalRef={modalRef} onClose={handleClose} title={modalTitle}>
+        {editMode &&
+            <form onSubmit={handleSubmit} className={styles.form}>            
+                <div className={styles.formRow}>
+                    <div className={`${styles.inputSection} ${formState.passwordObj.errors.length && styles.error}`}>
+                        <label className={styles.label} htmlFor='editPassword'>New Password:</label>
+                        <input 
+                            type='password'
+                            id='editPassword'
+                            value={formState.passwordObj.value}
+                            onChange={handlePassword}
+                            spellCheck='false'
+                            required={true}
+                            minLength={12}
+                            maxLength={30}
+                            aria-describedby='passwordHelp'
+                            className={styles.input}
+                        />
+                    </div>
+                    <Banner text='Password cannot contain spaces' style='info'/>
+                    {formState.passwordObj.errors.length > 0 && getErrors(formState.passwordObj.errors)}
                 </div>
-                <Banner text='Password cannot contain spaces' style='info'/>
-                {formState.passwordObj.errors.length > 0 && getErrors(formState.passwordObj.errors)}
-            </div>
 
-            <div className={styles.formRow}>
-                <div className={`${styles.inputSection} ${formState.confirmObj.errors.length && styles.error}`}>
-                    <label className={styles.label} htmlFor='editConfirm'>Confirm New Password:</label>
-                    <input 
-                        type='password'
-                        id='editConfirm'
-                        value={formState.confirmObj.value}
-                        onChange={handleConfirm}
-                        spellCheck='false'
-                        required={true}
-                        minLength={12}
-                        maxLength={30}
-                        className={styles.input}
-                    />
+                <div className={styles.formRow}>
+                    <div className={`${styles.inputSection} ${formState.confirmObj.errors.length && styles.error}`}>
+                        <label className={styles.label} htmlFor='editConfirm'>Confirm New Password:</label>
+                        <input 
+                            type='password'
+                            id='editConfirm'
+                            value={formState.confirmObj.value}
+                            onChange={handleConfirm}
+                            spellCheck='false'
+                            required={true}
+                            minLength={12}
+                            maxLength={30}
+                            className={styles.input}
+                        />
+                    </div>
+                    {formState.confirmObj.errors.length > 0 && getErrors(formState.confirmObj.errors)}
                 </div>
-                {formState.confirmObj.errors.length > 0 && getErrors(formState.confirmObj.errors)}
-            </div>
 
-            {formState.mainError !== null && <div className={styles.formRow}><Banner text={formState.mainError} style='error'/></div>}
-            {formState.mainSuccess !== null && <div className={styles.formRow}><Banner text={formState.mainSuccess} style='success'/></div>}
-            
-            <button type='submit' disabled={!formState.canSubmit} className={styles.formButton}>Update</button>
-        </form>
+                {formState.mainError !== null && <div className={styles.formRow}><Banner text={formState.mainError} style='error'/></div>}
+                {formState.mainSuccess !== null && <div className={styles.formRow}><Banner text={formState.mainSuccess} style='success'/></div>}
+                
+                <div className={styles.buttonSection}>
+                    <button type='button' className={`${styles.formButton} ${styles.deleteButton}`} onClick={handleDelete}>Delete</button>
+                    <button type='submit' disabled={!formState.canSubmit} className={styles.formButton}>Update</button>
+                </div>
+            </form>
+        }
+        {!editMode && <Delete changeEditMode={setEditMode} modalRef={modalRef}/>}
     </Modal>;
 }

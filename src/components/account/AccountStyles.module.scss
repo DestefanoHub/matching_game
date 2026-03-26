@@ -26,6 +26,22 @@
     align-items: center;
 }
 
+.buttonSection{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    button{
+        width: 45%;
+    }
+}
+
+.deleteButton{
+    background-color: common.$c-dark-red;
+    border-color: common.$c-dark-red;
+}
+
 .error{
 
     label{

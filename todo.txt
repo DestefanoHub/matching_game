@@ -1,8 +1,3 @@
-CURRENT
-_______
-
-- Add option to delete account.
-
 FUTURE
 ______
 

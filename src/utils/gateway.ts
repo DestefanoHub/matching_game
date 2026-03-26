@@ -181,3 +181,22 @@ export async function editAccount(token: string, password: string, confirmPasswo
         return response;
     }
 }
+
+export async function deleteAccount(token: string){
+    let response = new Response(null, {
+        status: 500
+    });
+
+    try{
+        response = await fetch(`${baseURL}player/deleteAccount`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+    }catch(error){
+        console.log(error);
+    }finally{
+        return response;
+    }
+}

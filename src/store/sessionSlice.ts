@@ -35,7 +35,7 @@ export const sessionSlice = createSlice({
     }
 });
 
-export const loginThunk = (player: Player) : AppThunk<void> => async (dispatch) => {
+export const loginThunk = (player: Player) : AppThunk<void> => (dispatch) => {
     dispatch(setSession(player));
     sessionStorage.setItem('user', JSON.stringify(player));
 };

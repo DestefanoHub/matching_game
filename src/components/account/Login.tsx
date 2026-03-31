@@ -104,6 +104,8 @@ const reducer = (state: LoginResponse, action: reducerAction): LoginResponse => 
                 canSubmit: checkCanSubmit(state.usernameObj.error, error)
             };
         }
+        default:
+            return state;
     }
 };
 

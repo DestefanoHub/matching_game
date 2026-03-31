@@ -3,8 +3,7 @@ import { useState, type RefObject} from 'react';
 import Banner from '../generic/Banner';
 import { selectAuthToken, logout } from '../../store/sessionSlice';
 import { deleteAccount } from '../../utils/gateway';
-import { useAppSelector } from '../../utils/hooks';
-import { useAppDispatch } from '../../utils/hooks';
+import { useAppSelector, useAppDispatch } from '../../utils/hooks';
 import { AccountMessages } from '../../utils/types';
 
 import styles from './Delete.module.scss';

@@ -55,22 +55,22 @@ export const historySlice = createSlice({
     }
 });
 
-export const searchThunk = (searchTerm: string): AppThunk<void> => async (dispatch) => {
+export const searchThunk = (searchTerm: string): AppThunk<void> => (dispatch) => {
     dispatch(search(searchTerm));
     dispatch(getGamesThunk(-1));
 };
 
-export const wlFilterThunk = (wlFilterValue: WinLoss): AppThunk<void> => async (dispatch) => {
+export const wlFilterThunk = (wlFilterValue: WinLoss): AppThunk<void> => (dispatch) => {
     dispatch(wlFilter(wlFilterValue));
     dispatch(getGamesThunk(-1));
 };
 
-export const diffFilterThunk = (diffFIlterValue: Difficulty): AppThunk<void> => async (dispatch) => {
+export const diffFilterThunk = (diffFIlterValue: Difficulty): AppThunk<void> => (dispatch) => {
     dispatch(diffFilter(diffFIlterValue));
     dispatch(getGamesThunk(-1));
 };
 
-export const sortThunk = (sortValue: SortBy): AppThunk<void> => async (dispatch) => {
+export const sortThunk = (sortValue: SortBy): AppThunk<void> => (dispatch) => {
     dispatch(sort(sortValue));
     dispatch(getGamesThunk(-1));
 };

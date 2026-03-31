@@ -156,6 +156,7 @@ const reducer = (state: AccountResponse, action: reducerAction): AccountResponse
             }
             break;
         }
+        default:
     }
 
     /*
@@ -212,11 +213,7 @@ export default function Edit({modalRef}: Props) {
         localDispatch({type: 'init'});
     }
 
-    const getErrors = (errors: AccountMessageTypes[]) => {
-        return errors.map((error) => {
-            return <Banner text={error} style='error'/>;
-        });
-    };
+    const getErrors = (errors: AccountMessageTypes[]) => errors.map((error) => <Banner key={error} text={error} style='error'/>);
 
     const modalTitle = (editMode) ? 'Edit Account' : 'Delete Account';
     

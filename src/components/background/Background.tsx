@@ -7,7 +7,7 @@ export default function Background() {
 
     for(let i = 0; i < 18; i++){
         const tile = {
-            id: i,
+            id: crypto.randomUUID(),
             interval: Math.floor(Math.random() * 11) + 4
         };
         tiles.push(tile);

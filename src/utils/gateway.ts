@@ -16,9 +16,9 @@ export async function getGameInfo(gameId: string): Promise<GameData | symbol> {
         gameData = await response.json();
     }catch(error){
         console.log(error);
-    }finally{
-        return gameData;
     }
+
+    return gameData;
 }
 
 export async function getRecentGames(playerID: string | undefined): Promise<Game[][]> {
@@ -39,9 +39,9 @@ export async function getRecentGames(playerID: string | undefined): Promise<Game
         recentGames = await response.json();
     }catch(error){
         console.log(error);
-    }finally{
-        return recentGames;
     }
+    
+    return recentGames;
 }
 
 export async function getGames(player: string, winLoss: WinLoss, diff: Difficulty, sortBy: SortBy, page: number): Promise<MultiGamesData> {
@@ -72,9 +72,9 @@ export async function getGames(player: string, winLoss: WinLoss, diff: Difficult
         gamesData = await response.json();
     }catch(error){
         console.log(error);
-    }finally{
-        return gamesData;
     }
+        
+    return gamesData;
 }
 
 export async function saveGame(player: Player, difficulty: Difficulty, hasWon: boolean, points: number, totalPoints: number, time: number): Promise<Response> {
@@ -103,9 +103,9 @@ export async function saveGame(player: Player, difficulty: Difficulty, hasWon: b
         });
     }catch(error){
         console.log(error);
-    }finally{
-        return response;
     }
+        
+    return response;
 }
 
 export async function login(username: string, password: string): Promise<Response> {
@@ -127,9 +127,9 @@ export async function login(username: string, password: string): Promise<Respons
         });
     }catch(error){
         console.log(error);
-    }finally{
-        return response;
     }
+        
+    return response;
 }
 
 export async function createAccount(username: string, password: string, confirmPassword: string): Promise<Response> {    
@@ -152,9 +152,9 @@ export async function createAccount(username: string, password: string, confirmP
         });
     }catch(error){
         console.log(error);
-    }finally{
-        return response;
     }
+     
+    return response;
 }
 
 export async function editAccount(token: string, password: string, confirmPassword: string): Promise<Response> {    
@@ -177,9 +177,9 @@ export async function editAccount(token: string, password: string, confirmPasswo
         });
     }catch(error){
         console.log(error);
-    }finally{
-        return response;
     }
+
+    return response;
 }
 
 export async function deleteAccount(token: string){
@@ -196,7 +196,7 @@ export async function deleteAccount(token: string){
         });
     }catch(error){
         console.log(error);
-    }finally{
-        return response;
     }
+        
+    return response;
 }

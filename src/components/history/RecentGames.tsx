@@ -32,7 +32,7 @@ export default function RecentGames() {
                 playerGames
             });
         })()
-    }, [isLoggedIn]);
+    }, [isLoggedIn, playerID]);
 
     useEffect(() => {
         if(wasRecordClicked.current){
@@ -46,11 +46,7 @@ export default function RecentGames() {
         wasRecordClicked.current = true;
     };
 
-    const showRecentGames = (games: Game[]) => {
-        return games.map((game, index) => {
-            return <GameHistoryRecord key={index} game={game} onClick={handleClick}/>;
-        });
-    };
+    const showRecentGames = (games: Game[]) => games.map((game) => <GameHistoryRecord key={game._id} game={game} onClick={handleClick}/>);
     
     return <Fragment>
         <GameHistoryFull modalRef={gameDetailsModal} details={gameDetails}/>

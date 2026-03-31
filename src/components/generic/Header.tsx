@@ -29,7 +29,7 @@ export default function Header() {
         if(storedSession !== null) {
             dispatch(setSession(storedSession));
         }
-    }, []);
+    }, [dispatch]);
 
     const handleLogin = () => {
         loginAccountModal.current?.showModal();

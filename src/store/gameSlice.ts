@@ -100,9 +100,7 @@ export const gameSlice = createSlice({
     name: 'game',
     initialState,
     reducers: {
-        init: () => {
-            return initialState;
-        },
+        init: () => initialState,
         setup: (state, action: PayloadAction<{player: string, difficulty: Difficulty}>) => {
             const tileGrid: Tile[] = [];
             let gridSize = 12;
@@ -143,9 +141,7 @@ export const gameSlice = createSlice({
         },
         reveal: (state, action: PayloadAction<number>) => {
             //Find the index of the tile that was revealed from state.tiles, using the tile.id parameter.
-            const tileIndex = state.tiles.findIndex((tile) => {
-                return tile.id === action.payload;
-            });
+            const tileIndex = state.tiles.findIndex((tile) => tile.id === action.payload);
 
             //Get the indices of the active tiles from state.tiles as an array.
             const activeTilesIndices = getActiveTileIndices(state.tiles);
@@ -153,9 +149,7 @@ export const gameSlice = createSlice({
             //Check if there are less than two active tiles, and the revealed tile exists.
             if(activeTilesIndices.length < 2 && tileIndex !== -1){
                 //Check if any of the active tiles match the revealed tile by id. This handles duplicate clicks on a revealed tile.
-                const isTileActive = activeTilesIndices.some((tileIndex) => {
-                    return state.tiles[tileIndex].id === action.payload;
-                });
+                const isTileActive = activeTilesIndices.some((tileIndex) => state.tiles[tileIndex].id === action.payload);
 
                 //If the revealed tile is not a duplicate, mark it as active in state.tiles.
                 if(!isTileActive){

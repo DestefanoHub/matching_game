@@ -37,9 +37,7 @@ export default function History() {
         setGameDetails(gameInfo); 
     };
 
-    const gameList = games.map((game, index: number) => {
-        return <GameHistoryRecord key={index} game={game} onClick={handleClick}/>;
-    });
+    const gameList = games.map((game) => <GameHistoryRecord key={game._id} game={game} onClick={handleClick}/>);
 
     const loadBanner = <Banner text='Loading...'/>;
     const noGamesBanner = <Banner text='No games...yet!'/>;

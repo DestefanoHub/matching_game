@@ -1,16 +1,17 @@
 import { useRef, Fragment } from 'react';
 import { useAppSelector, useAppDispatch } from '../utils/hooks';
-import { useNavigate } from 'react-router';
+import { useNavigate, useOutletContext } from 'react-router';
 
 import GameBoard from '../components/game/GameBoard';
 import GameSetup from '../components/game/GameSetup';
 import GameOver from '../components/game/GameOver';
-import { useShowLogin } from '../components/generic/Header';
 
 import { init, decrementThunk, selectInit, selectTime, selectGameOver } from '../store/gameSlice';
 import { selectLoginState } from '../store/sessionSlice';
 
 import styles from './Game.module.scss';
+
+type ContextType = { showLogin: () => void };
 
 export default function Game() {
     const initialized = useAppSelector(selectInit);
@@ -22,7 +23,7 @@ export default function Game() {
     const gameOverModal = useRef<HTMLDialogElement | null>(null);
     const countdownInterval = useRef<NodeJS.Timeout | null>(null);
 
-    const { showLogin } = useShowLogin();
+    const { showLogin } = useOutletContext<ContextType>();
 
     const navigate = useNavigate();
     const dispatch = useAppDispatch();

@@ -1,5 +1,5 @@
 import { useRef, Fragment, useEffect } from 'react';
-import { Outlet, NavLink, useNavigate, useOutletContext } from 'react-router';
+import { Outlet, NavLink, useNavigate } from 'react-router';
 
 import CreateAccount from '../account/Create';
 import EditAccount from '../account/Edit';
@@ -82,8 +82,4 @@ export default function Header() {
             </section>
         </main>
     </Fragment>;
-}
-
-export function useShowLogin(){
-    return useOutletContext<ContextType>();
 }

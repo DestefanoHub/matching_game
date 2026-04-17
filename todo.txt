@@ -6,3 +6,4 @@ ______
     - When selecting a difficulty option, show an example of the game board so players can see the difference in difficulty.
 - Add a delay to show the loading state of anything that uses the API.
 - The game history could show an error message instead of no reults if the server response errors.
+- Change password should require the current password as an additional level of security.

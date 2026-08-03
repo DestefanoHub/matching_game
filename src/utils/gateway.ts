@@ -90,10 +90,6 @@ export async function saveGame(player: Player, difficulty: Difficulty, hasWon: b
                 'Authorization': `Bearer ${player.JWT}`
             },
             body: JSON.stringify({
-                player: {
-                    pid: player.ID,
-                    username: player.username
-                },
                 difficulty,
                 hasWon,
                 points,

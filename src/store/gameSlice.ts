@@ -4,7 +4,7 @@ import { saveGame } from '../utils/gateway';
 import type { Difficulty, DifficultyText, Tile } from '../utils/types';
 import type { AppThunk, RootState } from './store';
 
-type State = {
+type GameState = {
     tiles: Tile[],
     points: number,
     totalPoints: number,
@@ -44,7 +44,7 @@ const values = [
     'gold'
 ];
 
-const initialState: State = {
+const initialState: GameState = {
     tiles: [],
     points: 0,
     totalPoints: 0,

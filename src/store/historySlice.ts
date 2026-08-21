@@ -4,7 +4,7 @@ import { getGames } from '../utils/gateway';
 import type { WinLoss, Difficulty, SortBy, Game } from '../utils/types';
 import type { RootState, AppThunk } from './store';
 
-type State = {
+type HistoryState = {
     search: string,
     wlFilter: WinLoss,
     diffFilter: Difficulty,
@@ -15,7 +15,7 @@ type State = {
     isLoaded: boolean
 };
 
-const initialState: State = {
+const initialState: HistoryState = {
     search: '',
     wlFilter: 'a',
     diffFilter: 0,

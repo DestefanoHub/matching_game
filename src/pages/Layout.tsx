@@ -1,5 +1,4 @@
 import { Fragment } from 'react';
-
 import { Outlet } from 'react-router';
 
 import Background from '../components/background/Background';

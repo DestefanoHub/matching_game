@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useRef } from 'react';
 import { useAppSelector, useAppDispatch } from '../../utils/hooks';
 
 import { selectWLFilter, selectDiffFilter, selectSort, searchThunk, wlFilterThunk, diffFilterThunk, sortThunk } from '../../store/historySlice';
@@ -8,7 +8,6 @@ import type { Difficulty, SortBy, WinLoss } from '../../utils/types';
 
 export default function GameSearch() {
     const searchDelayTimeout = useRef<NodeJS.Timeout | null>(null);
-    const [ searchValLocal, setSearchValLocal ] = useState('');
     const wlFilterVal = useAppSelector(selectWLFilter);
     const diffFilterVal = useAppSelector(selectDiffFilter);
     const sortVal = useAppSelector(selectSort);
@@ -16,11 +15,12 @@ export default function GameSearch() {
     const dispatch = useAppDispatch();
 
     const handleChangeSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchValLocal(event.target.value);
-
-        clearTimeout(searchDelayTimeout.current!);
+        if(searchDelayTimeout.current){
+            clearTimeout(searchDelayTimeout.current);
+        }
 
         searchDelayTimeout.current = setTimeout(() => {
+            searchDelayTimeout.current = null;
             dispatch(searchThunk(event.target.value));
         }, 750);
     };
@@ -42,7 +42,6 @@ export default function GameSearch() {
         <input 
             type='text'
             id='search'
-            value={searchValLocal}
             onChange={handleChangeSearch}
             spellCheck='false'
             className={styles.input}

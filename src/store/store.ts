@@ -1,18 +1,23 @@
-import { configureStore, type ThunkAction, type UnknownAction } from '@reduxjs/toolkit';
+import { combineReducers, configureStore, type ThunkAction, type UnknownAction } from '@reduxjs/toolkit';
 
 import gameReducer from './gameSlice';
 import historyReducer from './historySlice';
 import sessionReducer from './sessionSlice';
 
+const rootReducer = combineReducers({
+    game: gameReducer,
+    history: historyReducer,
+    session: sessionReducer
+});
+
 const store = configureStore({
-    reducer: {
-        game: gameReducer,
-        history: historyReducer,
-        session: sessionReducer
-    }
+    reducer: rootReducer
 });
 
 export default store;
+
+export { rootReducer };
+
 
 export type AppStore = typeof store;
 export type RootState = ReturnType<AppStore['getState']>;

@@ -9,11 +9,11 @@ const initialState: Player = {
     JWT: ''
 };
 
-export function checkSessionStorage(): Player {
+export function checkSessionStorage(): Player | null {
     const userJSON = sessionStorage.getItem('user');
     
     if(userJSON === null){
-        return initialState;
+        return null;
     }
 
     return JSON.parse(userJSON);

@@ -64,22 +64,20 @@ export default function Header() {
         <CreateAccount modalRef={createAccountModal}/>
         <EditAccount modalRef={editAccountModal}/>
         <LoginAccount modalRef={loginAccountModal}/>
-        <main className={styles.main}>
-            <header className={styles.header}>
-                <h1 className={styles.title}>Matching Game</h1>
-                <nav className={styles.nav}>
-                    <NavLink className={({isActive}) => isActive ? styles.active : ''} to={''}>Home</NavLink>
-                    <NavLink className={({isActive}) => isActive ? styles.active : ''} to={'game'}>Play</NavLink>
-                    <NavLink className={({isActive}) => isActive ? styles.active : ''} to={'history'}>History</NavLink>
-                </nav>
-                <div className={styles.account}>
-                    <span>Account:</span> {isLoggedIn ? editAccountButton : createAccountButton}
-                    <button type='button' className={isLoggedIn ? styles.secondary : ''} onClick={handleSession}>{isLoggedIn ? 'Logout' : 'Login'}</button>
-                </div>
-            </header>
-            <section className={styles.content}>
-                <Outlet context={{ showLogin: handleLogin } as ContextType}/>
-            </section>
+        <header className={styles.header}>
+            <h1 className={styles.title}>Matching Game</h1>
+            <nav className={styles.nav}>
+                <NavLink className={({isActive}) => isActive ? styles.active : ''} to={''}>Home</NavLink>
+                <NavLink className={({isActive}) => isActive ? styles.active : ''} to={'game'}>Play</NavLink>
+                <NavLink className={({isActive}) => isActive ? styles.active : ''} to={'history'}>History</NavLink>
+            </nav>
+            <div className={styles.account}>
+                <span>Account:</span> {isLoggedIn ? editAccountButton : createAccountButton}
+                <button type='button' className={isLoggedIn ? styles.secondary : ''} onClick={handleSession}>{isLoggedIn ? 'Logout' : 'Login'}</button>
+            </div>
+        </header>
+        <main className={styles.content}>
+            <Outlet context={{ showLogin: handleLogin } as ContextType}/>
         </main>
     </Fragment>;
 }

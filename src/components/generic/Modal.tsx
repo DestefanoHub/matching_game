@@ -13,10 +13,12 @@ export default function Modal({ modalRef, onClose, title, children }: Props) {
     const handleClose = () => {
         modalRef.current?.close();
     };
+
+    const titleId = `${title.toLowerCase().replace(/\s+/g, '-')}-title`;
     
-    return <dialog ref={modalRef} className={styles.modal} onClose={onClose}>
+    return <dialog ref={modalRef} className={styles.modal} onClose={onClose} aria-labelledby={titleId}>
         <div className={styles.header}>
-            <h1>{title}</h1>
+            <h1 id={titleId}>{title}</h1>
             <button className={styles.close} onClick={handleClose}>X</button>
         </div>
         {children}

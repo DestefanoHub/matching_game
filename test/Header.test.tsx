@@ -8,15 +8,13 @@ describe('Header component', () => {
             renderWithProviders(<Header />);
             const header = screen.getByRole('banner');
 
-            const loginButton = within(header).getByRole('button', {
+            expect(within(header).getByRole('button', {
                 name: /login/i
-            });
-            expect(loginButton).toBeVisible();
+            })).toBeVisible();
 
-            const createAccountButton = within(header).getByRole('button', {
+            expect(within(header).getByRole('button', {
                 name: /create account/i
-            });
-            expect(createAccountButton).toBeVisible();
+            })).toBeVisible();
         });
 
         test('Clicking the Login button opens the Login modal', async () => {
@@ -24,12 +22,33 @@ describe('Header component', () => {
             renderWithProviders(<Header/>);
             const header = screen.getByRole('banner');
 
-            const loginButton = within(header).getByRole('button', {
+            await user.click(within(header).getByRole('button', {
                 name: /login/i
-            });
-            await user.click(loginButton);
+            }));
             const loginModal = await screen.findByRole('dialog', {name: /login/i});
             expect(loginModal).toBeVisible();
+        });
+
+        test('Logging in successfully', async () => {
+            const user = userEvent.setup();
+            renderWithProviders(<Header/>);
+            const header = screen.getByRole('banner');
+
+            await user.click(within(header).getByRole('button', {
+                name: /login/i
+            }));
+            const loginModal = await screen.findByRole('dialog', {name: /login/i});
+
+            await user.type(within(loginModal).getByLabelText(/^username/i), 'tester1');
+            await user.type(within(loginModal).getByLabelText(/^password/i), 'Password1234!');
+            await user.click(within(loginModal).getByRole('button', {
+                name: /login/i
+            }));
+            
+            const logoutButton = await within(header).findByRole('button', {
+                name: /logout/i
+            });
+            expect(logoutButton).toBeVisible();
         });
 
         test('Clicking the Create Account button opens the Create Account modal', async () => {

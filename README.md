@@ -10,6 +10,7 @@ This project is the front-end of the matching game. It is created with:
 - SASS
 - Vitest
 - React Testing Library
+- Mock Service Worker
 
 In order to meaningfully interact with the app, the `matching-game-server` project must also be running, as that is the back-end REST API.
 

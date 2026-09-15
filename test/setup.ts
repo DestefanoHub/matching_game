@@ -1,6 +1,8 @@
 import '@testing-library/jest-dom/vitest';
 import { cleanup } from '@testing-library/react';
-import { afterEach, beforeEach, beforeAll } from 'vitest';
+import { afterEach, afterAll, beforeEach, beforeAll } from 'vitest';
+
+import { server } from './mocks/node';
 
 beforeAll(() => {
     if (!HTMLDialogElement.prototype.showModal) {
@@ -16,6 +18,12 @@ beforeAll(() => {
             this.setAttribute('aria-hidden', 'true');
         };
     }
+
+    server.listen();
+});
+
+afterAll(() => {
+    server.close();
 });
 
 beforeEach(() => {
@@ -24,4 +32,5 @@ beforeEach(() => {
 
 afterEach(() => {
     cleanup();
+    server.resetHandlers();
 });

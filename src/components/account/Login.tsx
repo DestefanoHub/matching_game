@@ -21,11 +21,13 @@ type reducerAction = {
 type LoginResponse = {
     usernameObj: {
         value: string,
-        error: AccountMessageTypes | null
+        error: boolean,
+        touched: boolean
     },
     passwordObj: {
         value: string,
-        error: AccountMessageTypes | null
+        error: boolean,
+        touched: boolean
     },
     mainError: AccountMessageTypes | null,
     canSubmit: boolean,
@@ -34,17 +36,19 @@ type LoginResponse = {
 const initState: LoginResponse = {
     usernameObj: {
         value: '',
-        error: null,
+        error: true,
+        touched: false
     },
     passwordObj: {
         value: '',
-        error: null,
+        error: true,
+        touched: false
     },
     mainError: null,
     canSubmit: false
 };
 
-const checkCanSubmit = (nameError: AccountMessageTypes | null, passError: AccountMessageTypes | null) => nameError === null && passError === null;
+const checkCanSubmit = (nameError: boolean, passError: boolean) => !(nameError || passError);
 
 const reducer = (state: LoginResponse, action: reducerAction): LoginResponse => {
     /*
@@ -68,38 +72,36 @@ const reducer = (state: LoginResponse, action: reducerAction): LoginResponse => 
         }
         case 'username': {
             const username = action.payload.trim();
-            let error: AccountMessageTypes | null = null;
+            let error = true;
 
-            if(username.length < 5) {
-                error = AccountMessages.UNAMELENGTH;
-            }else if(username.length > 30) {
-                error = AccountMessages.UNAMELENGTH;
+            if(username.length >= 5 && username.length <= 30) {
+                error = false;
             }
 
             return {
                 ...state,
                 usernameObj: {
                     value: username,
-                    error
+                    error,
+                    touched: true
                 },
                 canSubmit: checkCanSubmit(error, state.passwordObj.error)
             };
         }
         case 'password': {
             const password = action.payload.trim();
-            let error: AccountMessageTypes | null = null;
+            let error = true;
             
-            if(password.length < 12) {
-                error = AccountMessages.PWORDLENGTH;
-            }else if(password.length > 30) {
-                error = AccountMessages.PWORDLENGTH;
+            if(password.length >= 12 && password.length <= 30) {
+                error = false;
             }
 
             return {
                 ...state,
                 passwordObj: {
                     value: password,
-                    error
+                    error,
+                    touched: true
                 },
                 canSubmit: checkCanSubmit(state.usernameObj.error, error)
             };
@@ -150,7 +152,7 @@ export default function Login({modalRef}: Props) {
     return <Modal modalRef={modalRef} onClose={handleClose} title='Login'>
         <form onSubmit={handleSubmit} className={styles.form}>
             <div className={styles.formRow}>
-                <div className={`${styles.inputSection} ${formState.usernameObj.error !== null && styles.error}`}>
+                <div className={`${styles.inputSection} ${(formState.usernameObj.error && formState.usernameObj.touched) && styles.error}`}>
                     <label className={styles.label} htmlFor='loginUsername'>Username:</label>
                     <input
                         type='text'
@@ -169,7 +171,7 @@ export default function Login({modalRef}: Props) {
             </div>
             
             <div className={styles.formRow}>
-                <div className={`${styles.inputSection} ${formState.passwordObj.error !== null && styles.error}`}>
+                <div className={`${styles.inputSection} ${(formState.passwordObj.error && formState.passwordObj.touched) && styles.error}`}>
                     <label className={styles.label} htmlFor='loginPassword'>Password:</label>
                     <input 
                         type='password'

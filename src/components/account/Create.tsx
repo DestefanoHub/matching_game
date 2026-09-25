@@ -254,7 +254,6 @@ export default function Create({modalRef}: Props) {
                         required={true}
                         minLength={5}
                         maxLength={30}
-                        aria-describedby='usernameHelp'
                         autoComplete='off'
                         className={styles.input}
                     />
@@ -275,7 +274,6 @@ export default function Create({modalRef}: Props) {
                         required={true}
                         minLength={12}
                         maxLength={30}
-                        aria-describedby='passwordHelp'
                         className={styles.input}
                     />
                 </div>

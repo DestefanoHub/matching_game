@@ -1,10 +1,11 @@
-import { renderWithProviders, screen, userEvent, within } from './utils';
+import { fireEvent, renderWithProviders, screen, userEvent, within } from './utils';
 
 import Header from '../src/components/generic/Header';
+import { AccountMessages } from '../src/utils/types';
 
 describe('Header component', () => {
     describe('Tests when the user is logged out', () => {
-        test('Header displays \'create account\' and \'login\' buttons', () => {
+        test('Header displays \'create account\' and \'login\' buttons successfully', () => {
             renderWithProviders(<Header />);
             const header = screen.getByRole('banner');
 
@@ -17,52 +18,236 @@ describe('Header component', () => {
             })).toBeVisible();
         });
 
-        test('Clicking the Login button opens the Login modal', async () => {
-            const user = userEvent.setup();
-            renderWithProviders(<Header/>);
-            const header = screen.getByRole('banner');
+        describe('Testing the Login Modal', () => {        
+            test('Clicking the Login button opens the Login modal successfully', async () => {
+                const user = userEvent.setup();
+                renderWithProviders(<Header/>);
+                const header = screen.getByRole('banner');
 
-            await user.click(within(header).getByRole('button', {
-                name: /login/i
-            }));
-            const loginModal = await screen.findByRole('dialog', {name: /login/i});
-            expect(loginModal).toBeVisible();
-        });
-
-        test('Logging in successfully', async () => {
-            const user = userEvent.setup();
-            renderWithProviders(<Header/>);
-            const header = screen.getByRole('banner');
-
-            await user.click(within(header).getByRole('button', {
-                name: /login/i
-            }));
-            const loginModal = await screen.findByRole('dialog', {name: /login/i});
-
-            await user.type(within(loginModal).getByLabelText(/^username/i), 'tester1');
-            await user.type(within(loginModal).getByLabelText(/^password/i), 'Password1234!');
-            await user.click(within(loginModal).getByRole('button', {
-                name: /login/i
-            }));
-            
-            const logoutButton = await within(header).findByRole('button', {
-                name: /logout/i
+                await user.click(within(header).getByRole('button', {
+                    name: /login/i
+                }));
+                const loginModal = await screen.findByRole('dialog', {name: /login/i});
+                expect(loginModal).toBeVisible();
             });
-            expect(logoutButton).toBeVisible();
-        });
 
-        test('Clicking the Create Account button opens the Create Account modal', async () => {
-            const user = userEvent.setup();
-            renderWithProviders(<Header/>);
-            const header = screen.getByRole('banner');
+            test('Logging in successfully', async () => {
+                const user = userEvent.setup();
+                renderWithProviders(<Header/>);
+                const header = screen.getByRole('banner');
 
-            const createAccountButton = within(header).getByRole('button', {
-                name: /create account/i
+                await user.click(within(header).getByRole('button', {
+                    name: /login/i
+                }));
+                const loginModal = await screen.findByRole('dialog', {name: /login/i});
+
+                await user.type(within(loginModal).getByLabelText(/^username/i), 'tester1');
+                await user.type(within(loginModal).getByLabelText(/^password/i), 'Password1234!');
+                await user.click(within(loginModal).getByRole('button', {
+                    name: /login/i
+                }));
+                
+                const logoutButton = await within(header).findByRole('button', {
+                    name: /logout/i
+                });
+                expect(logoutButton).toBeVisible();
             });
-            await user.click(createAccountButton);
-            const createModal = await screen.findByRole('dialog', {name: /create account/i});
-            expect(createModal).toBeVisible();
+
+            test('Login form submission failed: all fields empty', async () => {
+                const user = userEvent.setup();
+                renderWithProviders(<Header/>);
+                const header = screen.getByRole('banner');
+
+                await user.click(within(header).getByRole('button', {
+                    name: /login/i
+                }));
+                const loginModal = await screen.findByRole('dialog', {name: /login/i});
+                const loginButton = within(loginModal).getByRole('button', {
+                    name: /login/i
+                });
+                
+                expect(loginButton).toBeDisabled();
+            });
+
+            test('Login form submission failed: username empty', async () => {
+                const user = userEvent.setup();
+                renderWithProviders(<Header/>);
+                const header = screen.getByRole('banner');
+
+                await user.click(within(header).getByRole('button', {
+                    name: /login/i
+                }));
+                const loginModal = await screen.findByRole('dialog', {name: /login/i});
+                const loginButton = within(loginModal).getByRole('button', {
+                    name: /login/i
+                });
+
+                await user.type(within(loginModal).getByLabelText(/^password/i), 'Password1234!');
+                
+                expect(loginButton).toBeDisabled();
+            });
+
+            test('Login form submission failed: password empty', async () => {
+                const user = userEvent.setup();
+                renderWithProviders(<Header/>);
+                const header = screen.getByRole('banner');
+
+                await user.click(within(header).getByRole('button', {
+                    name: /login/i
+                }));
+                const loginModal = await screen.findByRole('dialog', {name: /login/i});
+                const loginButton = within(loginModal).getByRole('button', {
+                    name: /login/i
+                });
+
+                await user.type(within(loginModal).getByLabelText(/^username/i), 'tester1');
+                
+                expect(loginButton).toBeDisabled();
+            });
+
+            test('Login form submission failed: username too short', async () => {
+                const user = userEvent.setup();
+                renderWithProviders(<Header/>);
+                const header = screen.getByRole('banner');
+
+                await user.click(within(header).getByRole('button', {
+                    name: /login/i
+                }));
+                const loginModal = await screen.findByRole('dialog', {name: /login/i});
+                const loginButton = within(loginModal).getByRole('button', {
+                    name: /login/i
+                });
+
+                await user.type(within(loginModal).getByLabelText(/^username/i), 'test');
+                await user.type(within(loginModal).getByLabelText(/^password/i), 'Password1234!');
+                
+                expect(loginButton).toBeDisabled();
+            });
+
+            test('Login form submission failed: username too long', async () => {
+                const user = userEvent.setup();
+                renderWithProviders(<Header/>);
+                const header = screen.getByRole('banner');
+
+                await user.click(within(header).getByRole('button', {
+                    name: /login/i
+                }));
+                const loginModal = await screen.findByRole('dialog', {name: /login/i});
+                const loginButton = within(loginModal).getByRole('button', {
+                    name: /login/i
+                });
+
+                //Using user.type won't allow the field to go past maxlength.
+                fireEvent.change(within(loginModal).getByLabelText(/^username/i), {target: {value: 'testertestertestertestertestertester'}});
+                await user.type(within(loginModal).getByLabelText(/^password/i), 'Password1234!');
+                
+                expect(loginButton).toBeDisabled();
+            });
+
+            test('Login form submission failed: password too short', async () => {
+                const user = userEvent.setup();
+                renderWithProviders(<Header/>);
+                const header = screen.getByRole('banner');
+
+                await user.click(within(header).getByRole('button', {
+                    name: /login/i
+                }));
+                const loginModal = await screen.findByRole('dialog', {name: /login/i});
+                const loginButton = within(loginModal).getByRole('button', {
+                    name: /login/i
+                });
+
+                await user.type(within(loginModal).getByLabelText(/^username/i), 'tester1');
+                await user.type(within(loginModal).getByLabelText(/^password/i), 'Password');
+                
+                expect(loginButton).toBeDisabled();
+            });
+
+            test('Login form submission failed: password too long', async () => {
+                const user = userEvent.setup();
+                renderWithProviders(<Header/>);
+                const header = screen.getByRole('banner');
+
+                await user.click(within(header).getByRole('button', {
+                    name: /login/i
+                }));
+                const loginModal = await screen.findByRole('dialog', {name: /login/i});
+                const loginButton = within(loginModal).getByRole('button', {
+                    name: /login/i
+                });
+
+                await user.type(within(loginModal).getByLabelText(/^username/i), 'tester1');
+                //Using user.type won't allow the field to go past maxlength.
+                fireEvent.change(within(loginModal).getByLabelText(/^password/i), {target: {value: 'PasswordPasswordPasswordPassword'}});
+                
+                expect(loginButton).toBeDisabled();
+            });
+
+            test('Login form submission failed: incorrect credentials', async () => {
+                const user = userEvent.setup();
+                renderWithProviders(<Header/>);
+                const header = screen.getByRole('banner');
+
+                await user.click(within(header).getByRole('button', {
+                    name: /login/i
+                }));
+                const loginModal = await screen.findByRole('dialog', {name: /login/i});
+                const loginButton = within(loginModal).getByRole('button', {
+                    name: /login/i
+                });
+
+                await user.type(within(loginModal).getByLabelText(/^username/i), 'tester');
+                await user.type(within(loginModal).getByLabelText(/^password/i), 'Password1234');
+                await user.click(loginButton);
+                const errorMsg = within(loginModal).getByText(AccountMessages.INVALID);
+                
+                expect(loginButton).toBeDisabled();
+                expect(errorMsg).toBeVisible();
+            });
         });
+
+        describe('Testing the Create Account Modal', () => {
+            test('Clicking the Create Account button opens the Create Account modal successfully', async () => {
+                const user = userEvent.setup();
+                renderWithProviders(<Header/>);
+                const header = screen.getByRole('banner');
+
+                const createAccountButton = within(header).getByRole('button', {
+                    name: /create account/i
+                });
+                await user.click(createAccountButton);
+                const createModal = await screen.findByRole('dialog', {name: /create account/i});
+                expect(createModal).toBeVisible();
+            });
+
+            test('Created account successfully', async () => {
+                const user = userEvent.setup();
+                renderWithProviders(<Header/>);
+                const header = screen.getByRole('banner');
+
+                await user.click(within(header).getByRole('button', {
+                    name: /create account/i
+                }));
+                const createModal = await screen.findByRole('dialog', {name: /create account/i});
+
+                await user.type(within(createModal).getByLabelText(/^username/i), 'tester0');
+                await user.type(within(createModal).getByLabelText(/^password/i), 'Password1234!');
+                await user.type(within(createModal).getByLabelText(/^confirm password/i), 'Password1234!');
+                await user.click(within(createModal).getByRole('button', {
+                    name: /create/i
+                }));
+                
+                const logoutButton = await within(header).findByRole('button', {
+                    name: /logout/i
+                });
+                expect(logoutButton).toBeVisible();
+
+                const editAccountButton = await within(header).findByRole('button', {
+                    name: 'tester0'
+                });
+                expect(editAccountButton).toBeVisible();
+            });
+         });
     });
 
     describe('Tests when the user is logged in', () => {

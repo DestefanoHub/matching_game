@@ -87,24 +87,6 @@ describe('Header component', () => {
                 expect(loginButton).toBeDisabled();
             });
 
-            test('Login form submission failed: password empty', async () => {
-                const user = userEvent.setup();
-                renderWithProviders(<Header/>);
-                const header = screen.getByRole('banner');
-
-                await user.click(within(header).getByRole('button', {
-                    name: /login/i
-                }));
-                const loginModal = await screen.findByRole('dialog', {name: /login/i});
-                const loginButton = within(loginModal).getByRole('button', {
-                    name: /login/i
-                });
-
-                await user.type(within(loginModal).getByLabelText(/^username/i), 'tester1');
-                
-                expect(loginButton).toBeDisabled();
-            });
-
             test('Login form submission failed: username too short', async () => {
                 const user = userEvent.setup();
                 renderWithProviders(<Header/>);
@@ -140,6 +122,24 @@ describe('Header component', () => {
                 //Using user.type won't allow the field to go past maxlength.
                 fireEvent.change(within(loginModal).getByLabelText(/^username/i), {target: {value: 'testertestertestertestertestertester'}});
                 await user.type(within(loginModal).getByLabelText(/^password/i), 'Password1234!');
+                
+                expect(loginButton).toBeDisabled();
+            });
+
+            test('Login form submission failed: password empty', async () => {
+                const user = userEvent.setup();
+                renderWithProviders(<Header/>);
+                const header = screen.getByRole('banner');
+
+                await user.click(within(header).getByRole('button', {
+                    name: /login/i
+                }));
+                const loginModal = await screen.findByRole('dialog', {name: /login/i});
+                const loginButton = within(loginModal).getByRole('button', {
+                    name: /login/i
+                });
+
+                await user.type(within(loginModal).getByLabelText(/^username/i), 'tester1');
                 
                 expect(loginButton).toBeDisabled();
             });
@@ -246,6 +246,238 @@ describe('Header component', () => {
                     name: 'tester0'
                 });
                 expect(editAccountButton).toBeVisible();
+            });
+
+            test('Create account submission failed: all fields empty', async () => {
+                const user = userEvent.setup();
+                renderWithProviders(<Header/>);
+                const header = screen.getByRole('banner');
+
+                await user.click(within(header).getByRole('button', {
+                    name: /create account/i
+                }));
+                const createModal = await screen.findByRole('dialog', {name: /create account/i});
+                const createButton = within(createModal).getByRole('button', {
+                    name: /create/i
+                });
+                
+                expect(createButton).toBeDisabled();
+            });
+
+            test('Create account submission failed: username empty', async () => {
+                const user = userEvent.setup();
+                renderWithProviders(<Header/>);
+                const header = screen.getByRole('banner');
+
+                await user.click(within(header).getByRole('button', {
+                    name: /create account/i
+                }));
+                const createModal = await screen.findByRole('dialog', {name: /create account/i});
+                const createButton = within(createModal).getByRole('button', {
+                    name: /create/i
+                });
+                
+                await user.type(within(createModal).getByLabelText(/^password/i), 'Password1234!');
+                await user.type(within(createModal).getByLabelText(/^confirm password/i), 'Password1234!');
+                
+                expect(createButton).toBeDisabled();
+            });
+
+            test('Create account submission failed: username too short', async () => {
+                const user = userEvent.setup();
+                renderWithProviders(<Header/>);
+                const header = screen.getByRole('banner');
+
+                await user.click(within(header).getByRole('button', {
+                    name: /create account/i
+                }));
+                const createModal = await screen.findByRole('dialog', {name: /create account/i});
+                const createButton = within(createModal).getByRole('button', {
+                    name: /create/i
+                });
+                
+                await user.type(within(createModal).getByLabelText(/^username/i), 'test');
+                await user.type(within(createModal).getByLabelText(/^password/i), 'Password1234!');
+                await user.type(within(createModal).getByLabelText(/^confirm password/i), 'Password1234!');
+                const uNameErrorMsg = within(createModal).getByText(AccountMessages.UNAMELENGTH);
+                
+                expect(createButton).toBeDisabled();
+                expect(uNameErrorMsg).toBeVisible();
+            });
+
+            test('Create account submission failed: username too long', async () => {
+                const user = userEvent.setup();
+                renderWithProviders(<Header/>);
+                const header = screen.getByRole('banner');
+
+                await user.click(within(header).getByRole('button', {
+                    name: /create account/i
+                }));
+                const createModal = await screen.findByRole('dialog', {name: /create account/i});
+                const createButton = within(createModal).getByRole('button', {
+                    name: /create/i
+                });
+                
+                //Using user.type won't allow the field to go past maxlength.
+                fireEvent.change(within(createModal).getByLabelText(/^username/i), {target: {value: 'TesterTesterTesterTesterTesterTester'}});
+                await user.type(within(createModal).getByLabelText(/^password/i), 'Password1234!');
+                await user.type(within(createModal).getByLabelText(/^confirm password/i), 'Password1234!');
+                const uNameErrorMsg = within(createModal).getByText(AccountMessages.UNAMELENGTH);
+                
+                expect(createButton).toBeDisabled();
+                expect(uNameErrorMsg).toBeVisible();
+            });
+
+            test('Create account submission failed: username taken', async () => {
+                const user = userEvent.setup();
+                renderWithProviders(<Header/>);
+                const header = screen.getByRole('banner');
+
+                await user.click(within(header).getByRole('button', {
+                    name: /create account/i
+                }));
+                const createModal = await screen.findByRole('dialog', {name: /create account/i});
+
+                await user.type(within(createModal).getByLabelText(/^username/i), 'testerDup');
+                await user.type(within(createModal).getByLabelText(/^password/i), 'Password1234!');
+                await user.type(within(createModal).getByLabelText(/^confirm password/i), 'Password1234!');
+                await user.click(within(createModal).getByRole('button', {
+                    name: /create/i
+                }));
+                const uNameErrorMsg = within(createModal).getByText(AccountMessages.UNAMETAKEN);
+
+                expect(uNameErrorMsg).toBeVisible();
+            });
+
+            test('Create account submission failed: password empty', async () => {
+                const user = userEvent.setup();
+                renderWithProviders(<Header/>);
+                const header = screen.getByRole('banner');
+
+                await user.click(within(header).getByRole('button', {
+                    name: /create account/i
+                }));
+                const createModal = await screen.findByRole('dialog', {name: /create account/i});
+                const createButton = within(createModal).getByRole('button', {
+                    name: /create/i
+                });
+                
+                await user.type(within(createModal).getByLabelText(/^username/i), 'tester0');
+                await user.type(within(createModal).getByLabelText(/^confirm password/i), 'Password1234!');
+                
+                expect(createButton).toBeDisabled();
+            });
+
+            test('Create account submission failed: password too short', async () => {
+                const user = userEvent.setup();
+                renderWithProviders(<Header/>);
+                const header = screen.getByRole('banner');
+
+                await user.click(within(header).getByRole('button', {
+                    name: /create account/i
+                }));
+                const createModal = await screen.findByRole('dialog', {name: /create account/i});
+                const createButton = within(createModal).getByRole('button', {
+                    name: /create/i
+                });
+                
+                await user.type(within(createModal).getByLabelText(/^username/i), 'tester0');
+                await user.type(within(createModal).getByLabelText(/^password/i), 'Pass');
+                await user.type(within(createModal).getByLabelText(/^confirm password/i), 'Password1234!');
+                const pWordErrorMsg = within(createModal).getByText(AccountMessages.PWORDLENGTH);
+                
+                expect(createButton).toBeDisabled();
+                expect(pWordErrorMsg).toBeVisible();
+            });
+
+            test('Create account submission failed: password too long', async () => {
+                const user = userEvent.setup();
+                renderWithProviders(<Header/>);
+                const header = screen.getByRole('banner');
+
+                await user.click(within(header).getByRole('button', {
+                    name: /create account/i
+                }));
+                const createModal = await screen.findByRole('dialog', {name: /create account/i});
+                const createButton = within(createModal).getByRole('button', {
+                    name: /create/i
+                });
+                
+                await user.type(within(createModal).getByLabelText(/^username/i), 'tester0');
+                //Using user.type won't allow the field to go past maxlength.
+                fireEvent.change(within(createModal).getByLabelText(/^password/i), {target: {value: 'PasswordPasswordPasswordPassword'}});
+                fireEvent.change(within(createModal).getByLabelText(/^confirm password/i), {target: {value: 'PasswordPasswordPasswordPassword'}});
+                const pWordErrorMsg = within(createModal).getByText(AccountMessages.PWORDLENGTH);
+                
+                expect(createButton).toBeDisabled();
+                expect(pWordErrorMsg).toBeVisible();
+            });
+
+            test('Create account submission failed: confirm password empty', async () => {
+                const user = userEvent.setup();
+                renderWithProviders(<Header/>);
+                const header = screen.getByRole('banner');
+
+                await user.click(within(header).getByRole('button', {
+                    name: /create account/i
+                }));
+                const createModal = await screen.findByRole('dialog', {name: /create account/i});
+                const createButton = within(createModal).getByRole('button', {
+                    name: /create/i
+                });
+                
+                await user.type(within(createModal).getByLabelText(/^username/i), 'tester0');
+                await user.type(within(createModal).getByLabelText(/^password/i), 'Password1234!');
+                
+                expect(createButton).toBeDisabled();
+            });
+
+            test('Create account submission failed: password and confirm password do not match', async () => {
+                const user = userEvent.setup();
+                renderWithProviders(<Header/>);
+                const header = screen.getByRole('banner');
+
+                await user.click(within(header).getByRole('button', {
+                    name: /create account/i
+                }));
+                const createModal = await screen.findByRole('dialog', {name: /create account/i});
+                const createButton = within(createModal).getByRole('button', {
+                    name: /create/i
+                });
+                
+                await user.type(within(createModal).getByLabelText(/^username/i), 'tester0');
+                await user.type(within(createModal).getByLabelText(/^password/i), 'Password1234!');
+                await user.type(within(createModal).getByLabelText(/^confirm password/i), '!4321dorwssaP');
+                const pWordErrorMsg = within(createModal).getByText(AccountMessages.PWORDNOMATCH);
+                
+                expect(createButton).toBeDisabled();
+                expect(pWordErrorMsg).toBeVisible();
+            });
+
+            test('Create account submission failed: username too short, password too short, password and confirm password do not match all at once', async () => {
+                const user = userEvent.setup();
+                renderWithProviders(<Header/>);
+                const header = screen.getByRole('banner');
+
+                await user.click(within(header).getByRole('button', {
+                    name: /create account/i
+                }));
+                const createModal = await screen.findByRole('dialog', {name: /create account/i});
+                const createButton = within(createModal).getByRole('button', {
+                    name: /create/i
+                });
+                
+                await user.type(within(createModal).getByLabelText(/^username/i), 'test');
+                await user.type(within(createModal).getByLabelText(/^password/i), 'Pass');
+                await user.type(within(createModal).getByLabelText(/^confirm password/i), '!4321dorwssaP');
+                const uNameLenErrorMsg = within(createModal).getByText(AccountMessages.UNAMELENGTH);
+                const pWordLenErrorMsg = within(createModal).getByText(AccountMessages.PWORDLENGTH);
+                const pWordMatchErrorMsg = within(createModal).getByText(AccountMessages.PWORDNOMATCH);
+                
+                expect(createButton).toBeDisabled();
+                expect(uNameLenErrorMsg).toBeVisible();
+                expect(pWordLenErrorMsg).toBeVisible();
+                expect(pWordMatchErrorMsg).toBeVisible();
             });
          });
     });

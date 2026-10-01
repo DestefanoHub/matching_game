@@ -21,7 +21,7 @@ type CreateUserRequestBody = {
 
 type CreateUserResponseBody = null | [
     number[],
-    LoginResponseBody
+    null | LoginResponseBody
 ];
 
 export const handlers = [
@@ -46,23 +46,50 @@ export const handlers = [
     }),
     http.post<never, CreateUserRequestBody, CreateUserResponseBody>(`${baseURL}player/createAccount`, async ({request}) => {
         const body = await request.json();
+        let status = 201;
+        let playerCreds: LoginResponseBody = null;
 
         if(typeof body === 'object' && body !== null){
             const errorCodes: number[] = [];
 
+            //Success
             if(body.username === 'tester0' && body.password === 'Password1234!' && body.confirmPassword === 'Password1234!'){
-                return HttpResponse.json([
-                    errorCodes,
-                    {
-                        ID: '1234abcd',
-                        username: 'tester0',
-                        JWT: 'avalidjwt'
-                    }], 
-                    {status: 201}
-                );
+                playerCreds = {
+                    ID: '1234abcd',
+                    username: 'tester0',
+                    JWT: 'avalidjwt'
+                };
             }
 
-            // return new HttpResponse(null, {status: 400});
+            //Duplicate
+            if(body.username === 'testerDup'){
+                errorCodes.push(2);
+            }
+
+            if(typeof body.username === 'undefined' || (body.username.length < 5 || body.username.length > 30)) {
+                errorCodes.push(1);
+            }
+
+            if(typeof body.password === 'undefined' || (body.password.length < 12 || body.password.length > 30)) {
+                errorCodes.push(3);
+            }
+            
+            if(typeof body.confirmPassword === 'undefined' || body.confirmPassword !== body.password) {
+                errorCodes.push(4);
+            }
+
+            if(errorCodes.length){
+                status = 400;
+            }else{
+
+            }
+
+            return HttpResponse.json([
+                    errorCodes,
+                    playerCreds
+                ],
+                {status}
+            );
         }
 
         return new HttpResponse(null, {status: 500});

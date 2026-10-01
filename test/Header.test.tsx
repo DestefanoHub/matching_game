@@ -383,7 +383,7 @@ describe('Header component', () => {
                 
                 await user.type(within(createModal).getByLabelText(/^username/i), 'tester0');
                 await user.type(within(createModal).getByLabelText(/^password/i), 'Pass');
-                await user.type(within(createModal).getByLabelText(/^confirm password/i), 'Password1234!');
+                await user.type(within(createModal).getByLabelText(/^confirm password/i), 'Pass');
                 const pWordErrorMsg = within(createModal).getByText(AccountMessages.PWORDLENGTH);
                 
                 expect(createButton).toBeDisabled();
@@ -507,29 +507,6 @@ describe('Header component', () => {
             expect(editAccountButton).toBeVisible();
         });
 
-        test('Clicking the Edit Account button opens the Edit Account modal', async () => {
-            const sessionState = {
-                ID: 'abcd1234',
-                username: 'Tester1',
-                JWT: 'qwertyuiop[]'
-            };
-            
-            const user = userEvent.setup();
-            renderWithProviders(<Header/>, {preloadedState: {
-                session: sessionState
-            }});
-            const header = screen.getByRole('banner');
-
-            const usernameRegex = new RegExp(`${sessionState.username}`, 'i');
-            const editAccountButton = within(header).getByRole('button', {
-                name: usernameRegex
-            });
-
-            await user.click(editAccountButton);
-            const editModal = await screen.findByRole('dialog', {name: /edit account/i});
-            expect(editModal).toBeVisible();
-        });
-
         test('Clicking the \'Logout\' button logs the user out', async () => {
             const sessionState = {
                 ID: 'abcd1234',
@@ -557,6 +534,288 @@ describe('Header component', () => {
                 name: /create account/i
             });
             expect(createAccountButton).toBeVisible();
+        });
+
+        describe('Testing the Edit Account modal', () => {
+            test('Clicking the Edit Account button opens the Edit Account modal', async () => {
+                const sessionState = {
+                    ID: 'abcd1234',
+                    username: 'Tester1',
+                    JWT: 'qwertyuiop[]'
+                };
+                
+                const user = userEvent.setup();
+                renderWithProviders(<Header/>, {preloadedState: {
+                    session: sessionState
+                }});
+                const header = screen.getByRole('banner');
+
+                const usernameRegex = new RegExp(`${sessionState.username}`, 'i');
+                const editAccountButton = within(header).getByRole('button', {
+                    name: usernameRegex
+                });
+
+                await user.click(editAccountButton);
+                const editModal = await screen.findByRole('dialog', {name: /edit account/i});
+                expect(editModal).toBeVisible();
+            });
+
+            test('Edited account successfully', async () => {
+                const sessionState = {
+                    ID: 'abcd1234',
+                    username: 'Tester1',
+                    JWT: 'qwertyuiop[]'
+                };
+                
+                const user = userEvent.setup();
+                renderWithProviders(<Header/>, {preloadedState: {
+                    session: sessionState
+                }});
+                const header = screen.getByRole('banner');
+
+                await user.click(within(header).getByRole('button', {
+                    name: sessionState.username
+                }));
+                const editModal = await screen.findByRole('dialog', {name: /edit account/i});
+
+                await user.type(within(editModal).getByLabelText(/^new password/i), 'MyNewPassword');
+                await user.type(within(editModal).getByLabelText(/^confirm new password/i), 'MyNewPassword');
+                await user.click(within(editModal).getByRole('button', {
+                    name: /update/i
+                }));
+                const editedAccountMsg = within(editModal).getByText(AccountMessages.PWORDCHANGED);
+                
+                expect(editedAccountMsg).toBeVisible();
+            });
+
+            test('Edit account submission failed: all fields empty', async () => {
+                const sessionState = {
+                    ID: 'abcd1234',
+                    username: 'Tester1',
+                    JWT: 'qwertyuiop[]'
+                };
+                
+                const user = userEvent.setup();
+                renderWithProviders(<Header/>, {preloadedState: {
+                    session: sessionState
+                }});
+                const header = screen.getByRole('banner');
+
+                await user.click(within(header).getByRole('button', {
+                    name: sessionState.username
+                }));
+
+                const editModal = await screen.findByRole('dialog', {name: /edit account/i});
+                const editButton = within(editModal).getByRole('button', {
+                    name: /update/i
+                });
+                
+                expect(editButton).toBeDisabled();
+            });
+
+            test('Edit account submission failed: password empty', async () => {
+                const sessionState = {
+                    ID: 'abcd1234',
+                    username: 'Tester1',
+                    JWT: 'qwertyuiop[]'
+                };
+                
+                const user = userEvent.setup();
+                renderWithProviders(<Header/>, {preloadedState: {
+                    session: sessionState
+                }});
+                const header = screen.getByRole('banner');
+
+                await user.click(within(header).getByRole('button', {
+                    name: sessionState.username
+                }));
+                const editModal = await screen.findByRole('dialog', {name: /edit account/i});
+                const editButton = within(editModal).getByRole('button', {
+                    name: /update/i
+                });
+
+                await user.type(within(editModal).getByLabelText(/^confirm new password/i), 'MyNewPassword');
+                
+                expect(editButton).toBeDisabled();
+            });
+
+            test('Edit account submission failed: password too short', async () => {
+                const sessionState = {
+                    ID: 'abcd1234',
+                    username: 'Tester1',
+                    JWT: 'qwertyuiop[]'
+                };
+                
+                const user = userEvent.setup();
+                renderWithProviders(<Header/>, {preloadedState: {
+                    session: sessionState
+                }});
+                const header = screen.getByRole('banner');
+
+                await user.click(within(header).getByRole('button', {
+                    name: sessionState.username
+                }));
+                const editModal = await screen.findByRole('dialog', {name: /edit account/i});
+                const editButton = within(editModal).getByRole('button', {
+                    name: /update/i
+                });
+
+                await user.type(within(editModal).getByLabelText(/^new password/i), 'MyNew');
+                await user.type(within(editModal).getByLabelText(/^confirm new password/i), 'MyNew');
+                const pWordErrorMsg = within(editModal).getByText(AccountMessages.PWORDLENGTH);
+                
+                expect(editButton).toBeDisabled();
+                expect(pWordErrorMsg).toBeVisible();
+            });
+
+            test('Edit account submission failed: password too long', async () => {
+                const sessionState = {
+                    ID: 'abcd1234',
+                    username: 'Tester1',
+                    JWT: 'qwertyuiop[]'
+                };
+                
+                const user = userEvent.setup();
+                renderWithProviders(<Header/>, {preloadedState: {
+                    session: sessionState
+                }});
+                const header = screen.getByRole('banner');
+
+                await user.click(within(header).getByRole('button', {
+                    name: sessionState.username
+                }));
+                const editModal = await screen.findByRole('dialog', {name: /edit account/i});
+                const editButton = within(editModal).getByRole('button', {
+                    name: /update/i
+                });
+
+                //Using user.type won't allow the field to go past maxlength.
+                fireEvent.change(within(editModal).getByLabelText(/^new password/i), {target: {value: 'PasswordPasswordPasswordPassword'}});
+                fireEvent.change(within(editModal).getByLabelText(/^confirm new password/i), {target: {value: 'PasswordPasswordPasswordPassword'}});
+                const pWordErrorMsg = within(editModal).getByText(AccountMessages.PWORDLENGTH);
+                
+                expect(editButton).toBeDisabled();
+                expect(pWordErrorMsg).toBeVisible();
+            });
+            
+            test('Edit account submission failed: password is old password', async () => {
+                const sessionState = {
+                    ID: 'abcd1234',
+                    username: 'Tester1',
+                    JWT: 'qwertyuiop[]'
+                };
+                
+                const user = userEvent.setup();
+                renderWithProviders(<Header/>, {preloadedState: {
+                    session: sessionState
+                }});
+                const header = screen.getByRole('banner');
+
+                await user.click(within(header).getByRole('button', {
+                    name: sessionState.username
+                }));
+                const editModal = await screen.findByRole('dialog', {name: /edit account/i});
+                const editButton = within(editModal).getByRole('button', {
+                    name: /update/i
+                });
+
+                await user.type(within(editModal).getByLabelText(/^new password/i), 'Password1234!');
+                await user.type(within(editModal).getByLabelText(/^confirm new password/i), 'Password1234!');
+                await user.click(editButton);
+                const pWordErrorMsg = within(editModal).getByText(AccountMessages.PWORDOLD);
+                
+                expect(pWordErrorMsg).toBeVisible();
+            });
+
+            test('Edit account submission failed: confirm password empty', async () => {
+                const sessionState = {
+                    ID: 'abcd1234',
+                    username: 'Tester1',
+                    JWT: 'qwertyuiop[]'
+                };
+                
+                const user = userEvent.setup();
+                renderWithProviders(<Header/>, {preloadedState: {
+                    session: sessionState
+                }});
+                const header = screen.getByRole('banner');
+
+                await user.click(within(header).getByRole('button', {
+                    name: sessionState.username
+                }));
+                const editModal = await screen.findByRole('dialog', {name: /edit account/i});
+                const editButton = within(editModal).getByRole('button', {
+                    name: /update/i
+                });
+
+                await user.type(within(editModal).getByLabelText(/^new password/i), 'MyNewPassword');
+                
+                expect(editButton).toBeDisabled();
+            });
+
+            test('Edit account submission failed: password and confirm password do not match', async () => {
+                const sessionState = {
+                    ID: 'abcd1234',
+                    username: 'Tester1',
+                    JWT: 'qwertyuiop[]'
+                };
+                
+                const user = userEvent.setup();
+                renderWithProviders(<Header/>, {preloadedState: {
+                    session: sessionState
+                }});
+                const header = screen.getByRole('banner');
+
+                await user.click(within(header).getByRole('button', {
+                    name: sessionState.username
+                }));
+                const editModal = await screen.findByRole('dialog', {name: /edit account/i});
+                const editButton = within(editModal).getByRole('button', {
+                    name: /update/i
+                });
+
+                await user.type(within(editModal).getByLabelText(/^new password/i), 'MyNewPassword');
+                await user.type(within(editModal).getByLabelText(/^confirm new password/i), 'drowssaPweNyM');
+                const pWordErrorMsg = within(editModal).getByText(AccountMessages.PWORDNOMATCH);
+                
+                expect(editButton).toBeDisabled();
+                expect(pWordErrorMsg).toBeVisible();
+            });
+
+            test('Edit account submission failed: password too short and confirm password do not match all at once', async () => {
+                const sessionState = {
+                    ID: 'abcd1234',
+                    username: 'Tester1',
+                    JWT: 'qwertyuiop[]'
+                };
+                
+                const user = userEvent.setup();
+                renderWithProviders(<Header/>, {preloadedState: {
+                    session: sessionState
+                }});
+                const header = screen.getByRole('banner');
+
+                await user.click(within(header).getByRole('button', {
+                    name: sessionState.username
+                }));
+                const editModal = await screen.findByRole('dialog', {name: /edit account/i});
+                const editButton = within(editModal).getByRole('button', {
+                    name: /update/i
+                });
+
+                await user.type(within(editModal).getByLabelText(/^new password/i), 'MyNew');
+                await user.type(within(editModal).getByLabelText(/^confirm new password/i), 'drowssaPweNyM');
+                const pWordMatchErrorMsg = within(editModal).getByText(AccountMessages.PWORDNOMATCH);
+                const pWordLengthErrorMsg = within(editModal).getByText(AccountMessages.PWORDLENGTH);
+                
+                expect(editButton).toBeDisabled();
+                expect(pWordMatchErrorMsg).toBeVisible();
+                expect(pWordLengthErrorMsg).toBeVisible();
+            });
+        });
+
+        describe('Testing the Delete Account modal', () => {
+
         });
     });
 

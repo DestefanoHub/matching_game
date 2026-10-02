@@ -178,7 +178,12 @@ const reducer = (state: AccountResponse, action: reducerAction): AccountResponse
                     confirmObj: {
                         ...state.confirmObj,
                         errors: confirmErrors
-                    }
+                    },
+                    canSubmit: checkCanSubmit(
+                        {value: state.usernameObj!.value, errors: unameErrors}, 
+                        {value: state.passwordObj.value, errors: pwordErrors},
+                        {value: state.confirmObj.value, errors: confirmErrors}
+                    )
                 }
             }
             break;

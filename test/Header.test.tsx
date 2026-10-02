@@ -337,16 +337,18 @@ describe('Header component', () => {
                     name: /create account/i
                 }));
                 const createModal = await screen.findByRole('dialog', {name: /create account/i});
+                const createButton = within(createModal).getByRole('button', {
+                    name: /create/i
+                });
 
                 await user.type(within(createModal).getByLabelText(/^username/i), 'testerDup');
                 await user.type(within(createModal).getByLabelText(/^password/i), 'Password1234!');
                 await user.type(within(createModal).getByLabelText(/^confirm password/i), 'Password1234!');
-                await user.click(within(createModal).getByRole('button', {
-                    name: /create/i
-                }));
+                await user.click(createButton);
                 const uNameErrorMsg = within(createModal).getByText(AccountMessages.UNAMETAKEN);
 
                 expect(uNameErrorMsg).toBeVisible();
+                expect(createButton).toBeDisabled();
             });
 
             test('Create account submission failed: password empty', async () => {
@@ -725,6 +727,7 @@ describe('Header component', () => {
                 const pWordErrorMsg = within(editModal).getByText(AccountMessages.PWORDOLD);
                 
                 expect(pWordErrorMsg).toBeVisible();
+                expect(editButton).toBeDisabled();
             });
 
             test('Edit account submission failed: confirm password empty', async () => {
